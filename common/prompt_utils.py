@@ -4,8 +4,9 @@ import os
 import sys
 import pkgutil
 import importlib
+import importlib.util
 import inspect
-from typing import Dict
+from typing import Dict, Tuple
 from scrapers.base_scraper import BaseScraper
 import scrapers  # This ensures the scrapers package is imported
 
@@ -69,18 +70,115 @@ def prompt_for_scraper():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
+def _prompt_from_mapping(
+    options: Dict[str, str],
+    *,
+    title: str,
+    allow_all: bool = True,
+    show_values: bool = True,
+) -> Tuple[str, str]:
+    if not options:
+        return "None Found", ""
+
+    print(f"\n{title}:\n-------------------")
+    if allow_all:
+        print("0) All locations for mass pull")
+
+    for i, (name, value) in enumerate(options.items(), start=1):
+        if show_values:
+            print(f"{i}) {name} ({value})")
+        else:
+            print(f"{i}) {name}")
+
+    while True:
+        try:
+            prompt = "Select a location by number"
+            if allow_all:
+                prompt += " (or 0 for all)"
+            choice = int(input(f"{prompt}: "))
+            if allow_all and choice == 0:
+                return "ALL", ""
+            if 1 <= choice <= len(options):
+                selected_name = list(options.keys())[choice - 1]
+                return selected_name, options[selected_name]
+            low = 0 if allow_all else 1
+            print(f"Invalid selection. Choose a number between {low} and {len(options)}.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+
+def _load_scraper_from_reference(reference: str) -> BaseScraper:
+    raw = reference.strip()
+
+    if ":" not in raw:
+        raise ValueError(f"Invalid scraper reference '{reference}'. Expected '<path_or_module>:<ClassName>'.")
+
+    target, class_name = raw.rsplit(":", 1)
+    target = target.strip()
+    class_name = class_name.strip()
+
+    if not target or not class_name:
+        raise ValueError(f"Invalid scraper reference '{reference}'.")
+
+    if target.endswith(".py") or target.startswith(".") or os.path.sep in target or "/" in target:
+        abs_path = os.path.abspath(os.path.expanduser(target))
+        module_name = f"_dynamic_scraper_{os.path.splitext(os.path.basename(abs_path))[0]}"
+        spec = importlib.util.spec_from_file_location(module_name, abs_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Could not load scraper module from path: {abs_path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    else:
+        module = importlib.import_module(target)
+
+    scraper_cls = getattr(module, class_name, None)
+    if scraper_cls is None or not inspect.isclass(scraper_cls) or not issubclass(scraper_cls, BaseScraper):
+        raise TypeError(f"Reference '{reference}' does not resolve to a BaseScraper subclass.")
+
+    return scraper_cls()
+
+
+def _is_play365_base_scraper(scraper) -> bool:
+    return getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__) == "Play365Base"
+
+
 def prompt_for_location(all_locations: Dict[str, str], scraper):
     """
     Prompt the user to select a location.
     - If scraper provides dynamic locations (e.g., TopGun), use those.
     - Otherwise, fall back to filtering locations.json by "(SCRAPER_NAME)".
     """
+    active_scraper = scraper
     scraper_name = getattr(scraper, 'SCRAPER_NAME', scraper.__class__.__name__)
 
-    # --- Dynamic locations path (TopGun-style) ---
-    if getattr(scraper, "DYNAMIC_LOCATIONS", False) and hasattr(scraper, "get_dynamic_locations"):
+    if _is_play365_base_scraper(scraper):
+        play365_targets = {
+            name: url for name, url in all_locations.items()
+            if "(Play365Base)" in name
+        }
+
+        if not play365_targets:
+            print("\nNo Play365 sub-scrapers are configured in locations.json.")
+            return "None Found", "", scraper
+
+        selected_target, scraper_ref = _prompt_from_mapping(
+            play365_targets,
+            title="Available Play365 scrapers",
+            allow_all=False,
+            show_values=False,
+        )
         try:
-            filtered_locations = scraper.get_dynamic_locations()
+            active_scraper = _load_scraper_from_reference(scraper_ref)
+        except Exception as e:
+            print(f"\nFailed to load Play365 sub-scraper '{selected_target}': {e}")
+            return "None Found", "", scraper
+
+        scraper_name = getattr(active_scraper, 'SCRAPER_NAME', active_scraper.__class__.__name__)
+
+    # --- Dynamic locations path (TopGun-style) ---
+    if getattr(active_scraper, "DYNAMIC_LOCATIONS", False) and hasattr(active_scraper, "get_dynamic_locations"):
+        try:
+            filtered_locations = active_scraper.get_dynamic_locations()
         except Exception as e:
             print(f"\nFailed to load dynamic locations for {scraper_name}: {e}")
             filtered_locations = {}
@@ -93,25 +191,18 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
 
     if not filtered_locations:
         print("\nNo matching locations found for this scraper type!")
-        return "None Found", ""
+        return "None Found", "", active_scraper
 
-    print("\nAvailable locations:\n-------------------")
-    print("0) All locations for mass pull")
-    for i, (name, url) in enumerate(filtered_locations.items(), start=1):
-        print(f"{i}) {name} ({url})")
+    selected_name, selected_value = _prompt_from_mapping(
+        filtered_locations,
+        title="Available locations",
+        allow_all=True,
+    )
 
-    while True:
-        try:
-            choice = int(input("Select a location by number (or 0 for all): "))
-            if choice == 0:
-                return "ALL", filtered_locations
-            elif 1 <= choice <= len(filtered_locations):
-                selected_name = list(filtered_locations.keys())[choice - 1]
-                return selected_name, filtered_locations[selected_name]
-            else:
-                print(f"Invalid selection. Choose a number between 0 and {len(filtered_locations)}.")
-        except ValueError:
-            print("Please enter a valid number.")
+    if selected_name == "ALL":
+        return "ALL", filtered_locations, active_scraper
+
+    return selected_name, selected_value, active_scraper
 
 
 def prompt_for_sheets_subfolder(sheets_folder: str = "Sheets") -> str:

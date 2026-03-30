@@ -1,53 +1,68 @@
 (async () => {
-  const STATES = ["TX", "OH", "AZ", "GA", "LA", "MI", "MO", "NM", "NV", "OK"];
+  const STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
   const MAX_RETRIES = 20;
+  const FORCE_SPORT_ID = 1;
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-  function findSeasonIdsFromPerformance() {
+  function findAjaxSeed() {
     try {
       const entries = performance.getEntriesByType("resource")
         .map(e => e.name)
-        .filter(u => u && u.includes("/ajax-events") && u.includes("season_ids="));
+        .filter(u => u && u.includes("/ajax-events"));
 
-      if (!entries.length) return "";
+      if (entries.length) {
+        const preferred =
+          entries.find(u => u.includes("season_ids=") && u.includes("page=1")) ||
+          entries.find(u => u.includes("page=1")) ||
+          entries[entries.length - 1];
 
-      const page1 = entries.find(u => u.includes("page=1")) || entries[0];
-      const url = new URL(page1);
-      return url.searchParams.get("season_ids") || "";
+        const url = new URL(preferred);
+        return {
+          ajaxUrl: `${url.origin}${url.pathname}`,
+          params: Object.fromEntries(url.searchParams.entries())
+        };
+      }
     } catch (e) {
-      console.log("Unable to read season_ids from performance entries:", e);
-      return "";
+      console.log("Could not inspect ajax-events request from performance:", e);
+    }
+
+    try {
+      const fallbackUrl = `${location.origin}/ajax-events`;
+      const params = Object.fromEntries(new URLSearchParams(location.search).entries());
+      return {
+        ajaxUrl: fallbackUrl,
+        params
+      };
+    } catch (e) {
+      console.log("Could not build fallback ajax URL from current page:", e);
+      return null;
     }
   }
 
-  const seasonIds = findSeasonIdsFromPerformance();
-  if (!seasonIds) {
+  const seed = findAjaxSeed();
+  if (!seed) {
     alert(
-      "Could not detect current season_ids.\n\n" +
-      "Open the current Five Tool Youth baseball season page first " +
-      "(for example /season/2026-baseball), wait for it to fully load, " +
-      "then run this script again."
+      "Could not detect /ajax-events parameters.\n\n" +
+      "Open the target site page first, wait until listings load, " +
+      "apply any season/year filter you want, then run this script again."
     );
     return;
   }
 
-  console.log("Detected season_ids:", seasonIds);
+  console.log("Using ajax endpoint:", seed.ajaxUrl);
+  console.log("Seed params:", seed.params);
 
   async function fetchState(state) {
-    const params = new URLSearchParams({
-      layout: "medium",
-      past_events: "false",
-      season_ids: seasonIds,
-      region: "",
-      name: "",
-      event_label_id: "",
-      division: "",
-      state,
-      sport_id: "1",
-      director: "",
-      events_exits: "",
-      organization_id: ""
-    });
+    const params = new URLSearchParams(seed.params || {});
+
+    params.set("layout", params.get("layout") || "medium");
+    params.set("past_events", params.get("past_events") || "false");
+    params.set("events_exits", "");
+    params.set("state", state);
+
+    if (FORCE_SPORT_ID !== null) {
+      params.set("sport_id", String(FORCE_SPORT_ID));
+    }
 
     const allPages = [];
     let page = 1;
@@ -55,7 +70,7 @@
 
     while (true) {
       params.set("page", String(page));
-      const url = `${location.origin}/ajax-events?${params.toString()}`;
+      const url = `${seed.ajaxUrl}?${params.toString()}`;
 
       let resp;
       try {
@@ -74,7 +89,7 @@
       }
 
       if (resp.status === 403) {
-        console.log(`[${state}] 403 on page ${page}. Solve Cloudflare in this tab, then wait...`);
+        console.log(`[${state}] 403 on page ${page}. Solve any challenge in this tab, then wait...`);
         retries++;
         if (retries > MAX_RETRIES) break;
         await sleep(5000);
@@ -125,7 +140,6 @@
       allPages.push({
         state,
         page,
-        season_ids: seasonIds,
         url,
         fetchedAt: new Date().toISOString(),
         payload: data
@@ -141,9 +155,10 @@
   const dump = {
     generated_at: new Date().toISOString(),
     source: location.href,
-    season_ids: seasonIds,
-    sport_id: 1,
+    domain: location.origin,
+    forced_sport_id: FORCE_SPORT_ID,
     states: STATES,
+    seed_params: seed.params || {},
     pages: []
   };
 

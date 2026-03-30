@@ -58,17 +58,11 @@
         "West Virginia (FiveTool)": "https://events.fivetool.org/ajax-events?state=WV",
         "Wyoming (FiveTool)": "https://events.fivetool.org/ajax-events?state=WY",
 
-
-        "Texas (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=TX",
-        "Ohio (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=OH",
-        "Arizona (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=AZ",
-        "Georgia (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=GA",
-        "Louisiana (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=LA",
-        "Michigan (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=MI",
-        "Missouri (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=MO",
-        "New Mexico (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=NM",
-        "Nevada (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=NV",
-        "Oklahoma (FiveToolYouth)": "./FiveToolYouthUtilities/fivetoolyouth_dump.json?state=OK",
+        "FiveToolYouth (Play365Base)": "./scrapers/play365/fivetoolyouth_scraper.py:FiveToolYouthScraper",
+        "Play24Sports (Play365Base)": "./scrapers/play365/play24sports_scraper.py:Play24SportsScraper",
+        "PlayPPS (Play365Base)": "./scrapers/play365/playpps_scraper.py:PlayPPSScraper",
+        "2DSportsYouth (Play365Base)": "./scrapers/play365/twodsportsyouth_scraper.py:TwoDSportsYouthScraper",
+        "2DSportsHighSchool (Play365Base)": "./scrapers/play365/twodsportshighschool_scraper.py:TwoDSportsHighSchoolScraper",
 
         "All (PST)": "https://registrations.premiersportstournaments.com/store/events?storeorganizationid=31369",
 

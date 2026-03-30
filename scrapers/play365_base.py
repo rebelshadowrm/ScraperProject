@@ -102,15 +102,19 @@ def _looks_like_event_dict(obj: Any) -> bool:
     if not url_key:
         return False
 
+    if obj.get("start_date") and obj.get("end_date"):
+        return True
+
     return any(
         key in obj
         for key in (
-            "id",
             "event_id",
-            "name",
-            "label",
-            "start_date",
-            "end_date",
+            "registration_status",
+            "season_id",
+            "game_guarantee",
+            "stay_to_play",
+            "display_location",
+            "schedule_link",
             "divisions",
             "venues",
             "contacts",
@@ -239,11 +243,46 @@ class Play365BaseScraper(BaseScraper):
     def _project_root(self) -> str:
         return os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
+    def _default_dump_path(self) -> str:
+        return os.path.join(self._project_root(), self.UTILITIES_SUBDIR, self.DUMP_FILENAME)
+
+    def _state_pairs_from_dump(self, dump_path: str) -> List[Tuple[str, str]]:
+        if not os.path.exists(dump_path):
+            return ALL_50_STATES
+
+        try:
+            with open(dump_path, "r", encoding="utf-8") as f:
+                blob = json.load(f)
+        except Exception as e:
+            logger.warning("[%s] Failed to inspect dump state list at %s: %s", self.SCRAPER_NAME, dump_path, e)
+            return ALL_50_STATES
+
+        seen = set()
+
+        for state in blob.get("states", []):
+            state_code = clean_text(state).upper()
+            if state_code:
+                seen.add(state_code)
+
+        for page in blob.get("pages", []):
+            if not isinstance(page, dict):
+                continue
+            page_state = clean_text(page.get("state")).upper()
+            if page_state:
+                seen.add(page_state)
+
+        if not seen:
+            return ALL_50_STATES
+
+        filtered = [(abbr, name) for abbr, name in ALL_50_STATES if abbr in seen]
+        return filtered or ALL_50_STATES
+
     def get_dynamic_locations(self) -> Dict[str, str]:
         dump_rel = f"./{self.UTILITIES_SUBDIR}/{self.DUMP_FILENAME}"
+        state_pairs = self._state_pairs_from_dump(self._default_dump_path())
         return {
             f"{state_name} ({self.SCRAPER_NAME})": f"{dump_rel}?state={state_abbr}"
-            for state_abbr, state_name in ALL_50_STATES
+            for state_abbr, state_name in state_pairs
         }
 
     def _parse_base_url(self, base_url: str) -> Tuple[str, Dict[str, str]]:

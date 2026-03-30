@@ -82,7 +82,8 @@ def run_cli():
 
     # Prompt for location using the scraper instance.
     locations = load_locations(LOCATIONS_FILE)
-    selected_location, loc_info = prompt_for_location(locations, scraper)
+    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
+    logger.info("Effective scraper: %s", scraper.__class__.__name__)
     logger.info("User selected location: %s", selected_location)
 
     # Load persistent state

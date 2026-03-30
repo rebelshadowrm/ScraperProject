@@ -1,0 +1,224 @@
+{
+    "failed_events": [
+        {
+            "name": "San Diego One Day Tournament 2",
+            "url": "https://cabaseball.usssa.com/event/san-diego-one-day-tournament-2/",
+            "reason": "Data validation failed. Possible missing or malformed fields."
+        },
+        {
+            "name": "Trophy Club Classic",
+            "url": "https://txbaseball.usssa.com/event/trophy-club-classic/",
+            "reason": "Validation failed",
+            "location": "Texas (USSSA)"
+        },
+        {
+            "name": "Turf Titans Of Little Elm",
+            "url": "https://txbaseball.usssa.com/event/turf-titans-of-little-elm/",
+            "reason": "Validation failed",
+            "location": "Texas (USSSA)"
+        },
+        {
+            "name": "Little Elm Turf War",
+            "url": "https://txbaseball.usssa.com/event/little-elm-turf-war/",
+            "reason": "Validation failed",
+            "location": "Texas (USSSA)"
+        },
+        {
+            "name": "Sat Sun Arrowhead Super Regional 7 8 10U Calera",
+            "url": "https://albaseball.usssa.com/event/sat-sun-arrowhead-super-regional-7-8-10u-calera/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Cornshucker Harley Steele Nit 4 Gg",
+            "url": "https://iabaseball.usssa.com/event/cornshucker-harley-steele-nit-4-gg/",
+            "reason": "Extraction failed"
+        },
+        {
+            "name": "Krewe Of Champions Super Regional",
+            "url": "https://labaseball.usssa.com/event/krewe-of-champions-super-regional/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "St Patricks Day Bash For Cash",
+            "url": "https://labaseball.usssa.com/event/st-patricks-day-bash-for-cash/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Vermillon Parish Showdown",
+            "url": "https://labaseball.usssa.com/event/vermillon-parish-showdown/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Pelican State Slugfest",
+            "url": "https://labaseball.usssa.com/event/pelican-state-slugfest/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Cajun Country Classic",
+            "url": "https://labaseball.usssa.com/event/cajun-country-classic/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Battle On The Bayou",
+            "url": "https://labaseball.usssa.com/event/battle-on-the-bayou/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Man Of Steel Super Regional",
+            "url": "https://labaseball.usssa.com/event/man-of-steel-super-regional/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Down South Diamond Classic",
+            "url": "https://labaseball.usssa.com/event/down-south-diamond-classic/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Swingin Into Summer",
+            "url": "https://labaseball.usssa.com/event/swingin-into-summer/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Louisiana Usssa State Championship",
+            "url": "https://labaseball.usssa.com/event/louisiana-usssa-state-championship/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Winter Nationals Toys For Tots Pap 3",
+            "url": "https://labaseball.usssa.com/event/winter-nationals-toys-for-tots-pap-3/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Nebraska Usssa All State Showcase 2024",
+            "url": "https://nebaseball.usssa.com/event/nebraska-usssa-all-state-showcase-2024/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "25 Ne Vs Ia Battle Of The Borders Major",
+            "url": "https://nebaseball.usssa.com/event/25-ne-vs-ia-battle-of-the-borders-major/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "25 Ne Vs Ia Battle Of The Borders Aa",
+            "url": "https://nebaseball.usssa.com/event/25-ne-vs-ia-battle-of-the-borders-aa/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "The Great 8 Global Nit",
+            "url": "https://nebaseball.usssa.com/event/the-great-8-global-nit/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Storm Chasers Classic World Series Qualifier 2",
+            "url": "https://nebaseball.usssa.com/event/storm-chasers-classic-world-series-qualifier-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Gretna Spring Training 13U 11U 9U Qualifier",
+            "url": "https://nebaseball.usssa.com/event/gretna-spring-training-13u-11u-9u-qualifier/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Best Game On Dirt Nit A Aa 2",
+            "url": "https://nebaseball.usssa.com/event/best-game-on-dirt-nit-a-aa-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "The Regal Awards Global Nit Major Aaa",
+            "url": "https://nebaseball.usssa.com/event/the-regal-awards-global-nit-major-aaa/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Runza Schools Out Global Nit",
+            "url": "https://nebaseball.usssa.com/event/runza-schools-out-global-nit/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Gretna Spring Training 14U 12U 10U Qualifier",
+            "url": "https://nebaseball.usssa.com/event/gretna-spring-training-14u-12u-10u-qualifier/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Boys R Back Nit 2",
+            "url": "https://nebaseball.usssa.com/event/boys-r-back-nit-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Stormchasers Papillion Days World Series Qualifier 2",
+            "url": "https://nebaseball.usssa.com/event/stormchasers-papillion-days-world-series-qualifier-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Nebraska Usssa Major State Tournament",
+            "url": "https://nebaseball.usssa.com/event/nebraska-usssa-major-state-tournament/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Nebraska Usssa A State Tournament 2",
+            "url": "https://nebaseball.usssa.com/event/nebraska-usssa-a-state-tournament-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Nebraska Usssa Aaa State Tournament 2",
+            "url": "https://nebaseball.usssa.com/event/nebraska-usssa-aaa-state-tournament-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Nebraska Usssa Aa State Tournament 2",
+            "url": "https://nebaseball.usssa.com/event/nebraska-usssa-aa-state-tournament-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "Asg24 Nc Usssa All State Games",
+            "url": "https://ncbaseball.usssa.com/event/asg24-nc-usssa-all-state-games/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "San Diego One Day Tournament 3",
+            "url": "https://cabaseball.usssa.com/event/san-diego-one-day-tournament-3/",
+            "reason": "Validation failed",
+            "location": "California (USSSA)"
+        },
+        {
+            "name": "2 Day Santa Barbara Labor Day Surf",
+            "url": "https://cabaseball.usssa.com/event/2-day-santa-barbara-labor-day-surf/",
+            "reason": "Validation failed",
+            "location": "California (USSSA)"
+        },
+        {
+            "name": "Rocky Mountain Plains Wednesday Night League",
+            "url": "https://cobaseball.usssa.com/event/rocky-mountain-plains-wednesday-night-league/",
+            "reason": "Validation failed",
+            "location": "Colorado (USSSA)"
+        },
+        {
+            "name": "Event 220239",
+            "url": "https://registrations.premiersportstournaments.com/store/event?eventid=220239",
+            "reason": "Validation failed",
+            "location": "All (PST)"
+        },
+        {
+            "name": "Event 212173",
+            "url": "https://registrations.premiersportstournaments.com/store/event?eventid=212173",
+            "reason": "Validation failed",
+            "location": "All (PST)"
+        },
+        {
+            "name": "san-diego-one-day-tournament-2",
+            "url": "https://cabaseball.usssa.com/event/san-diego-one-day-tournament-2/",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "https://labaseball.usssa.com/event/moms-love-diamonds",
+            "url": "https://labaseball.usssa.com/event/moms-love-diamonds/",
+            "location": "Louisiana (USSSA)",
+            "reason": "Validation failed"
+        },
+        {
+            "name": "https://njbaseball.usssa.com/event/c-a-m-p-invitational",
+            "url": "https://njbaseball.usssa.com/event/c-a-m-p-invitational/",
+            "location": "New Jersey (USSSA)",
+            "reason": "Validation failed"
+        }
+    ]
+}

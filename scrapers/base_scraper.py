@@ -1,0 +1,34 @@
+import abc
+from typing import List, Dict
+from selenium.webdriver import Firefox
+
+class BaseScraper(abc.ABC):
+    """
+    BaseScraper defines the interface for any site-specific scraper.
+    """
+
+    SCRAPER_NAME = "Base"
+    BATCH_DELAY_SECONDS = 30
+
+    @abc.abstractmethod
+    def collect_event_links(self, driver: Firefox, base_url: str, **kwargs) -> List[str]:
+        """
+        Collect and return a list of event URLs from the given base_url.
+        """
+        pass
+
+    @abc.abstractmethod
+    def extract_event_details(self, url: str, driver: Firefox, **kwargs) -> Dict:
+        """
+        Given an event URL, extract and return a dictionary of event data.
+        Return an empty dict or None if extraction fails.
+        """
+        pass
+
+    @abc.abstractmethod
+    def get_event_key(self, url: str) -> str:
+        """
+        Given an event URL, return a unique key for that event.
+        This key is used to store and compare events in the events JSON.
+        """
+        pass

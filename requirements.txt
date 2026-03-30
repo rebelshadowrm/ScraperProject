@@ -1,0 +1,9 @@
+selenium
+beautifulsoup4
+pandas
+openpyxl
+us
+tenacity
+webdriver-manager
+requests
+geopy

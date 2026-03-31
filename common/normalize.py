@@ -186,7 +186,7 @@ def normalize_guaranteed_games(value: Any) -> str:
 
     u = raw.strip("(),;").upper()
 
-    if u in {"NONE", "NO", "NO GG", "NO GUARANTEED GAMES"}:
+    if u in {"0", "NONE", "NO", "NO GG", "NO GUARANTEED GAMES"}:
         return "None"
 
     if u.isdigit() and u in _GG_CANON_SET:
@@ -267,6 +267,18 @@ def normalize_state_full_name(value: Any) -> str:
     return st.name if st else raw
 
 
+def normalize_required_address(value: Any) -> str:
+    raw = clean_text(value)
+    if not raw:
+        return "N/A"
+
+    upper = raw.upper()
+    if upper in {"N/A", "NA", "NONE", "NULL", "-", "--", "NOT AVAILABLE", "NOT APPLICABLE"}:
+        return "N/A"
+
+    return raw
+
+
 def normalize_row(row: Dict[str, Any]) -> Dict[str, Any]:
     """
     Normalize all known dropdown-constrained fields in a single event row dict.
@@ -283,6 +295,9 @@ def normalize_row(row: Dict[str, Any]) -> Dict[str, Any]:
     # State
     if "State-FullName" in out:
         out["State-FullName"] = normalize_state_full_name(out.get("State-FullName"))
+
+    if "Address" in out:
+        out["Address"] = normalize_required_address(out.get("Address"))
 
     # Single dropdown columns
     if "Guaranteed-games" in out:

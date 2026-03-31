@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Dict, Tuple
 from urllib.parse import urlparse
 
+from common.normalize import normalize_required_address
+
 _PLACEHOLDER_STRINGS = {
     "", "N/A", "NA", "NONE", "NULL", "-", "--", "NIL", "NOT AVAILABLE", "NOTAPPLICABLE", "NOT APPLICABLE",
 }
@@ -164,6 +166,9 @@ def validate_event_data(data: Dict) -> Tuple[bool, str | None]:
     if not validate_url(website_url):
         return False, f"Website URL '{website_url}' is invalid."
     data["Website-url"] = website_url
+
+    # Address is required by downstream upload process; normalize blanks/placeholders to N/A
+    data["Address"] = normalize_required_address(data.get("Address"))
 
     # Zip (OPTIONAL): normalize and never hard-fail
     data["Zip"] = normalize_zip(data.get("Zip"))

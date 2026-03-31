@@ -10,6 +10,7 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import WebDriverException
 from webdriver_manager.firefox import GeckoDriverManager
+from common.logging_utils import log_progress
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +112,7 @@ def initialize_driver(
         except Exception:
             pass
 
-    logger.info("Selenium WebDriver (Firefox) initialized. Download dir: %s", download_dir)
+    log_progress(logger, "Selenium WebDriver (Firefox) initialized.")
     return driver
 
 def restart_driver(

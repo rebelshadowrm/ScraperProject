@@ -309,7 +309,7 @@ def append_rows_to_template(
 # File naming & consolidation
 # --------------------------------------------------------------------
 
-def get_output_filename(location: str) -> str:
+def get_output_filename(location: str, base_folder: str = "Sheets") -> str:
     """
     Generate a location-specific Excel file name with the current date.
     If the location is 'Region (Org)', create Sheets/<date>/<Org>/Region_<date>.xlsx
@@ -328,7 +328,6 @@ def get_output_filename(location: str) -> str:
     region_clean = re.sub(r'[^\w-]', '_', region)
     org_clean = re.sub(r'[^\w-]', '_', org)
 
-    base_folder = "Sheets"
     os.makedirs(base_folder, exist_ok=True)
 
     date_folder = os.path.join(base_folder, date_str)

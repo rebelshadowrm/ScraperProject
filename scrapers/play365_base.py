@@ -2,11 +2,16 @@ import json
 import logging
 import os
 import re
+import shutil
+import time
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import parse_qs
 
+import requests
+
 from scrapers.base_scraper import BaseScraper
 from common.config import OUTPUT_COLUMNS
+from common.logging_utils import log_progress
 from common.normalize import (
     clean_text,
     normalize_age_group,
@@ -15,6 +20,10 @@ from common.normalize import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class Play365ManualFallbackRequired(Exception):
+    pass
 
 
 ALL_50_STATES = [
@@ -69,6 +78,24 @@ ALL_50_STATES = [
     ("WI", "Wisconsin"),
     ("WY", "Wyoming"),
 ]
+
+
+def _build_event_url(domain: str, url_key: str) -> str:
+    raw_domain = clean_text(domain).rstrip("/")
+    raw_key = clean_text(url_key).strip()
+
+    if not raw_key:
+        return ""
+
+    if raw_key.startswith("http://") or raw_key.startswith("https://"):
+        return raw_key
+
+    if "/events/" in raw_key:
+        if raw_key.startswith("/"):
+            return f"{raw_domain}{raw_key}"
+        return f"{raw_domain}/{raw_key.lstrip('/')}"
+
+    return f"{raw_domain}/events/{raw_key.lstrip('/')}"
 
 
 def _first_non_empty(*values) -> str:
@@ -221,7 +248,9 @@ class Play365BaseScraper(BaseScraper):
     """
 
     SCRAPER_NAME = "Play365Base"
+    REQUIRES_DRIVER = False
     DYNAMIC_LOCATIONS = True
+    AUTO_ALL_LOCATIONS = True
     BATCH_DELAY_SECONDS = 0
 
     DOMAIN = ""
@@ -229,12 +258,26 @@ class Play365BaseScraper(BaseScraper):
     DUMP_FILENAME = "play365_dump.json"
     SCRIPT_FILENAME = "export_play365.js"
     FORCE_SPORT_ID: Optional[int] = 1
+    EXPORT_HTTP_METHOD = "GET"
+    EXPORT_SUPPORTS_STATE_FILTER = True
+    EXPORT_LAYOUT_DEFAULT = "medium"
+    EXPORT_EXTRA_PARAMS: Dict[str, str] = {}
+    EXPORT_TOKEN_PARAM: Optional[str] = None
+    PREPARE_DUMP_IN_PROMPT = False
+    SUPPORTS_SELENIUM_EXPORT = False
+    DIRECT_API_ENABLED = True
+    DIRECT_API_HEADERS: Dict[str, str] = {
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0",
+    }
 
     def __init__(self):
         self.events_by_url: Dict[str, Dict[str, Any]] = {}
         self._loaded_dump_path: Optional[str] = None
         self._loaded_dump_mtime: Optional[float] = None
         self._all_events_cache: List[Dict[str, Any]] = []
+        self._event_source_label: str = ""
+        self._last_collection_source: str = ""
 
     # -------------------------------------------------------------------------
     # Paths / locations
@@ -246,43 +289,11 @@ class Play365BaseScraper(BaseScraper):
     def _default_dump_path(self) -> str:
         return os.path.join(self._project_root(), self.UTILITIES_SUBDIR, self.DUMP_FILENAME)
 
-    def _state_pairs_from_dump(self, dump_path: str) -> List[Tuple[str, str]]:
-        if not os.path.exists(dump_path):
-            return ALL_50_STATES
-
-        try:
-            with open(dump_path, "r", encoding="utf-8") as f:
-                blob = json.load(f)
-        except Exception as e:
-            logger.warning("[%s] Failed to inspect dump state list at %s: %s", self.SCRAPER_NAME, dump_path, e)
-            return ALL_50_STATES
-
-        seen = set()
-
-        for state in blob.get("states", []):
-            state_code = clean_text(state).upper()
-            if state_code:
-                seen.add(state_code)
-
-        for page in blob.get("pages", []):
-            if not isinstance(page, dict):
-                continue
-            page_state = clean_text(page.get("state")).upper()
-            if page_state:
-                seen.add(page_state)
-
-        if not seen:
-            return ALL_50_STATES
-
-        filtered = [(abbr, name) for abbr, name in ALL_50_STATES if abbr in seen]
-        return filtered or ALL_50_STATES
-
     def get_dynamic_locations(self) -> Dict[str, str]:
         dump_rel = f"./{self.UTILITIES_SUBDIR}/{self.DUMP_FILENAME}"
-        state_pairs = self._state_pairs_from_dump(self._default_dump_path())
         return {
             f"{state_name} ({self.SCRAPER_NAME})": f"{dump_rel}?state={state_abbr}"
-            for state_abbr, state_name in state_pairs
+            for state_abbr, state_name in ALL_50_STATES
         }
 
     def _parse_base_url(self, base_url: str) -> Tuple[str, Dict[str, str]]:
@@ -304,6 +315,44 @@ class Play365BaseScraper(BaseScraper):
     def _utilities_dir_from_dump_path(self, dump_path: str) -> str:
         return os.path.dirname(dump_path)
 
+    def _manual_dump_path(self, workspace_root: str) -> str:
+        return os.path.join(workspace_root, self.DUMP_FILENAME)
+
+    def _manual_readme_path(self, workspace_root: str) -> str:
+        return os.path.join(workspace_root, "README.txt")
+
+    def _write_manual_readme(self, workspace_root: str) -> str:
+        os.makedirs(workspace_root, exist_ok=True)
+        path = self._manual_readme_path(workspace_root)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(
+                "Manual Play365 Extraction\n\n"
+                "1. Open the matching site in your normal browser.\n"
+                "2. Open DevTools Console.\n"
+                "3. Paste and run the matching export_*.js script in this folder.\n"
+                "4. If the dump downloads into Downloads instead of this folder, drag it here or leave it in Downloads.\n"
+                "5. Return to the scraper program and continue.\n"
+            )
+        return path
+
+    def _try_recover_downloaded_dump(self, expected_dump_path: str) -> bool:
+        if os.path.exists(expected_dump_path):
+            return True
+
+        downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
+        candidate = os.path.join(downloads_dir, os.path.basename(expected_dump_path))
+        if not os.path.exists(candidate):
+            return False
+
+        try:
+            os.makedirs(os.path.dirname(expected_dump_path), exist_ok=True)
+            shutil.move(candidate, expected_dump_path)
+            logger.info("[%s] Recovered dump from Downloads: %s", self.SCRAPER_NAME, candidate)
+            return True
+        except Exception as e:
+            logger.warning("[%s] Failed to recover dump from Downloads: %s", self.SCRAPER_NAME, e)
+            return False
+
     # -------------------------------------------------------------------------
     # Browser export script generation
     # -------------------------------------------------------------------------
@@ -311,11 +360,21 @@ class Play365BaseScraper(BaseScraper):
     def _build_export_script(self) -> str:
         states_json = json.dumps([abbr for abbr, _ in ALL_50_STATES])
         force_sport = "null" if self.FORCE_SPORT_ID is None else str(self.FORCE_SPORT_ID)
+        export_method = json.dumps(self.EXPORT_HTTP_METHOD.upper())
+        supports_state_filter = "true" if self.EXPORT_SUPPORTS_STATE_FILTER else "false"
+        layout_default = json.dumps(self.EXPORT_LAYOUT_DEFAULT)
+        extra_params_json = json.dumps(self.EXPORT_EXTRA_PARAMS)
+        token_param = "null" if self.EXPORT_TOKEN_PARAM is None else json.dumps(self.EXPORT_TOKEN_PARAM)
 
         return f"""(async () => {{
   const STATES = {states_json};
   const MAX_RETRIES = 20;
   const FORCE_SPORT_ID = {force_sport};
+  const HTTP_METHOD = {export_method};
+  const SUPPORTS_STATE_FILTER = {supports_state_filter};
+  const LAYOUT_DEFAULT = {layout_default};
+  const EXTRA_PARAMS = {extra_params_json};
+  const TOKEN_PARAM = {token_param};
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   function findAjaxSeed() {{
@@ -353,6 +412,48 @@ class Play365BaseScraper(BaseScraper):
     }}
   }}
 
+  function findToken() {{
+    try {{
+      const tokenInput = document.querySelector('input[name="_token"]');
+      if (tokenInput && tokenInput.value) return tokenInput.value;
+
+      const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+      if (tokenMeta && tokenMeta.content) return tokenMeta.content;
+    }} catch (e) {{
+      console.log("Could not discover CSRF token from page:", e);
+    }}
+    return "";
+  }}
+
+  function shouldCaptureHiddenParam(name) {{
+    if (!name) return false;
+    const normalized = String(name).trim().toLowerCase();
+    return (
+      normalized === "_token" ||
+      normalized === "token" ||
+      normalized === "granted" ||
+      normalized.endsWith("_token") ||
+      normalized.endsWith("token") ||
+      normalized.endsWith("granted")
+    );
+  }}
+
+  function collectHiddenParams() {{
+    const out = {{}};
+    try {{
+      const hiddenInputs = document.querySelectorAll('input[type="hidden"][name]');
+      for (const input of hiddenInputs) {{
+        const name = input.getAttribute('name') || "";
+        const value = input.value || "";
+        if (!value || !shouldCaptureHiddenParam(name) || out[name]) continue;
+        out[name] = value;
+      }}
+    }} catch (e) {{
+      console.log("Could not collect hidden form params from page:", e);
+    }}
+    return out;
+  }}
+
   const seed = findAjaxSeed();
   if (!seed) {{
     alert(
@@ -368,14 +469,37 @@ class Play365BaseScraper(BaseScraper):
 
   async function fetchState(state) {{
     const params = new URLSearchParams(seed.params || {{}});
+    const hiddenParams = collectHiddenParams();
+    for (const [key, value] of Object.entries(hiddenParams)) {{
+      if (!params.has(key)) {{
+        params.set(key, value);
+      }}
+    }}
+    for (const [key, value] of Object.entries(EXTRA_PARAMS || {{}})) {{
+      if (!params.has(key)) {{
+        params.set(key, value);
+      }}
+    }}
 
-    params.set("layout", params.get("layout") || "medium");
+    params.set("layout", params.get("layout") || LAYOUT_DEFAULT);
     params.set("past_events", params.get("past_events") || "false");
     params.set("events_exits", "");
-    params.set("state", state);
+
+    if (SUPPORTS_STATE_FILTER) {{
+      params.set("state", state);
+    }} else {{
+      params.delete("state");
+    }}
 
     if (FORCE_SPORT_ID !== null) {{
       params.set("sport_id", String(FORCE_SPORT_ID));
+    }}
+
+    if (TOKEN_PARAM && !params.get(TOKEN_PARAM)) {{
+      const token = findToken();
+      if (token) {{
+        params.set(TOKEN_PARAM, token);
+      }}
     }}
 
     const allPages = [];
@@ -388,12 +512,22 @@ class Play365BaseScraper(BaseScraper):
 
       let resp;
       try {{
-        resp = await fetch(url, {{
+        const fetchOptions = {{
+          method: HTTP_METHOD,
           credentials: "include",
           headers: {{
             "x-requested-with": "XMLHttpRequest"
           }}
-        }});
+        }};
+
+        let requestUrl = url;
+        if (HTTP_METHOD === "POST") {{
+          fetchOptions.headers["content-type"] = "application/x-www-form-urlencoded; charset=UTF-8";
+          fetchOptions.body = params.toString();
+          requestUrl = seed.ajaxUrl;
+        }}
+
+        resp = await fetch(requestUrl, fetchOptions);
       }} catch (e) {{
         console.log(`[${{state}}] Network error on page ${{page}}:`, e);
         retries++;
@@ -452,7 +586,7 @@ class Play365BaseScraper(BaseScraper):
       console.log(`[${{state}}] Saved page ${{page}} (${{eventCount}} events)`);
 
       allPages.push({{
-        state,
+        state: SUPPORTS_STATE_FILTER ? state : "",
         page,
         url,
         fetchedAt: new Date().toISOString(),
@@ -476,11 +610,14 @@ class Play365BaseScraper(BaseScraper):
     pages: []
   }};
 
-  for (const state of STATES) {{
-    console.log(`Starting export for ${{state}}...`);
+  const exportStates = SUPPORTS_STATE_FILTER ? STATES : [""];
+
+  for (const state of exportStates) {{
+    const stateLabel = state || "ALL";
+    console.log(`Starting export for ${{stateLabel}}...`);
     const pages = await fetchState(state);
     dump.pages.push(...pages);
-    console.log(`Done with ${{state}}. Added ${{pages.length}} page(s).`);
+    console.log(`Done with ${{stateLabel}}. Added ${{pages.length}} page(s).`);
     await sleep(1000);
   }}
 
@@ -506,8 +643,226 @@ class Play365BaseScraper(BaseScraper):
         with open(script_path, "w", encoding="utf-8") as f:
             f.write(self._build_export_script())
 
-        logger.info("[%s] Wrote browser export script to: %s", self.SCRAPER_NAME, script_path)
+        log_progress(logger, "[%s] Browser export script generated: %s", self.SCRAPER_NAME, script_path)
         return script_path
+
+    def _build_selenium_export_script(self) -> str:
+        states_json = json.dumps([abbr for abbr, _ in ALL_50_STATES])
+        force_sport = "null" if self.FORCE_SPORT_ID is None else str(self.FORCE_SPORT_ID)
+        export_method = json.dumps(self.EXPORT_HTTP_METHOD.upper())
+        supports_state_filter = "true" if self.EXPORT_SUPPORTS_STATE_FILTER else "false"
+        layout_default = json.dumps(self.EXPORT_LAYOUT_DEFAULT)
+        extra_params_json = json.dumps(self.EXPORT_EXTRA_PARAMS)
+        token_param = "null" if self.EXPORT_TOKEN_PARAM is None else json.dumps(self.EXPORT_TOKEN_PARAM)
+
+        return f"""
+const callback = arguments[arguments.length - 1];
+const STATES = {states_json};
+const MAX_RETRIES = 10;
+const FORCE_SPORT_ID = {force_sport};
+const HTTP_METHOD = {export_method};
+const SUPPORTS_STATE_FILTER = {supports_state_filter};
+const LAYOUT_DEFAULT = {layout_default};
+const EXTRA_PARAMS = {extra_params_json};
+const TOKEN_PARAM = {token_param};
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function findAjaxSeed() {{
+  try {{
+    const entries = performance.getEntriesByType("resource")
+      .map((e) => e.name)
+      .filter((u) => u && u.includes("/ajax-events"));
+
+    if (entries.length) {{
+      const preferred =
+        entries.find((u) => u.includes("season_ids=") && u.includes("page=1")) ||
+        entries.find((u) => u.includes("page=1")) ||
+        entries[entries.length - 1];
+
+      const url = new URL(preferred);
+      return {{
+        ajaxUrl: `${{url.origin}}${{url.pathname}}`,
+        params: Object.fromEntries(url.searchParams.entries())
+      }};
+    }}
+  }} catch (e) {{}}
+
+  return {{
+    ajaxUrl: `${{location.origin}}/ajax-events`,
+    params: Object.fromEntries(new URLSearchParams(location.search).entries())
+  }};
+}}
+
+function findToken() {{
+  try {{
+    const tokenInput = document.querySelector('input[name="_token"]');
+    if (tokenInput && tokenInput.value) return tokenInput.value;
+    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+    if (tokenMeta && tokenMeta.content) return tokenMeta.content;
+  }} catch (e) {{}}
+  return "";
+}}
+
+function shouldCaptureHiddenParam(name) {{
+  if (!name) return false;
+  const normalized = String(name).trim().toLowerCase();
+  return (
+    normalized === "_token" ||
+    normalized === "token" ||
+    normalized === "granted" ||
+    normalized.endsWith("_token") ||
+    normalized.endsWith("token") ||
+    normalized.endsWith("granted")
+  );
+}}
+
+function collectHiddenParams() {{
+  const out = {{}};
+  try {{
+    const hiddenInputs = document.querySelectorAll('input[type="hidden"][name]');
+    for (const input of hiddenInputs) {{
+      const name = input.getAttribute('name') || "";
+      const value = input.value || "";
+      if (!value || !shouldCaptureHiddenParam(name) || out[name]) continue;
+      out[name] = value;
+    }}
+  }} catch (e) {{}}
+  return out;
+}}
+
+function countEvents(data) {{
+  if (Array.isArray(data)) return data.length;
+  if (Array.isArray(data?.events)) return data.events.length;
+  if (Array.isArray(data?.data)) return data.data.length;
+  if (Array.isArray(data?.eventlist)) return data.eventlist.length;
+  if (Array.isArray(data?.payload)) return data.payload.length;
+  if (Array.isArray(data?.payload?.events)) return data.payload.events.length;
+  if (Array.isArray(data?.payload?.data)) return data.payload.data.length;
+  if (Array.isArray(data?.payload?.eventlist)) return data.payload.eventlist.length;
+  if (typeof data?.html === "string") return (data.html.match(/data-event-id=/g) || []).length;
+  if (typeof data?.payload?.html === "string") return (data.payload.html.match(/data-event-id=/g) || []).length;
+  return 0;
+}}
+
+(async () => {{
+  try {{
+    const seed = findAjaxSeed();
+    const dump = {{
+      generated_at: new Date().toISOString(),
+      source: location.href,
+      domain: location.origin,
+      forced_sport_id: FORCE_SPORT_ID,
+      states: STATES,
+      seed_params: seed.params || {{}},
+      pages: []
+    }};
+
+    const exportStates = SUPPORTS_STATE_FILTER ? STATES : [""];
+
+    for (const state of exportStates) {{
+      const params = new URLSearchParams(seed.params || {{}});
+      const hiddenParams = collectHiddenParams();
+      for (const [key, value] of Object.entries(hiddenParams)) {{
+        if (!params.has(key)) params.set(key, value);
+      }}
+      for (const [key, value] of Object.entries(EXTRA_PARAMS || {{}})) {{
+        if (!params.has(key)) params.set(key, value);
+      }}
+
+      params.set("layout", params.get("layout") || LAYOUT_DEFAULT);
+      params.set("past_events", params.get("past_events") || "false");
+      params.set("events_exits", "");
+
+      if (SUPPORTS_STATE_FILTER) params.set("state", state);
+      else params.delete("state");
+
+      if (FORCE_SPORT_ID !== null) params.set("sport_id", String(FORCE_SPORT_ID));
+
+      if (TOKEN_PARAM && !params.get(TOKEN_PARAM)) {{
+        const token = findToken();
+        if (token) params.set(TOKEN_PARAM, token);
+      }}
+
+      let page = 1;
+      let retries = 0;
+      while (true) {{
+        params.set("page", String(page));
+        const url = `${{seed.ajaxUrl}}?${{params.toString()}}`;
+
+        try {{
+          const fetchOptions = {{
+            method: HTTP_METHOD,
+            credentials: "include",
+            headers: {{
+              "x-requested-with": "XMLHttpRequest"
+            }}
+          }};
+
+          let requestUrl = url;
+          if (HTTP_METHOD === "POST") {{
+            fetchOptions.headers["content-type"] = "application/x-www-form-urlencoded; charset=UTF-8";
+            fetchOptions.body = params.toString();
+            requestUrl = seed.ajaxUrl;
+          }}
+
+          const resp = await fetch(requestUrl, fetchOptions);
+          if (resp.status === 403) throw new Error(`403 on page ${{page}}`);
+          const data = JSON.parse(await resp.text());
+          const eventCount = countEvents(data);
+          if (!eventCount) break;
+
+          dump.pages.push({{
+            state: SUPPORTS_STATE_FILTER ? state : "",
+            page,
+            url,
+            fetchedAt: new Date().toISOString(),
+            payload: data
+          }});
+
+          retries = 0;
+          page += 1;
+          await sleep(250);
+        }} catch (err) {{
+          retries += 1;
+          if (retries > MAX_RETRIES) throw err;
+          await sleep(1000);
+        }}
+      }}
+    }}
+
+    callback({{ ok: true, dump }});
+  }} catch (err) {{
+    callback({{ ok: false, error: String(err && err.message ? err.message : err) }});
+  }}
+}})();
+"""
+
+    def _try_export_dump_with_selenium(self, driver, dump_path: str) -> bool:
+        if not self.SUPPORTS_SELENIUM_EXPORT or driver is None:
+            return False
+
+        try:
+            driver.get(self.DOMAIN)
+            time.sleep(3)
+            result = driver.execute_async_script(self._build_selenium_export_script())
+        except Exception as e:
+            logger.warning("[%s] Selenium export attempt failed: %s", self.SCRAPER_NAME, e)
+            return False
+
+        if not isinstance(result, dict) or not result.get("ok") or "dump" not in result:
+            logger.warning(
+                "[%s] Selenium export did not return a usable dump%s",
+                self.SCRAPER_NAME,
+                f": {result.get('error')}" if isinstance(result, dict) and result.get("error") else ".",
+            )
+            return False
+
+        os.makedirs(os.path.dirname(dump_path), exist_ok=True)
+        with open(dump_path, "w", encoding="utf-8") as f:
+            json.dump(result["dump"], f, indent=2)
+
+        log_progress(logger, "[%s] Dump generated via Selenium: %s", self.SCRAPER_NAME, dump_path)
+        return True
 
     # -------------------------------------------------------------------------
     # Dump loading / caching
@@ -527,6 +882,7 @@ class Play365BaseScraper(BaseScraper):
         self._all_events_cache = list(_walk_event_objects(blob))
         self._loaded_dump_path = dump_path
         self._loaded_dump_mtime = mtime
+        self._event_source_label = f"dump cache ({dump_path})"
 
         logger.info(
             "[%s] Loaded %s raw event object(s) from dump: %s",
@@ -535,29 +891,216 @@ class Play365BaseScraper(BaseScraper):
             dump_path,
         )
 
-    def _ensure_dump_exists(self, dump_path: str) -> None:
+    def _load_events_from_blob(self, blob: Any, source_label: str) -> None:
+        self._all_events_cache = list(_walk_event_objects(blob))
+        self._loaded_dump_path = None
+        self._loaded_dump_mtime = None
+        self._event_source_label = source_label
+        logger.info(
+            "[%s] Loaded %s raw event object(s) from %s.",
+            self.SCRAPER_NAME,
+            len(self._all_events_cache),
+            source_label,
+        )
+
+    def _extract_hidden_inputs(self, html: str) -> Dict[str, str]:
+        out: Dict[str, str] = {}
+        if not html:
+            return out
+
+        for match in re.finditer(r'<input[^>]+type=["\']hidden["\'][^>]*>', html, flags=re.IGNORECASE):
+            tag = match.group(0)
+            name_match = re.search(r'name=["\']([^"\']+)["\']', tag, flags=re.IGNORECASE)
+            value_match = re.search(r'value=["\']([^"\']*)["\']', tag, flags=re.IGNORECASE)
+            if not name_match:
+                continue
+            name = clean_text(name_match.group(1))
+            value = clean_text(value_match.group(1) if value_match else "")
+            if name and value:
+                out[name] = value
+
+        meta_match = re.search(
+            r'<meta[^>]+name=["\']csrf-token["\'][^>]+content=["\']([^"\']+)["\']',
+            html,
+            flags=re.IGNORECASE,
+        )
+        if meta_match and "_token" not in out:
+            out["_token"] = clean_text(meta_match.group(1))
+
+        return out
+
+    def _build_direct_api_params(self, *, page: int, state: str = "") -> Dict[str, str]:
+        params = dict(self.EXPORT_EXTRA_PARAMS or {})
+        params["page"] = str(page)
+        params["layout"] = self.EXPORT_LAYOUT_DEFAULT or "medium"
+        params["past_events"] = params.get("past_events", "false")
+        params["events_exits"] = ""
+
+        if self.EXPORT_SUPPORTS_STATE_FILTER and state:
+            params["state"] = state
+        else:
+            params.pop("state", None)
+
+        if self.FORCE_SPORT_ID is not None:
+            params["sport_id"] = str(self.FORCE_SPORT_ID)
+
+        return params
+
+    def _try_load_events_from_api(self) -> bool:
+        if not self.DIRECT_API_ENABLED:
+            return False
+
+        ajax_url = f"{self.DOMAIN.rstrip('/')}/ajax-events"
+        session = requests.Session()
+        pages = []
+        export_states = [abbr for abbr, _ in ALL_50_STATES] if self.EXPORT_SUPPORTS_STATE_FILTER else [""]
+        hidden_params: Dict[str, str] = {}
+        made_request = False
+
+        try:
+            try:
+                bootstrap = session.get(self.DOMAIN, headers=self.DIRECT_API_HEADERS, timeout=30)
+                if bootstrap.ok:
+                    hidden_params = self._extract_hidden_inputs(bootstrap.text)
+            except Exception as e:
+                logger.info("[%s] Bootstrap request for direct API seed did not succeed: %s", self.SCRAPER_NAME, e)
+
+            log_progress(logger, "[%s] Attempting direct API pull.", self.SCRAPER_NAME)
+
+            for state in export_states:
+                page = 1
+                while True:
+                    params = self._build_direct_api_params(page=page, state=state)
+                    for key, value in hidden_params.items():
+                        if key not in params:
+                            params[key] = value
+                    if self.EXPORT_HTTP_METHOD.upper() == "POST":
+                        if self.EXPORT_TOKEN_PARAM and self.EXPORT_TOKEN_PARAM not in params and hidden_params.get(self.EXPORT_TOKEN_PARAM):
+                            params[self.EXPORT_TOKEN_PARAM] = hidden_params[self.EXPORT_TOKEN_PARAM]
+                        resp = session.post(ajax_url, data=params, headers=self.DIRECT_API_HEADERS, timeout=30)
+                    else:
+                        resp = session.get(ajax_url, params=params, headers=self.DIRECT_API_HEADERS, timeout=30)
+                    made_request = True
+                    resp.raise_for_status()
+                    data = resp.json()
+
+                    eventlist = []
+                    if isinstance(data, dict):
+                        eventlist = data.get("eventlist") or data.get("events") or data.get("data") or []
+                    elif isinstance(data, list):
+                        eventlist = data
+
+                    if not eventlist:
+                        break
+
+                    pages.append(
+                        {
+                            "state": state if self.EXPORT_SUPPORTS_STATE_FILTER else "",
+                            "page": page,
+                            "url": resp.url,
+                            "fetchedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                            "payload": data,
+                        }
+                    )
+                    page += 1
+
+            blob = {
+                "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "source": ajax_url,
+                "domain": self.DOMAIN,
+                "forced_sport_id": self.FORCE_SPORT_ID,
+                "states": [abbr for abbr, _ in ALL_50_STATES],
+                "seed_params": self._build_direct_api_params(page=1),
+                "pages": pages,
+            }
+            self._load_events_from_blob(blob, "direct API")
+            log_progress(
+                logger,
+                "[%s] Direct API pull succeeded%s.",
+                self.SCRAPER_NAME,
+                f" with {len(pages)} page(s)" if pages else " with no events returned",
+            )
+            return True
+        except Exception as e:
+            logger.warning("[%s] Direct API pull failed: %s", self.SCRAPER_NAME, e)
+            return False
+
+    def _prompt_manual_fallback(self) -> bool:
+        print(
+            f"\nAutomatic pulling method failed for {self.SCRAPER_NAME}.\n"
+            "Extract manually using a browser script?\n"
+            "1) Yes\n"
+            "2) No\n"
+        )
+        while True:
+            choice = input("Enter choice [1-2]: ").strip()
+            if choice == "1":
+                return True
+            if choice == "2":
+                return False
+            print("Invalid choice. Please enter 1 or 2.")
+
+    def _ensure_dump_exists(
+        self,
+        dump_path: str,
+        driver=None,
+        manual_workspace_root: Optional[str] = None,
+        *,
+        prompt_for_manual_fallback: bool = True,
+    ) -> str:
         if os.path.exists(dump_path):
-            return
+            return dump_path
 
-        script_path = self._write_export_script(dump_path)
+        if self._try_export_dump_with_selenium(driver, dump_path):
+            return dump_path
 
-        logger.warning("[%s] Required dump file not found: %s", self.SCRAPER_NAME, dump_path)
+        active_dump_path = dump_path
+        if manual_workspace_root:
+            os.makedirs(manual_workspace_root, exist_ok=True)
+            self._write_manual_readme(manual_workspace_root)
+            active_dump_path = self._manual_dump_path(manual_workspace_root)
+
+        logger.warning("[%s] Automatic pulling failed. No dump is available at: %s", self.SCRAPER_NAME, active_dump_path)
+
+        if prompt_for_manual_fallback and not self._prompt_manual_fallback():
+            raise RuntimeError(f"{self.SCRAPER_NAME} manual extraction declined by user.")
+
+        log_progress(logger, "[%s] Switching to manual browser-script fallback.", self.SCRAPER_NAME)
+
+        script_path = self._write_export_script(active_dump_path)
         logger.warning("[%s] Browser export script generated at: %s", self.SCRAPER_NAME, script_path)
 
         try:
-            input(
-                f"\n{self.SCRAPER_NAME} dump is missing.\n"
-                f"Run the generated browser script from: {script_path}\n"
-                f"Place/save the resulting {self.DUMP_FILENAME} in: {os.path.dirname(dump_path)}\n"
-                "Press Enter after the dump file is ready..."
-            )
+            while True:
+                input(
+                    f"\n{self.SCRAPER_NAME} manual extraction selected.\n"
+                    f"Run the generated browser script from: {script_path}\n"
+                    f"Place/save the resulting {self.DUMP_FILENAME} in: {os.path.dirname(active_dump_path)}\n"
+                    "Press Enter after the dump file is ready..."
+                )
+
+                if os.path.exists(active_dump_path) or self._try_recover_downloaded_dump(active_dump_path):
+                    break
+
+                print(
+                    f"\n{self.DUMP_FILENAME} was not found yet.\n"
+                    "1) Retry after placing the dump file\n"
+                    "2) Cancel\n"
+                )
+                retry_choice = input("Enter choice [1-2]: ").strip()
+                if retry_choice == "1":
+                    continue
+                raise FileNotFoundError(
+                    f"{self.SCRAPER_NAME} dump still not found after prompt: {active_dump_path}"
+                )
         except EOFError:
             pass
 
-        if not os.path.exists(dump_path):
+        if not os.path.exists(active_dump_path) and not self._try_recover_downloaded_dump(active_dump_path):
             raise FileNotFoundError(
-                f"{self.SCRAPER_NAME} dump still not found after prompt: {dump_path}"
+                f"{self.SCRAPER_NAME} dump still not found after prompt: {active_dump_path}"
             )
+        return active_dump_path
 
     # -------------------------------------------------------------------------
     # BaseScraper interface
@@ -566,13 +1109,31 @@ class Play365BaseScraper(BaseScraper):
     def collect_event_links(self, driver, base_url: str, **kwargs) -> List[str]:
         dump_path, params = self._parse_base_url(base_url)
         target_state = clean_text(params.get("state")).upper()
+        allow_manual_fallback = kwargs.get("allow_manual_fallback", True)
+        manual_workspace_root = kwargs.get("manual_workspace_root")
+        skip_direct_api = kwargs.get("skip_direct_api", False)
+        prompt_for_manual_fallback = kwargs.get("prompt_for_manual_fallback", True)
 
         if not target_state:
             raise ValueError(f"{self.SCRAPER_NAME} base_url is missing ?state=XX")
 
-        self._ensure_dump_exists(dump_path)
-        self._load_dump_if_needed(dump_path)
+        if not self._all_events_cache:
+            api_loaded = False
+            if not skip_direct_api:
+                api_loaded = self._try_load_events_from_api()
 
+            if not api_loaded:
+                if not allow_manual_fallback:
+                    raise Play365ManualFallbackRequired(self.SCRAPER_NAME)
+                resolved_dump_path = self._ensure_dump_exists(
+                    dump_path,
+                    driver=driver,
+                    manual_workspace_root=manual_workspace_root,
+                    prompt_for_manual_fallback=prompt_for_manual_fallback,
+                )
+                self._load_dump_if_needed(resolved_dump_path)
+
+        self._last_collection_source = self._event_source_label or "cache"
         self.events_by_url.clear()
 
         for event in self._all_events_cache:
@@ -598,10 +1159,11 @@ class Play365BaseScraper(BaseScraper):
 
         links = sorted(self.events_by_url.keys())
         logger.info(
-            "[%s] Returning %s event link(s) for state %s from local dump.",
+            "[%s] Returning %s event link(s) for state %s from %s.",
             self.SCRAPER_NAME,
             len(links),
             target_state,
+            self._last_collection_source,
         )
         return links
 
@@ -777,3 +1339,19 @@ class Play365BaseScraper(BaseScraper):
         if match:
             return match.group(1)
         return url
+
+
+class Play365GetScraper(Play365BaseScraper):
+    EXPORT_HTTP_METHOD = "GET"
+
+
+class Play365GetAllScraper(Play365GetScraper):
+    FORCE_SPORT_ID = None
+    EXPORT_SUPPORTS_STATE_FILTER = False
+
+
+class Play365PostScraper(Play365BaseScraper):
+    FORCE_SPORT_ID = None
+    EXPORT_HTTP_METHOD = "POST"
+    EXPORT_SUPPORTS_STATE_FILTER = False
+    EXPORT_TOKEN_PARAM = "_token"

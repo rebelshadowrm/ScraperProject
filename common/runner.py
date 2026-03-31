@@ -8,6 +8,7 @@ from typing import List, Dict, Any, Callable, Optional
 
 from selenium.common.exceptions import WebDriverException
 
+from common.logging_utils import log_progress
 from common.validation import validate_event_data
 from common.excel_utils import create_workbook_from_template, append_rows_to_template, get_output_filename
 
@@ -34,6 +35,18 @@ logger = logging.getLogger(__name__)
 
 def normalize_url(url: str) -> str:
     return url.rstrip('/.').lower()
+
+
+def _can_use_driver(scraper, driver) -> bool:
+    return bool(getattr(scraper, "REQUIRES_DRIVER", True) and driver is not None)
+
+
+def _should_log_source_init(scraper) -> bool:
+    return bool(
+        getattr(scraper, "DYNAMIC_LOCATIONS", False)
+        and hasattr(scraper, "_all_events_cache")
+        and not getattr(scraper, "_all_events_cache", None)
+    )
 
 
 def ensure_template(output_file: str) -> bool:
@@ -76,7 +89,8 @@ def process_events_in_batches(
             break
 
         batch = urls_to_process[i:i + batch_size]
-        logger.info(
+        log_progress(
+            logger,
             "Processing batch %d/%d.",
             (i // batch_size) + 1,
             (total_urls + batch_size - 1) // batch_size
@@ -153,7 +167,7 @@ def process_events_in_batches(
                     record_attempt(events_data, key=key, status="failed", error=str(e))
                     save_events(events_data, json_file)
 
-                    if is_driver_connection_error(e) and attempts < 2:
+                    if is_driver_connection_error(e) and attempts < 2 and _can_use_driver(scraper, driver):
                         logger.warning("WebDriver disconnected. Restarting and retrying URL: %s", url)
                         driver = restart_driver(
                             driver,
@@ -178,7 +192,7 @@ def process_events_in_batches(
                     record_attempt(events_data, key=key, status="failed", error=str(e))
                     save_events(events_data, json_file)
 
-                    if is_driver_connection_error(e) and attempts < 2:
+                    if is_driver_connection_error(e) and attempts < 2 and _can_use_driver(scraper, driver):
                         logger.warning("Driver connection issue detected. Restarting and retrying URL: %s", url)
                         driver = restart_driver(
                             driver,
@@ -242,6 +256,8 @@ def process_location(
     download_dir: str,
     shutdown_check: Callable[[], bool],
     firefox_binary: Optional[str] = None,
+    output_base_folder: str = "Sheets",
+    collect_kwargs: Optional[Dict[str, Any]] = None,
 ):
     """
     Process a single location:
@@ -251,13 +267,16 @@ def process_location(
       4) ensure output template exists
       5) batch scrape + append to Excel
     """
-    logger.info("Processing location: %s (%s)", location_name, base_url)
+    if _should_log_source_init(scraper):
+        log_progress(logger, "Initializing event source for %s...", getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__))
+    else:
+        log_progress(logger, "Processing location: %s", location_name)
 
     # 1) Collect event links (restart-on-disconnect once)
     try:
-        new_links = scraper.collect_event_links(driver, base_url=base_url)
+        new_links = scraper.collect_event_links(driver, base_url=base_url, **(collect_kwargs or {}))
     except WebDriverException as e:
-        if is_driver_connection_error(e):
+        if is_driver_connection_error(e) and _can_use_driver(scraper, driver):
             logger.warning("WebDriver disconnected during link collection. Restarting and retrying once.")
             driver = restart_driver(
                 driver,
@@ -265,11 +284,15 @@ def process_location(
                 download_dir=download_dir,
                 headless=True,
             )
-            new_links = scraper.collect_event_links(driver, base_url=base_url)
+            new_links = scraper.collect_event_links(driver, base_url=base_url, **(collect_kwargs or {}))
         else:
             raise
 
-    logger.info("Collected %d event links from %s for %s.", len(new_links), base_url, location_name)
+    source_label = getattr(scraper, "_last_collection_source", "") or base_url
+    logger.info("Collected %d event links using %s for %s.", len(new_links), source_label, location_name)
+
+    if getattr(scraper, "DYNAMIC_LOCATIONS", False):
+        log_progress(logger, "Filtering loaded events into output: %s", location_name)
 
     # 2) Add/update events with richer schema
     scraper_name = scraper.__class__.__name__
@@ -312,7 +335,7 @@ def process_location(
         return driver
 
     # 4) Ensure output Excel file exists
-    output_file = get_output_filename(location_name)
+    output_file = get_output_filename(location_name, base_folder=output_base_folder)
     created_this_run = ensure_template(output_file)
     logger.info("Excel output file for %s will be: %s", location_name, output_file)
 
@@ -341,5 +364,5 @@ def process_location(
         except Exception as e:
             logger.warning("[Excel] Failed to delete empty staged sheet %s: %s", output_file, e)
 
-    logger.info("Batch processing complete for %s.", location_name)
+    log_progress(logger, "Completed location: %s", location_name)
     return driver

@@ -1,7 +1,12 @@
 (async () => {
   const STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
   const MAX_RETRIES = 20;
-  const FORCE_SPORT_ID = 1;
+  const FORCE_SPORT_ID = null;
+  const HTTP_METHOD = "GET";
+  const SUPPORTS_STATE_FILTER = false;
+  const LAYOUT_DEFAULT = "medium";
+  const EXTRA_PARAMS = {};
+  const TOKEN_PARAM = null;
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   function findAjaxSeed() {
@@ -39,6 +44,48 @@
     }
   }
 
+  function findToken() {
+    try {
+      const tokenInput = document.querySelector('input[name="_token"]');
+      if (tokenInput && tokenInput.value) return tokenInput.value;
+
+      const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+      if (tokenMeta && tokenMeta.content) return tokenMeta.content;
+    } catch (e) {
+      console.log("Could not discover CSRF token from page:", e);
+    }
+    return "";
+  }
+
+  function shouldCaptureHiddenParam(name) {
+    if (!name) return false;
+    const normalized = String(name).trim().toLowerCase();
+    return (
+      normalized === "_token" ||
+      normalized === "token" ||
+      normalized === "granted" ||
+      normalized.endsWith("_token") ||
+      normalized.endsWith("token") ||
+      normalized.endsWith("granted")
+    );
+  }
+
+  function collectHiddenParams() {
+    const out = {};
+    try {
+      const hiddenInputs = document.querySelectorAll('input[type="hidden"][name]');
+      for (const input of hiddenInputs) {
+        const name = input.getAttribute('name') || "";
+        const value = input.value || "";
+        if (!value || !shouldCaptureHiddenParam(name) || out[name]) continue;
+        out[name] = value;
+      }
+    } catch (e) {
+      console.log("Could not collect hidden form params from page:", e);
+    }
+    return out;
+  }
+
   const seed = findAjaxSeed();
   if (!seed) {
     alert(
@@ -54,14 +101,37 @@
 
   async function fetchState(state) {
     const params = new URLSearchParams(seed.params || {});
+    const hiddenParams = collectHiddenParams();
+    for (const [key, value] of Object.entries(hiddenParams)) {
+      if (!params.has(key)) {
+        params.set(key, value);
+      }
+    }
+    for (const [key, value] of Object.entries(EXTRA_PARAMS || {})) {
+      if (!params.has(key)) {
+        params.set(key, value);
+      }
+    }
 
-    params.set("layout", params.get("layout") || "medium");
+    params.set("layout", params.get("layout") || LAYOUT_DEFAULT);
     params.set("past_events", params.get("past_events") || "false");
     params.set("events_exits", "");
-    params.set("state", state);
+
+    if (SUPPORTS_STATE_FILTER) {
+      params.set("state", state);
+    } else {
+      params.delete("state");
+    }
 
     if (FORCE_SPORT_ID !== null) {
       params.set("sport_id", String(FORCE_SPORT_ID));
+    }
+
+    if (TOKEN_PARAM && !params.get(TOKEN_PARAM)) {
+      const token = findToken();
+      if (token) {
+        params.set(TOKEN_PARAM, token);
+      }
     }
 
     const allPages = [];
@@ -74,12 +144,22 @@
 
       let resp;
       try {
-        resp = await fetch(url, {
+        const fetchOptions = {
+          method: HTTP_METHOD,
           credentials: "include",
           headers: {
             "x-requested-with": "XMLHttpRequest"
           }
-        });
+        };
+
+        let requestUrl = url;
+        if (HTTP_METHOD === "POST") {
+          fetchOptions.headers["content-type"] = "application/x-www-form-urlencoded; charset=UTF-8";
+          fetchOptions.body = params.toString();
+          requestUrl = seed.ajaxUrl;
+        }
+
+        resp = await fetch(requestUrl, fetchOptions);
       } catch (e) {
         console.log(`[${state}] Network error on page ${page}:`, e);
         retries++;
@@ -138,7 +218,7 @@
       console.log(`[${state}] Saved page ${page} (${eventCount} events)`);
 
       allPages.push({
-        state,
+        state: SUPPORTS_STATE_FILTER ? state : "",
         page,
         url,
         fetchedAt: new Date().toISOString(),
@@ -162,11 +242,14 @@
     pages: []
   };
 
-  for (const state of STATES) {
-    console.log(`Starting export for ${state}...`);
+  const exportStates = SUPPORTS_STATE_FILTER ? STATES : [""];
+
+  for (const state of exportStates) {
+    const stateLabel = state || "ALL";
+    console.log(`Starting export for ${stateLabel}...`);
     const pages = await fetchState(state);
     dump.pages.push(...pages);
-    console.log(`Done with ${state}. Added ${pages.length} page(s).`);
+    console.log(`Done with ${stateLabel}. Added ${pages.length} page(s).`);
     await sleep(1000);
   }
 

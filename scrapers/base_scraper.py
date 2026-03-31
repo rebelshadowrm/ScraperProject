@@ -8,6 +8,7 @@ class BaseScraper(abc.ABC):
     """
 
     SCRAPER_NAME = "Base"
+    REQUIRES_DRIVER = True
     BATCH_DELAY_SECONDS = 30
 
     @abc.abstractmethod

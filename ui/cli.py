@@ -5,14 +5,29 @@ import sys
 import json
 import signal
 import logging
+from datetime import datetime
+from pathlib import Path
 
-from common.logging_utils import setup_logger, flush_logs
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from common.logging_utils import (
+    setup_logger,
+    flush_logs,
+    log_progress,
+    build_run_log_path,
+    cleanup_old_logs,
+)
 from common.json_utils import load_events, load_failed_events
 from common.config import OUTPUT_COLUMNS
+from common.data_control import rollback_events
 
 from common.prompt_utils import (
+    prompt_main_action,
     prompt_for_scraper,
     prompt_for_location,
+    _load_scraper_from_reference,
 )
 
 from common.driver_manager import (
@@ -22,12 +37,14 @@ from common.driver_manager import (
 )
 
 from common.runner import process_location
+from scrapers.play365_base import Play365ManualFallbackRequired
 
 
 # -------------------- GLOBALS & CONSTANTS --------------------
 shutdown_flag = False
 
-logger = setup_logger(log_file="scraping.log", log_level=logging.INFO)
+cleanup_old_logs(logs_root="Logs", keep_runs=50, keep_days=60)
+logger = setup_logger(log_file=build_run_log_path("startup", logs_root="Logs"), log_level=logging.INFO)
 
 JSON_FILE = "events.json"
 FAILED_EVENTS_FILE = "failed_events.json"
@@ -40,6 +57,7 @@ def _signal_handler(sig, frame):
     logger.info("Shutdown signal received. Preparing to exit gracefully...")
     shutdown_flag = True
     flush_logs()
+    raise KeyboardInterrupt
 
 
 signal.signal(signal.SIGINT, _signal_handler)
@@ -52,10 +70,6 @@ def _shutdown_check() -> bool:
 
 # -------------------- LOAD LOCATIONS -------------------------
 def load_locations(config_file: str = LOCATIONS_FILE):
-    """
-    Kept here for now (per your request to delay splitting locations/failure_tracker),
-    so CLI remains self-contained.
-    """
     if os.path.exists(config_file):
         with open(config_file, "r", encoding="utf-8") as file:
             data = json.load(file)
@@ -68,44 +82,253 @@ def load_locations(config_file: str = LOCATIONS_FILE):
     sys.exit(1)
 
 
-# -------------------- CLI ENTRYPOINT -------------------------
-def run_cli():
-    """
-    Runs the CLI workflow:
-      1) choose scraper
-      2) choose location (or ALL)
-      3) run scraping pipeline via common.runner
-    """
-    # Use the dynamic prompt to select the scraper.
-    scraper = prompt_for_scraper()
-    logger.info("Selected scraper: %s", scraper.__class__.__name__)
+def _build_test_run_paths(scraper_name: str) -> tuple[str, str, str]:
+    now = datetime.now()
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%H%M%S")
+    scraper_folder = scraper_name or "UnknownScraper"
 
-    # Prompt for location using the scraper instance.
-    locations = load_locations(LOCATIONS_FILE)
-    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
-    logger.info("Effective scraper: %s", scraper.__class__.__name__)
-    logger.info("User selected location: %s", selected_location)
+    base_dir = os.path.join("Tests", date_str, f"{time_str}_{scraper_folder}")
+    sheets_dir = os.path.join(base_dir, "Sheets")
 
-    # Load persistent state
-    events_data = load_events(JSON_FILE)
-    failed_data = load_failed_events(FAILED_EVENTS_FILE)
+    os.makedirs(sheets_dir, exist_ok=True)
 
-    # Initialize driver once (runner will restart if it disconnects mid-run).
-    driver = None
-    firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+    return (
+        os.path.join(base_dir, "events.json"),
+        os.path.join(base_dir, "failed_events.json"),
+        sheets_dir,
+    )
+
+
+def _downloads_manual_play365_dir() -> str:
+    return str(Path.home() / "Downloads" / "ScraperProject" / "ManualPlay365")
+
+
+def _cleanup_manual_play365_workspace(workspace_root: str, scraper=None):
+    root = Path(workspace_root)
+    if not root.exists():
+        return
+
+    targets = []
+    if scraper is not None:
+        targets.append(root / scraper.SCRIPT_FILENAME)
+        targets.append(root / scraper.DUMP_FILENAME)
+    else:
+        targets.extend(root.glob("export_*.js"))
+        targets.extend(root.glob("*_dump.json"))
+
+    targets.append(root / "README.txt")
+
+    for path in targets:
+        try:
+            if path.exists() and path.is_file():
+                path.unlink()
+        except Exception:
+            pass
 
     try:
-        driver = initialize_driver(
-            firefox_binary=firefox_path,
-            download_dir=DEFAULT_DOWNLOAD_DIR,
-            headless=True,
-        )
+        if root.exists() and not any(root.iterdir()):
+            root.rmdir()
+    except Exception:
+        pass
+
+    for parent in (root.parent, root.parent.parent):
+        try:
+            if parent.exists() and not any(parent.iterdir()):
+                parent.rmdir()
+        except Exception:
+            pass
+
+
+def _run_play365_batch(
+    *,
+    play365_targets: dict[str, str],
+    events_data,
+    failed_data,
+    json_file: str,
+    failed_events_file: str,
+    output_base_folder: str,
+):
+    firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+    manual_failures: list[tuple[str, str]] = []
+
+    for display_name, scraper_ref in play365_targets.items():
+        if _shutdown_check():
+            log_progress(logger, "Shutdown detected. Stopping Play365 automatic sweep.")
+            break
+
+        scraper = _load_scraper_from_reference(scraper_ref)
+        log_progress(logger, "[Play365] Automatic phase: %s", scraper.SCRAPER_NAME)
+        locations = scraper.get_dynamic_locations()
+
+        try:
+            driver = None
+            if getattr(scraper, "REQUIRES_DRIVER", True):
+                driver = initialize_driver(
+                    firefox_binary=firefox_path,
+                    download_dir=DEFAULT_DOWNLOAD_DIR,
+                    headless=True,
+                )
+
+            for loc_name, loc_url in locations.items():
+                if _shutdown_check():
+                    break
+                driver = process_location(
+                    location_name=loc_name,
+                    base_url=loc_url,
+                    scraper=scraper,
+                    driver=driver,
+                    events_data=events_data,
+                    failed_data=failed_data,
+                    output_columns=OUTPUT_COLUMNS,
+                    json_file=json_file,
+                    failed_events_file=failed_events_file,
+                    download_dir=DEFAULT_DOWNLOAD_DIR,
+                    shutdown_check=_shutdown_check,
+                    firefox_binary=firefox_path,
+                    output_base_folder=output_base_folder,
+                    collect_kwargs={"allow_manual_fallback": False},
+                )
+            safe_quit_driver(driver)
+        except Play365ManualFallbackRequired:
+            safe_quit_driver(driver)
+            logger.warning("[Play365] Automatic phase failed for %s. Queued for manual fallback.", scraper.SCRAPER_NAME)
+            manual_failures.append((display_name, scraper_ref))
+        except Exception:
+            safe_quit_driver(driver)
+            raise
+
+    if not manual_failures or _shutdown_check():
+        return
+
+    failed_names = ", ".join(_load_scraper_from_reference(ref).SCRAPER_NAME for _, ref in manual_failures)
+    print(
+        "\nAutomatic Play365 pulling finished.\n"
+        f"Manual fallback is available for: {failed_names}\n"
+        "Generate manual extraction scripts and process them now?\n"
+        "1) Yes\n"
+        "2) No\n"
+    )
+
+    while True:
+        choice = input("Enter choice [1-2]: ").strip()
+        if choice in {"1", "2"}:
+            break
+        print("Invalid choice. Please enter 1 or 2.")
+
+    if choice == "2":
+        return
+
+    workspace_root = _downloads_manual_play365_dir()
+    for _, scraper_ref in manual_failures:
+        if _shutdown_check():
+            break
+
+        scraper = _load_scraper_from_reference(scraper_ref)
+        log_progress(logger, "[Play365] Manual fallback phase: %s", scraper.SCRAPER_NAME)
+        locations = scraper.get_dynamic_locations()
+        driver = None
+        try:
+            if getattr(scraper, "REQUIRES_DRIVER", True):
+                driver = initialize_driver(
+                    firefox_binary=firefox_path,
+                    download_dir=DEFAULT_DOWNLOAD_DIR,
+                    headless=True,
+                )
+
+            for loc_name, loc_url in locations.items():
+                if _shutdown_check():
+                    break
+                driver = process_location(
+                    location_name=loc_name,
+                    base_url=loc_url,
+                    scraper=scraper,
+                    driver=driver,
+                    events_data=events_data,
+                    failed_data=failed_data,
+                    output_columns=OUTPUT_COLUMNS,
+                    json_file=json_file,
+                    failed_events_file=failed_events_file,
+                    download_dir=DEFAULT_DOWNLOAD_DIR,
+                    shutdown_check=_shutdown_check,
+                    firefox_binary=firefox_path,
+                    output_base_folder=output_base_folder,
+                    collect_kwargs={
+                        "allow_manual_fallback": True,
+                        "manual_workspace_root": workspace_root,
+                        "skip_direct_api": True,
+                        "prompt_for_manual_fallback": False,
+                    },
+                )
+        finally:
+            safe_quit_driver(driver)
+            _cleanup_manual_play365_workspace(workspace_root, scraper=scraper)
+
+    _cleanup_manual_play365_workspace(workspace_root)
+
+
+def _run_scrape_flow(*, test_mode: bool = False):
+    global logger
+
+    scraper = prompt_for_scraper()
+    log_progress(logger, "Selected scraper: %s", scraper.__class__.__name__)
+
+    locations = load_locations(LOCATIONS_FILE)
+    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
+    log_progress(logger, "Effective scraper: %s", scraper.__class__.__name__)
+    log_progress(logger, "Selected location: %s", selected_location)
+
+    json_file = JSON_FILE
+    failed_events_file = FAILED_EVENTS_FILE
+    output_base_folder = "Sheets"
+    run_label = scraper.__class__.__name__
+
+    if test_mode:
+        batch_name = "Play365Batch" if selected_location == "ALL_PLAY365_SCRAPERS" else scraper.__class__.__name__
+        json_file, failed_events_file, output_base_folder = _build_test_run_paths(batch_name)
+        run_label = batch_name
+        log_progress(logger, "Test mode enabled. Writing outputs under: %s", os.path.dirname(json_file))
+    elif selected_location == "ALL_PLAY365_SCRAPERS":
+        run_label = "Play365Batch"
+
+    logger = setup_logger(log_file=build_run_log_path(run_label, logs_root="Logs"), log_level=logging.INFO)
+    log_progress(logger, "Run log created for %s.", run_label)
+
+    events_data = load_events(json_file)
+    failed_data = load_failed_events(failed_events_file)
+
+    driver = None
+    firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+    manual_workspace_root = _downloads_manual_play365_dir() if hasattr(scraper, "_manual_dump_path") else None
+
+    try:
+        if selected_location == "ALL_PLAY365_SCRAPERS":
+            _run_play365_batch(
+                play365_targets=loc_info,
+                events_data=events_data,
+                failed_data=failed_data,
+                json_file=json_file,
+                failed_events_file=failed_events_file,
+                output_base_folder=output_base_folder,
+            )
+            return
+
+        if getattr(scraper, "REQUIRES_DRIVER", True):
+            driver = initialize_driver(
+                firefox_binary=firefox_path,
+                download_dir=DEFAULT_DOWNLOAD_DIR,
+                headless=True,
+            )
+        else:
+            log_progress(logger, "Skipping Selenium startup for %s.", scraper.__class__.__name__)
 
         if selected_location == "ALL":
-            # loc_info is expected to be dict: location_name -> base_url
+            collect_kwargs = {}
+            if manual_workspace_root:
+                collect_kwargs["manual_workspace_root"] = manual_workspace_root
             for loc_name, loc_url in loc_info.items():
                 if _shutdown_check():
-                    logger.info("Shutdown detected. Stopping before next location.")
+                    log_progress(logger, "Shutdown detected. Stopping before next location.")
                     break
 
                 driver = process_location(
@@ -116,14 +339,18 @@ def run_cli():
                     events_data=events_data,
                     failed_data=failed_data,
                     output_columns=OUTPUT_COLUMNS,
-                    json_file=JSON_FILE,
-                    failed_events_file=FAILED_EVENTS_FILE,
+                    json_file=json_file,
+                    failed_events_file=failed_events_file,
                     download_dir=DEFAULT_DOWNLOAD_DIR,
                     shutdown_check=_shutdown_check,
                     firefox_binary=firefox_path,
+                    output_base_folder=output_base_folder,
+                    collect_kwargs=collect_kwargs,
                 )
         else:
-            # loc_info is expected to be a single base_url string
+            collect_kwargs = {}
+            if manual_workspace_root:
+                collect_kwargs["manual_workspace_root"] = manual_workspace_root
             driver = process_location(
                 location_name=selected_location,
                 base_url=loc_info,
@@ -132,11 +359,13 @@ def run_cli():
                 events_data=events_data,
                 failed_data=failed_data,
                 output_columns=OUTPUT_COLUMNS,
-                json_file=JSON_FILE,
-                failed_events_file=FAILED_EVENTS_FILE,
+                json_file=json_file,
+                failed_events_file=failed_events_file,
                 download_dir=DEFAULT_DOWNLOAD_DIR,
                 shutdown_check=_shutdown_check,
                 firefox_binary=firefox_path,
+                output_base_folder=output_base_folder,
+                collect_kwargs=collect_kwargs,
             )
 
     except Exception as e:
@@ -144,5 +373,66 @@ def run_cli():
 
     finally:
         safe_quit_driver(driver)
+        if manual_workspace_root:
+            _cleanup_manual_play365_workspace(manual_workspace_root, scraper=scraper)
+            _cleanup_manual_play365_workspace(manual_workspace_root)
         flush_logs()
         logging.shutdown()
+
+
+def _run_data_control():
+    print("\nData Control\n------------")
+    print("1) Roll back newly added events")
+    print("2) Return\n")
+
+    while True:
+        choice = input("Enter choice [1-2]: ").strip()
+        if choice in {"1", "2"}:
+            break
+        print("Invalid choice. Please enter 1 or 2.")
+
+    if choice == "2":
+        return
+
+    created_after = input("Roll back events created on/after (YYYY-MM-DD or ISO datetime): ").strip()
+    scraper_filter = input("Optional scraper filter (blank for all): ").strip()
+    location_filter = input("Optional location filter (blank for all): ").strip()
+    reason = input("Optional rollback reason: ").strip()
+
+    try:
+        result = rollback_events(
+            events_path=JSON_FILE,
+            failed_events_path=FAILED_EVENTS_FILE,
+            created_after=created_after,
+            scraper_filter=scraper_filter,
+            location_filter=location_filter,
+            reason=reason,
+        )
+    except Exception as e:
+        logger.error("Data Control rollback failed: %s", e)
+        print(f"\nRollback failed: {e}")
+        return
+
+    print(
+        "\nRollback complete:\n"
+        f"  Cutoff: {result['cutoff']}\n"
+        f"  Rolled back: {result['rolled_back']}\n"
+        f"  Already deleted: {result['already_deleted']}\n"
+        f"  Failed entries removed: {result['affected_failures_removed']}\n"
+    )
+
+
+# -------------------- CLI ENTRYPOINT -------------------------
+def run_cli():
+    action = prompt_main_action()
+
+    if action == "1":
+        _run_data_control()
+    elif action == "2":
+        _run_scrape_flow(test_mode=False)
+    elif action == "3":
+        _run_scrape_flow(test_mode=True)
+
+
+if __name__ == "__main__":
+    run_cli()

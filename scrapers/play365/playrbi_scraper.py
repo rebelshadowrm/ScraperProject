@@ -1,10 +1,13 @@
-from scrapers.play365_base import Play365BaseScraper
+from scrapers.play365_base import Play365PostScraper
 
 
-class PlayPPSScraper(Play365BaseScraper):
-    SCRAPER_NAME = "PlayPPS"
-    DOMAIN = "https://baseball.playpps.com"
-    UTILITIES_SUBDIR = "Play365Utilities/PlayPPS"
-    DUMP_FILENAME = "playpps_dump.json"
-    SCRIPT_FILENAME = "export_playpps.js"
-    FORCE_SPORT_ID = 1
+class PlayRBIScraper(Play365PostScraper):
+    SCRAPER_NAME = "PlayRBI"
+    DOMAIN = "https://events.playrbi.com"
+    UTILITIES_SUBDIR = "Play365Utilities/PlayRBI"
+    DUMP_FILENAME = "playrbi_dump.json"
+    SCRIPT_FILENAME = "export_playrbi.js"
+    EXPORT_LAYOUT_DEFAULT = "full"
+    EXPORT_EXTRA_PARAMS = {
+        "organization_id": "",
+    }

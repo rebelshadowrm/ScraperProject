@@ -16,10 +16,20 @@ def get_scraper_classes():
     that are subclasses of BaseScraper (excluding BaseScraper itself).
     """
     scraper_classes = []
+    excluded_names = {
+        "FiveToolScraper",
+        "Play365GetScraper",
+        "Play365GetAllScraper",
+        "Play365PostScraper",
+    }
     for module_info in pkgutil.iter_modules(scrapers.__path__):
         module_name = module_info.name
         module = importlib.import_module(f"scrapers.{module_name}")
         for name, obj in inspect.getmembers(module, inspect.isclass):
+            if obj.__module__ != module.__name__:
+                continue
+            if name in excluded_names:
+                continue
             if issubclass(obj, BaseScraper) and obj is not BaseScraper:
                 scraper_classes.append(obj)
     return scraper_classes
@@ -27,19 +37,21 @@ def get_scraper_classes():
 def prompt_main_action() -> str:
     """
     Prompt the user to select between:
-    1) Scrape
-    2) Consolidate Excel Files
-    Returns either '1' or '2'.
+    1) Data Control
+    2) Normal Scrape
+    3) Test Scrape
+    Returns one of '1'..'3'.
     """
     print("What do you want to do?\n")
-    print("1) Scrape websites (using discovered scrapers)")
-    print("2) Consolidate Excel files (by folder)\n")
+    print("1) Data Control")
+    print("2) Normal scraper menus")
+    print("3) Test scraper run (isolated output)\n")
 
     while True:
-        choice = input("Enter choice [1 or 2]: ").strip()
-        if choice in ["1", "2"]:
+        choice = input("Enter choice [1-3]: ").strip()
+        if choice in ["1", "2", "3"]:
             return choice
-        print("Invalid choice. Please enter '1' or '2'.")
+        print("Invalid choice. Please enter a number from 1 to 3.")
 
 def prompt_for_scraper():
     """
@@ -76,13 +88,14 @@ def _prompt_from_mapping(
     title: str,
     allow_all: bool = True,
     show_values: bool = True,
+    all_label: str = "All locations for mass pull",
 ) -> Tuple[str, str]:
     if not options:
         return "None Found", ""
 
     print(f"\n{title}:\n-------------------")
     if allow_all:
-        print("0) All locations for mass pull")
+        print(f"0) {all_label}")
 
     for i, (name, value) in enumerate(options.items(), start=1):
         if show_values:
@@ -164,9 +177,12 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
         selected_target, scraper_ref = _prompt_from_mapping(
             play365_targets,
             title="Available Play365 scrapers",
-            allow_all=False,
+            allow_all=True,
             show_values=False,
+            all_label="Pull all Play365 scrapers",
         )
+        if selected_target == "ALL":
+            return "ALL_PLAY365_SCRAPERS", play365_targets, scraper
         try:
             active_scraper = _load_scraper_from_reference(scraper_ref)
         except Exception as e:
@@ -174,6 +190,17 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
             return "None Found", "", scraper
 
         scraper_name = getattr(active_scraper, 'SCRAPER_NAME', active_scraper.__class__.__name__)
+
+        if (
+            getattr(active_scraper, "PREPARE_DUMP_IN_PROMPT", True)
+            and hasattr(active_scraper, "_default_dump_path")
+            and hasattr(active_scraper, "_ensure_dump_exists")
+        ):
+            try:
+                active_scraper._ensure_dump_exists(active_scraper._default_dump_path())
+            except Exception as e:
+                print(f"\nFailed to prepare dump for {scraper_name}: {e}")
+                return "None Found", "", scraper
 
     # --- Dynamic locations path (TopGun-style) ---
     if getattr(active_scraper, "DYNAMIC_LOCATIONS", False) and hasattr(active_scraper, "get_dynamic_locations"):
@@ -192,6 +219,10 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
     if not filtered_locations:
         print("\nNo matching locations found for this scraper type!")
         return "None Found", "", active_scraper
+
+    if getattr(active_scraper, "AUTO_ALL_LOCATIONS", False):
+        print(f"\n{scraper_name} will process all available locations.")
+        return "ALL", filtered_locations, active_scraper
 
     selected_name, selected_value = _prompt_from_mapping(
         filtered_locations,

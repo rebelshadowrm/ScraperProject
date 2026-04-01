@@ -1,0 +1,305 @@
+2026-04-01 13:13:40,430 - INFO - Logger initialized.
+2026-04-01 13:13:40,430 - INFO - Run log created for GrandSlamScraper.
+2026-04-01 13:13:50,044 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-04-01 13:13:50,044 - INFO - Processing location: Alabama (GrandSlam)
+2026-04-01 13:13:50,044 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:50,629 - INFO - [GrandSlam] Collected 21 events for state=AL
+2026-04-01 13:13:50,629 - INFO - Collected 21 event links using https://www.grandslamtournaments.com/baseball/Events?state=AL for Alabama (GrandSlam).
+2026-04-01 13:13:51,600 - INFO - Total unique events to process for Alabama (GrandSlam): 0
+2026-04-01 13:13:51,600 - INFO - No unprocessed events for Alabama (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:51,600 - INFO - Processing location: Alaska (GrandSlam)
+2026-04-01 13:13:51,600 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:51,810 - INFO - [GrandSlam] Collected 0 events for state=AK
+2026-04-01 13:13:51,810 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=AK for Alaska (GrandSlam).
+2026-04-01 13:13:52,024 - INFO - Total unique events to process for Alaska (GrandSlam): 0
+2026-04-01 13:13:52,024 - INFO - No unprocessed events for Alaska (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:52,024 - INFO - Processing location: Arizona (GrandSlam)
+2026-04-01 13:13:52,024 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:52,227 - INFO - [GrandSlam] Collected 0 events for state=AZ
+2026-04-01 13:13:52,227 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=AZ for Arizona (GrandSlam).
+2026-04-01 13:13:52,446 - INFO - Total unique events to process for Arizona (GrandSlam): 0
+2026-04-01 13:13:52,446 - INFO - No unprocessed events for Arizona (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:52,446 - INFO - Processing location: Arkansas (GrandSlam)
+2026-04-01 13:13:52,446 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:53,139 - INFO - [GrandSlam] Collected 25 events for state=AR
+2026-04-01 13:13:53,139 - INFO - Collected 25 event links using https://www.grandslamtournaments.com/baseball/Events?state=AR for Arkansas (GrandSlam).
+2026-04-01 13:13:54,228 - INFO - Total unique events to process for Arkansas (GrandSlam): 0
+2026-04-01 13:13:54,228 - INFO - No unprocessed events for Arkansas (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:54,228 - INFO - Processing location: California (GrandSlam)
+2026-04-01 13:13:54,228 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:54,460 - INFO - [GrandSlam] Collected 0 events for state=CA
+2026-04-01 13:13:54,460 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=CA for California (GrandSlam).
+2026-04-01 13:13:54,669 - INFO - Total unique events to process for California (GrandSlam): 0
+2026-04-01 13:13:54,669 - INFO - No unprocessed events for California (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:54,669 - INFO - Processing location: Colorado (GrandSlam)
+2026-04-01 13:13:54,669 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:54,881 - INFO - [GrandSlam] Collected 0 events for state=CO
+2026-04-01 13:13:54,881 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=CO for Colorado (GrandSlam).
+2026-04-01 13:13:55,091 - INFO - Total unique events to process for Colorado (GrandSlam): 0
+2026-04-01 13:13:55,091 - INFO - No unprocessed events for Colorado (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:55,091 - INFO - Processing location: Connecticut (GrandSlam)
+2026-04-01 13:13:55,091 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:55,295 - INFO - [GrandSlam] Collected 0 events for state=CT
+2026-04-01 13:13:55,295 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=CT for Connecticut (GrandSlam).
+2026-04-01 13:13:55,499 - INFO - Total unique events to process for Connecticut (GrandSlam): 0
+2026-04-01 13:13:55,499 - INFO - No unprocessed events for Connecticut (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:55,499 - INFO - Processing location: Delaware (GrandSlam)
+2026-04-01 13:13:55,500 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:55,710 - INFO - [GrandSlam] Collected 0 events for state=DE
+2026-04-01 13:13:55,710 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=DE for Delaware (GrandSlam).
+2026-04-01 13:13:55,920 - INFO - Total unique events to process for Delaware (GrandSlam): 0
+2026-04-01 13:13:55,920 - INFO - No unprocessed events for Delaware (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:55,920 - INFO - Processing location: Florida (GrandSlam)
+2026-04-01 13:13:55,920 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:56,195 - INFO - [GrandSlam] Collected 5 events for state=FL
+2026-04-01 13:13:56,195 - INFO - Collected 5 event links using https://www.grandslamtournaments.com/baseball/Events?state=FL for Florida (GrandSlam).
+2026-04-01 13:13:56,564 - INFO - Total unique events to process for Florida (GrandSlam): 0
+2026-04-01 13:13:56,564 - INFO - No unprocessed events for Florida (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:56,564 - INFO - Processing location: Georgia (GrandSlam)
+2026-04-01 13:13:56,564 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:57,343 - INFO - [GrandSlam] Collected 44 events for state=GA
+2026-04-01 13:13:57,343 - INFO - Collected 44 event links using https://www.grandslamtournaments.com/baseball/Events?state=GA for Georgia (GrandSlam).
+2026-04-01 13:13:59,026 - INFO - Total unique events to process for Georgia (GrandSlam): 0
+2026-04-01 13:13:59,026 - INFO - No unprocessed events for Georgia (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:59,026 - INFO - Processing location: Hawaii (GrandSlam)
+2026-04-01 13:13:59,026 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:59,241 - INFO - [GrandSlam] Collected 0 events for state=HI
+2026-04-01 13:13:59,241 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=HI for Hawaii (GrandSlam).
+2026-04-01 13:13:59,438 - INFO - Total unique events to process for Hawaii (GrandSlam): 0
+2026-04-01 13:13:59,438 - INFO - No unprocessed events for Hawaii (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:59,438 - INFO - Processing location: Idaho (GrandSlam)
+2026-04-01 13:13:59,438 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:13:59,677 - INFO - [GrandSlam] Collected 0 events for state=ID
+2026-04-01 13:13:59,677 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=ID for Idaho (GrandSlam).
+2026-04-01 13:13:59,874 - INFO - Total unique events to process for Idaho (GrandSlam): 0
+2026-04-01 13:13:59,875 - INFO - No unprocessed events for Idaho (GrandSlam). Skipping Excel creation.
+2026-04-01 13:13:59,875 - INFO - Processing location: Illinois (GrandSlam)
+2026-04-01 13:13:59,875 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:00,118 - INFO - [GrandSlam] Collected 0 events for state=IL
+2026-04-01 13:14:00,118 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=IL for Illinois (GrandSlam).
+2026-04-01 13:14:00,328 - INFO - Total unique events to process for Illinois (GrandSlam): 0
+2026-04-01 13:14:00,328 - INFO - No unprocessed events for Illinois (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:00,328 - INFO - Processing location: Indiana (GrandSlam)
+2026-04-01 13:14:00,328 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:00,705 - INFO - [GrandSlam] Collected 18 events for state=IN
+2026-04-01 13:14:00,705 - INFO - Collected 18 event links using https://www.grandslamtournaments.com/baseball/Events?state=IN for Indiana (GrandSlam).
+2026-04-01 13:14:01,525 - INFO - Total unique events to process for Indiana (GrandSlam): 0
+2026-04-01 13:14:01,526 - INFO - No unprocessed events for Indiana (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:01,526 - INFO - Processing location: Iowa (GrandSlam)
+2026-04-01 13:14:01,526 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:01,739 - INFO - [GrandSlam] Collected 0 events for state=IA
+2026-04-01 13:14:01,739 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=IA for Iowa (GrandSlam).
+2026-04-01 13:14:01,944 - INFO - Total unique events to process for Iowa (GrandSlam): 0
+2026-04-01 13:14:01,944 - INFO - No unprocessed events for Iowa (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:01,945 - INFO - Processing location: Kansas (GrandSlam)
+2026-04-01 13:14:01,945 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:02,152 - INFO - [GrandSlam] Collected 0 events for state=KS
+2026-04-01 13:14:02,152 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=KS for Kansas (GrandSlam).
+2026-04-01 13:14:02,350 - INFO - Total unique events to process for Kansas (GrandSlam): 0
+2026-04-01 13:14:02,350 - INFO - No unprocessed events for Kansas (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:02,350 - INFO - Processing location: Kentucky (GrandSlam)
+2026-04-01 13:14:02,350 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:02,681 - INFO - [GrandSlam] Collected 18 events for state=KY
+2026-04-01 13:14:02,681 - INFO - Collected 18 event links using https://www.grandslamtournaments.com/baseball/Events?state=KY for Kentucky (GrandSlam).
+2026-04-01 13:14:03,548 - INFO - Total unique events to process for Kentucky (GrandSlam): 0
+2026-04-01 13:14:03,548 - INFO - No unprocessed events for Kentucky (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:03,548 - INFO - Processing location: Louisiana (GrandSlam)
+2026-04-01 13:14:03,548 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:03,873 - INFO - [GrandSlam] Collected 11 events for state=LA
+2026-04-01 13:14:03,873 - INFO - Collected 11 event links using https://www.grandslamtournaments.com/baseball/Events?state=LA for Louisiana (GrandSlam).
+2026-04-01 13:14:04,452 - INFO - Total unique events to process for Louisiana (GrandSlam): 0
+2026-04-01 13:14:04,452 - INFO - No unprocessed events for Louisiana (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:04,452 - INFO - Processing location: Maine (GrandSlam)
+2026-04-01 13:14:04,452 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:04,658 - INFO - [GrandSlam] Collected 0 events for state=ME
+2026-04-01 13:14:04,659 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=ME for Maine (GrandSlam).
+2026-04-01 13:14:04,860 - INFO - Total unique events to process for Maine (GrandSlam): 0
+2026-04-01 13:14:04,861 - INFO - No unprocessed events for Maine (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:04,861 - INFO - Processing location: Maryland (GrandSlam)
+2026-04-01 13:14:04,861 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:05,065 - INFO - [GrandSlam] Collected 0 events for state=MD
+2026-04-01 13:14:05,065 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MD for Maryland (GrandSlam).
+2026-04-01 13:14:05,262 - INFO - Total unique events to process for Maryland (GrandSlam): 0
+2026-04-01 13:14:05,262 - INFO - No unprocessed events for Maryland (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:05,263 - INFO - Processing location: Massachusetts (GrandSlam)
+2026-04-01 13:14:05,263 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:05,497 - INFO - [GrandSlam] Collected 0 events for state=MA
+2026-04-01 13:14:05,497 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MA for Massachusetts (GrandSlam).
+2026-04-01 13:14:05,717 - INFO - Total unique events to process for Massachusetts (GrandSlam): 0
+2026-04-01 13:14:05,717 - INFO - No unprocessed events for Massachusetts (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:05,717 - INFO - Processing location: Michigan (GrandSlam)
+2026-04-01 13:14:05,717 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:05,933 - INFO - [GrandSlam] Collected 0 events for state=MI
+2026-04-01 13:14:05,933 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MI for Michigan (GrandSlam).
+2026-04-01 13:14:06,206 - INFO - Total unique events to process for Michigan (GrandSlam): 0
+2026-04-01 13:14:06,206 - INFO - No unprocessed events for Michigan (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:06,206 - INFO - Processing location: Minnesota (GrandSlam)
+2026-04-01 13:14:06,206 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:06,454 - INFO - [GrandSlam] Collected 0 events for state=MN
+2026-04-01 13:14:06,454 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MN for Minnesota (GrandSlam).
+2026-04-01 13:14:06,685 - INFO - Total unique events to process for Minnesota (GrandSlam): 0
+2026-04-01 13:14:06,685 - INFO - No unprocessed events for Minnesota (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:06,686 - INFO - Processing location: Mississippi (GrandSlam)
+2026-04-01 13:14:06,686 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:08,363 - INFO - [GrandSlam] Collected 82 events for state=MS
+2026-04-01 13:14:08,363 - INFO - Collected 82 event links using https://www.grandslamtournaments.com/baseball/Events?state=MS for Mississippi (GrandSlam).
+2026-04-01 13:14:11,327 - INFO - Total unique events to process for Mississippi (GrandSlam): 0
+2026-04-01 13:14:11,327 - INFO - No unprocessed events for Mississippi (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:11,327 - INFO - Processing location: Missouri (GrandSlam)
+2026-04-01 13:14:11,327 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:11,666 - INFO - [GrandSlam] Collected 0 events for state=MO
+2026-04-01 13:14:11,667 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MO for Missouri (GrandSlam).
+2026-04-01 13:14:11,892 - INFO - Total unique events to process for Missouri (GrandSlam): 0
+2026-04-01 13:14:11,892 - INFO - No unprocessed events for Missouri (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:11,892 - INFO - Processing location: Montana (GrandSlam)
+2026-04-01 13:14:11,892 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:12,115 - INFO - [GrandSlam] Collected 0 events for state=MT
+2026-04-01 13:14:12,115 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=MT for Montana (GrandSlam).
+2026-04-01 13:14:12,346 - INFO - Total unique events to process for Montana (GrandSlam): 0
+2026-04-01 13:14:12,346 - INFO - No unprocessed events for Montana (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:12,346 - INFO - Processing location: Nebraska (GrandSlam)
+2026-04-01 13:14:12,347 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:12,545 - INFO - [GrandSlam] Collected 0 events for state=NE
+2026-04-01 13:14:12,545 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NE for Nebraska (GrandSlam).
+2026-04-01 13:14:12,762 - INFO - Total unique events to process for Nebraska (GrandSlam): 0
+2026-04-01 13:14:12,762 - INFO - No unprocessed events for Nebraska (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:12,762 - INFO - Processing location: Nevada (GrandSlam)
+2026-04-01 13:14:12,762 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:12,969 - INFO - [GrandSlam] Collected 0 events for state=NV
+2026-04-01 13:14:12,969 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NV for Nevada (GrandSlam).
+2026-04-01 13:14:13,171 - INFO - Total unique events to process for Nevada (GrandSlam): 0
+2026-04-01 13:14:13,171 - INFO - No unprocessed events for Nevada (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:13,172 - INFO - Processing location: New Hampshire (GrandSlam)
+2026-04-01 13:14:13,172 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:13,389 - INFO - [GrandSlam] Collected 0 events for state=NH
+2026-04-01 13:14:13,389 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NH for New Hampshire (GrandSlam).
+2026-04-01 13:14:13,603 - INFO - Total unique events to process for New Hampshire (GrandSlam): 0
+2026-04-01 13:14:13,603 - INFO - No unprocessed events for New Hampshire (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:13,603 - INFO - Processing location: New Jersey (GrandSlam)
+2026-04-01 13:14:13,603 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:13,828 - INFO - [GrandSlam] Collected 0 events for state=NJ
+2026-04-01 13:14:13,828 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NJ for New Jersey (GrandSlam).
+2026-04-01 13:14:14,035 - INFO - Total unique events to process for New Jersey (GrandSlam): 0
+2026-04-01 13:14:14,035 - INFO - No unprocessed events for New Jersey (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:14,035 - INFO - Processing location: New Mexico (GrandSlam)
+2026-04-01 13:14:14,035 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:14,246 - INFO - [GrandSlam] Collected 0 events for state=NM
+2026-04-01 13:14:14,247 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NM for New Mexico (GrandSlam).
+2026-04-01 13:14:14,450 - INFO - Total unique events to process for New Mexico (GrandSlam): 0
+2026-04-01 13:14:14,451 - INFO - No unprocessed events for New Mexico (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:14,451 - INFO - Processing location: New York (GrandSlam)
+2026-04-01 13:14:14,451 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:14,659 - INFO - [GrandSlam] Collected 0 events for state=NY
+2026-04-01 13:14:14,659 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NY for New York (GrandSlam).
+2026-04-01 13:14:14,863 - INFO - Total unique events to process for New York (GrandSlam): 0
+2026-04-01 13:14:14,863 - INFO - No unprocessed events for New York (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:14,863 - INFO - Processing location: North Carolina (GrandSlam)
+2026-04-01 13:14:14,863 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:15,059 - INFO - [GrandSlam] Collected 0 events for state=NC
+2026-04-01 13:14:15,059 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=NC for North Carolina (GrandSlam).
+2026-04-01 13:14:15,269 - INFO - Total unique events to process for North Carolina (GrandSlam): 0
+2026-04-01 13:14:15,269 - INFO - No unprocessed events for North Carolina (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:15,269 - INFO - Processing location: North Dakota (GrandSlam)
+2026-04-01 13:14:15,269 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:15,500 - INFO - [GrandSlam] Collected 0 events for state=ND
+2026-04-01 13:14:15,500 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=ND for North Dakota (GrandSlam).
+2026-04-01 13:14:15,729 - INFO - Total unique events to process for North Dakota (GrandSlam): 0
+2026-04-01 13:14:15,729 - INFO - No unprocessed events for North Dakota (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:15,729 - INFO - Processing location: Ohio (GrandSlam)
+2026-04-01 13:14:15,730 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:15,993 - INFO - [GrandSlam] Collected 0 events for state=OH
+2026-04-01 13:14:15,993 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=OH for Ohio (GrandSlam).
+2026-04-01 13:14:16,227 - INFO - Total unique events to process for Ohio (GrandSlam): 0
+2026-04-01 13:14:16,227 - INFO - No unprocessed events for Ohio (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:16,227 - INFO - Processing location: Oklahoma (GrandSlam)
+2026-04-01 13:14:16,227 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:16,427 - INFO - [GrandSlam] Collected 0 events for state=OK
+2026-04-01 13:14:16,427 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=OK for Oklahoma (GrandSlam).
+2026-04-01 13:14:16,620 - INFO - Total unique events to process for Oklahoma (GrandSlam): 0
+2026-04-01 13:14:16,620 - INFO - No unprocessed events for Oklahoma (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:16,620 - INFO - Processing location: Oregon (GrandSlam)
+2026-04-01 13:14:16,621 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:16,852 - INFO - [GrandSlam] Collected 0 events for state=OR
+2026-04-01 13:14:16,853 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=OR for Oregon (GrandSlam).
+2026-04-01 13:14:17,050 - INFO - Total unique events to process for Oregon (GrandSlam): 0
+2026-04-01 13:14:17,050 - INFO - No unprocessed events for Oregon (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:17,050 - INFO - Processing location: Pennsylvania (GrandSlam)
+2026-04-01 13:14:17,050 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:17,264 - INFO - [GrandSlam] Collected 0 events for state=PA
+2026-04-01 13:14:17,264 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=PA for Pennsylvania (GrandSlam).
+2026-04-01 13:14:17,470 - INFO - Total unique events to process for Pennsylvania (GrandSlam): 0
+2026-04-01 13:14:17,470 - INFO - No unprocessed events for Pennsylvania (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:17,470 - INFO - Processing location: Rhode Island (GrandSlam)
+2026-04-01 13:14:17,470 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:17,702 - INFO - [GrandSlam] Collected 0 events for state=RI
+2026-04-01 13:14:17,702 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=RI for Rhode Island (GrandSlam).
+2026-04-01 13:14:17,915 - INFO - Total unique events to process for Rhode Island (GrandSlam): 0
+2026-04-01 13:14:17,915 - INFO - No unprocessed events for Rhode Island (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:17,915 - INFO - Processing location: South Carolina (GrandSlam)
+2026-04-01 13:14:17,915 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:18,112 - INFO - [GrandSlam] Collected 0 events for state=SC
+2026-04-01 13:14:18,112 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=SC for South Carolina (GrandSlam).
+2026-04-01 13:14:18,337 - INFO - Total unique events to process for South Carolina (GrandSlam): 0
+2026-04-01 13:14:18,337 - INFO - No unprocessed events for South Carolina (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:18,337 - INFO - Processing location: South Dakota (GrandSlam)
+2026-04-01 13:14:18,337 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:18,562 - INFO - [GrandSlam] Collected 0 events for state=SD
+2026-04-01 13:14:18,562 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=SD for South Dakota (GrandSlam).
+2026-04-01 13:14:18,790 - INFO - Total unique events to process for South Dakota (GrandSlam): 0
+2026-04-01 13:14:18,790 - INFO - No unprocessed events for South Dakota (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:18,790 - INFO - Processing location: Tennessee (GrandSlam)
+2026-04-01 13:14:18,790 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:19,153 - INFO - [GrandSlam] Collected 6 events for state=TN
+2026-04-01 13:14:19,154 - INFO - Collected 6 event links using https://www.grandslamtournaments.com/baseball/Events?state=TN for Tennessee (GrandSlam).
+2026-04-01 13:14:19,635 - INFO - Total unique events to process for Tennessee (GrandSlam): 0
+2026-04-01 13:14:19,636 - INFO - No unprocessed events for Tennessee (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:19,636 - INFO - Processing location: Texas (GrandSlam)
+2026-04-01 13:14:19,636 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:19,853 - INFO - [GrandSlam] Collected 0 events for state=TX
+2026-04-01 13:14:19,853 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=TX for Texas (GrandSlam).
+2026-04-01 13:14:20,088 - INFO - Total unique events to process for Texas (GrandSlam): 0
+2026-04-01 13:14:20,088 - INFO - No unprocessed events for Texas (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:20,088 - INFO - Processing location: Utah (GrandSlam)
+2026-04-01 13:14:20,088 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:20,292 - INFO - [GrandSlam] Collected 0 events for state=UT
+2026-04-01 13:14:20,292 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=UT for Utah (GrandSlam).
+2026-04-01 13:14:20,492 - INFO - Total unique events to process for Utah (GrandSlam): 0
+2026-04-01 13:14:20,492 - INFO - No unprocessed events for Utah (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:20,492 - INFO - Processing location: Vermont (GrandSlam)
+2026-04-01 13:14:20,492 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:20,736 - INFO - [GrandSlam] Collected 0 events for state=VT
+2026-04-01 13:14:20,736 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=VT for Vermont (GrandSlam).
+2026-04-01 13:14:20,959 - INFO - Total unique events to process for Vermont (GrandSlam): 0
+2026-04-01 13:14:20,960 - INFO - No unprocessed events for Vermont (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:20,960 - INFO - Processing location: Virginia (GrandSlam)
+2026-04-01 13:14:20,960 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:21,228 - INFO - [GrandSlam] Collected 0 events for state=VA
+2026-04-01 13:14:21,228 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=VA for Virginia (GrandSlam).
+2026-04-01 13:14:21,476 - INFO - Total unique events to process for Virginia (GrandSlam): 0
+2026-04-01 13:14:21,476 - INFO - No unprocessed events for Virginia (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:21,476 - INFO - Processing location: Washington (GrandSlam)
+2026-04-01 13:14:21,476 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:21,691 - INFO - [GrandSlam] Collected 0 events for state=WA
+2026-04-01 13:14:21,691 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=WA for Washington (GrandSlam).
+2026-04-01 13:14:21,906 - INFO - Total unique events to process for Washington (GrandSlam): 0
+2026-04-01 13:14:21,906 - INFO - No unprocessed events for Washington (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:21,906 - INFO - Processing location: West Virginia (GrandSlam)
+2026-04-01 13:14:21,906 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:22,126 - INFO - [GrandSlam] Collected 0 events for state=WV
+2026-04-01 13:14:22,126 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=WV for West Virginia (GrandSlam).
+2026-04-01 13:14:22,354 - INFO - Total unique events to process for West Virginia (GrandSlam): 0
+2026-04-01 13:14:22,354 - INFO - No unprocessed events for West Virginia (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:22,354 - INFO - Processing location: Wisconsin (GrandSlam)
+2026-04-01 13:14:22,354 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:22,563 - INFO - [GrandSlam] Collected 0 events for state=WI
+2026-04-01 13:14:22,563 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=WI for Wisconsin (GrandSlam).
+2026-04-01 13:14:22,784 - INFO - Total unique events to process for Wisconsin (GrandSlam): 0
+2026-04-01 13:14:22,784 - INFO - No unprocessed events for Wisconsin (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:22,784 - INFO - Processing location: Wyoming (GrandSlam)
+2026-04-01 13:14:22,785 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
+2026-04-01 13:14:23,033 - INFO - [GrandSlam] Collected 0 events for state=WY
+2026-04-01 13:14:23,033 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=WY for Wyoming (GrandSlam).
+2026-04-01 13:14:23,272 - INFO - Total unique events to process for Wyoming (GrandSlam): 0
+2026-04-01 13:14:23,272 - INFO - No unprocessed events for Wyoming (GrandSlam). Skipping Excel creation.
+2026-04-01 13:14:25,953 - INFO - Effective scraper: NCSScraper
+2026-04-01 13:14:25,954 - INFO - Selected location: ALL

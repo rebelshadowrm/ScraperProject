@@ -264,7 +264,7 @@ class PSTScraper(BaseScraper):
             logger.error(f"Error extracting event links from DOM: {e}")
         return links
 
-    def extract_event_details(self, url: str, driver) -> Dict:
+    def extract_event_details(self, url: str, driver, **kwargs) -> Dict:
         """
         Extract event details for a given event URL.
         Uses cached API data and retrieves competition levels via the schedule endpoint.

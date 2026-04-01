@@ -21,7 +21,6 @@ def get_scraper_classes():
     """
     scraper_classes = []
     excluded_names = {
-        "FiveToolScraper",
         "Play365GetScraper",
         "Play365GetAllScraper",
         "Play365PostScraper",

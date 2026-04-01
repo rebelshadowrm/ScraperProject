@@ -1,0 +1,96 @@
+2026-04-01 13:33:43,437 - INFO - Logger initialized.
+2026-04-01 13:33:43,438 - INFO - Run log created for PSTScraper.
+2026-04-01 13:33:52,819 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-04-01 13:33:52,820 - INFO - Processing location: All (PST)
+2026-04-01 13:33:52,820 - INFO - Loading store page: https://registrations.premiersportstournaments.com/store?storeorganizationid=31369
+2026-04-01 13:33:54,832 - INFO - Clicking 'Find Events' link.
+2026-04-01 13:33:55,870 - INFO - Page URL after clicking: https://registrations.premiersportstournaments.com/store?storeorganizationid=31369#events
+2026-04-01 13:33:56,147 - INFO - API page 1 returned 48 events.
+2026-04-01 13:33:56,839 - INFO - API page 2 returned 0 events.
+2026-04-01 13:33:56,839 - INFO - No events returned via API – last page reached.
+2026-04-01 13:33:56,839 - INFO - Collected 48 event links using https://registrations.premiersportstournaments.com/store/events?storeorganizationid=31369 for All (PST).
+2026-04-01 13:33:58,773 - INFO - Skipping 2 stale unprocessed event(s) for All (PST) because they were not rediscovered in the current run.
+2026-04-01 13:33:58,773 - INFO - Total unique events to process for All (PST): 48
+2026-04-01 13:33:58,775 - INFO - [Excel] Copied template to Sheets\2026-04-01\PST\All_2026-04-01.xlsx
+2026-04-01 13:33:58,775 - INFO - Excel output file for All (PST) will be: Sheets\2026-04-01\PST\All_2026-04-01.xlsx
+2026-04-01 13:33:58,775 - INFO - Processing batch 1/5.
+2026-04-01 13:33:58,775 - INFO - Fetching schedule data for event 252618 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252618&storeorganizationid=31369
+2026-04-01 13:33:59,408 - INFO - Fetching schedule data for event 262999 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=262999&storeorganizationid=31369
+2026-04-01 13:34:00,604 - INFO - Fetching schedule data for event 249361 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249361&storeorganizationid=31369
+2026-04-01 13:34:01,163 - INFO - Fetching schedule data for event 249362 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249362&storeorganizationid=31369
+2026-04-01 13:34:02,162 - INFO - Fetching schedule data for event 249363 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249363&storeorganizationid=31369
+2026-04-01 13:34:03,615 - INFO - Fetching schedule data for event 252486 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252486&storeorganizationid=31369
+2026-04-01 13:34:04,162 - INFO - Fetching schedule data for event 249565 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249565&storeorganizationid=31369
+2026-04-01 13:34:05,556 - INFO - Fetching schedule data for event 252570 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252570&storeorganizationid=31369
+2026-04-01 13:34:06,166 - INFO - Fetching schedule data for event 249567 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249567&storeorganizationid=31369
+2026-04-01 13:34:07,165 - INFO - Fetching schedule data for event 249568 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249568&storeorganizationid=31369
+2026-04-01 13:34:07,821 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 13:34:07,828 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-04-01 13:34:08,221 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-04-01 13:34:11,057 - INFO - Saved batch 1 to Excel (template append).
+2026-04-01 13:34:11,057 - INFO - Batch 1 completed. Waiting 32.84s before next batch.
+2026-04-01 13:34:43,899 - INFO - Processing batch 2/5.
+2026-04-01 13:34:44,125 - INFO - Fetching schedule data for event 252490 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252490&storeorganizationid=31369
+2026-04-01 13:34:45,410 - INFO - Fetching schedule data for event 252910 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252910&storeorganizationid=31369
+2026-04-01 13:34:45,922 - INFO - Fetching schedule data for event 249569 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249569&storeorganizationid=31369
+2026-04-01 13:34:46,923 - INFO - Fetching schedule data for event 249580 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249580&storeorganizationid=31369
+2026-04-01 13:34:47,923 - INFO - Fetching schedule data for event 249570 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249570&storeorganizationid=31369
+2026-04-01 13:34:49,384 - INFO - Fetching schedule data for event 252504 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252504&storeorganizationid=31369
+2026-04-01 13:34:49,924 - INFO - Fetching schedule data for event 252573 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252573&storeorganizationid=31369
+2026-04-01 13:34:50,922 - INFO - Fetching schedule data for event 249581 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249581&storeorganizationid=31369
+2026-04-01 13:34:52,134 - INFO - Fetching schedule data for event 252581 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252581&storeorganizationid=31369
+2026-04-01 13:34:52,925 - INFO - Fetching schedule data for event 249571 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249571&storeorganizationid=31369
+2026-04-01 13:34:53,759 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 13:34:53,768 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-04-01 13:34:54,172 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-04-01 13:34:56,933 - INFO - Saved batch 2 to Excel (template append).
+2026-04-01 13:34:56,933 - INFO - Batch 2 completed. Waiting 34.79s before next batch.
+2026-04-01 13:35:31,724 - INFO - Processing batch 3/5.
+2026-04-01 13:35:31,746 - INFO - Fetching schedule data for event 249582 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249582&storeorganizationid=31369
+2026-04-01 13:35:32,748 - INFO - Fetching schedule data for event 252585 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252585&storeorganizationid=31369
+2026-04-01 13:35:33,753 - INFO - Fetching schedule data for event 249572 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249572&storeorganizationid=31369
+2026-04-01 13:35:35,113 - INFO - Fetching schedule data for event 253973 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=253973&storeorganizationid=31369
+2026-04-01 13:35:35,747 - INFO - Fetching schedule data for event 249583 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249583&storeorganizationid=31369
+2026-04-01 13:35:36,748 - INFO - Fetching schedule data for event 249573 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249573&storeorganizationid=31369
+2026-04-01 13:35:37,749 - INFO - Fetching schedule data for event 249584 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249584&storeorganizationid=31369
+2026-04-01 13:35:39,140 - INFO - Fetching schedule data for event 252605 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252605&storeorganizationid=31369
+2026-04-01 13:35:39,566 - INFO - Fetching schedule data for event 252616 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252616&storeorganizationid=31369
+2026-04-01 13:35:39,988 - INFO - Fetching schedule data for event 252603 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252603&storeorganizationid=31369
+2026-04-01 13:35:40,721 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 13:35:40,727 - INFO - [Excel] Wrote rows 23..32 (key col 1)
+2026-04-01 13:35:41,178 - INFO - [Excel] Appended 10 rows. New bottom row: 32.
+2026-04-01 13:35:44,091 - INFO - Saved batch 3 to Excel (template append).
+2026-04-01 13:35:44,091 - INFO - Batch 3 completed. Waiting 31.97s before next batch.
+2026-04-01 13:36:16,061 - INFO - Processing batch 4/5.
+2026-04-01 13:36:16,278 - INFO - Fetching schedule data for event 252493 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252493&storeorganizationid=31369
+2026-04-01 13:36:17,085 - INFO - Fetching schedule data for event 249574 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249574&storeorganizationid=31369
+2026-04-01 13:36:18,084 - INFO - Fetching schedule data for event 249585 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249585&storeorganizationid=31369
+2026-04-01 13:36:19,086 - INFO - Fetching schedule data for event 252588 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252588&storeorganizationid=31369
+2026-04-01 13:36:20,085 - INFO - Fetching schedule data for event 252608 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252608&storeorganizationid=31369
+2026-04-01 13:36:21,085 - INFO - Fetching schedule data for event 249575 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249575&storeorganizationid=31369
+2026-04-01 13:36:22,085 - INFO - Fetching schedule data for event 249586 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249586&storeorganizationid=31369
+2026-04-01 13:36:23,084 - INFO - Fetching schedule data for event 249576 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249576&storeorganizationid=31369
+2026-04-01 13:36:24,489 - INFO - Fetching schedule data for event 252611 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252611&storeorganizationid=31369
+2026-04-01 13:36:25,087 - INFO - Fetching schedule data for event 253976 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=253976&storeorganizationid=31369
+2026-04-01 13:36:25,788 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 13:36:25,796 - INFO - [Excel] Wrote rows 33..42 (key col 1)
+2026-04-01 13:36:26,214 - INFO - [Excel] Appended 10 rows. New bottom row: 42.
+2026-04-01 13:36:29,133 - INFO - Saved batch 4 to Excel (template append).
+2026-04-01 13:36:29,133 - INFO - Batch 4 completed. Waiting 32.87s before next batch.
+2026-04-01 13:37:02,000 - INFO - Processing batch 5/5.
+2026-04-01 13:37:02,022 - INFO - Fetching schedule data for event 249587 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249587&storeorganizationid=31369
+2026-04-01 13:37:03,023 - INFO - Fetching schedule data for event 252593 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252593&storeorganizationid=31369
+2026-04-01 13:37:04,023 - INFO - Fetching schedule data for event 249577 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249577&storeorganizationid=31369
+2026-04-01 13:37:05,023 - INFO - Fetching schedule data for event 249589 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249589&storeorganizationid=31369
+2026-04-01 13:37:06,026 - INFO - Fetching schedule data for event 252615 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=252615&storeorganizationid=31369
+2026-04-01 13:37:07,025 - INFO - Fetching schedule data for event 249578 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249578&storeorganizationid=31369
+2026-04-01 13:37:08,024 - INFO - Fetching schedule data for event 249590 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249590&storeorganizationid=31369
+2026-04-01 13:37:09,024 - INFO - Fetching schedule data for event 249579 from https://registrations.premiersportstournaments.com/store/event/schedule/search?eventId=249579&storeorganizationid=31369
+2026-04-01 13:37:09,823 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 13:37:09,831 - INFO - [Excel] Wrote rows 43..50 (key col 1)
+2026-04-01 13:37:10,278 - INFO - [Excel] Appended 8 rows. New bottom row: 50.
+2026-04-01 13:37:12,455 - INFO - Saved batch 5 to Excel (template append).
+2026-04-01 13:37:12,456 - INFO - Completed location: All (PST)
+2026-04-01 13:37:15,077 - INFO - [TopGun] Filter-data loaded. States=15, Types=151, BannedTypes(umpire)=0
+2026-04-01 13:37:15,078 - INFO - Effective scraper: TopGunScraper
+2026-04-01 13:37:15,078 - INFO - Selected location: ALL

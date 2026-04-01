@@ -343,21 +343,21 @@
         {
             "name": "Event 220239",
             "url": "https://registrations.premiersportstournaments.com/store/event?eventid=220239",
-            "reason": "Validation failed: Start-date 'N/A' has an invalid format.",
+            "reason": "PSTScraper.extract_event_details() got an unexpected keyword argument 'selected_location'",
             "location": "All (PST)",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:25:32.381073+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
             "name": "Event 212173",
             "url": "https://registrations.premiersportstournaments.com/store/event?eventid=212173",
-            "reason": "Validation failed: Zip code is required.",
+            "reason": "PSTScraper.extract_event_details() got an unexpected keyword argument 'selected_location'",
             "location": "All (PST)",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:25:32.102057+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -376,8 +376,8 @@
             "location": "California (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:35:36.906045+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -386,8 +386,8 @@
             "location": "California (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:36:13.742865+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -396,8 +396,8 @@
             "location": "California (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:36:50.543597+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -406,8 +406,8 @@
             "location": "California (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:37:27.298039+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -416,8 +416,8 @@
             "location": "Nebraska (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:55:58.039913+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -426,8 +426,8 @@
             "location": "Arizona (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:32:26.465277+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -436,38 +436,8 @@
             "location": "Arizona (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
-            "resolved_at": ""
-        },
-        {
-            "name": "https://flbaseball.usssa.com/event/2023-florida-usssa-all-state-games",
-            "url": "https://flbaseball.usssa.com/event/2023-florida-usssa-all-state-games",
-            "location": "Florida (USSSA)",
-            "reason": "Validation failed: State-FullName is required.",
-            "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
-            "resolved_at": ""
-        },
-        {
-            "name": "https://mobaseball.usssa.com/event/the-heartland-fall-classic",
-            "url": "https://mobaseball.usssa.com/event/the-heartland-fall-classic",
-            "location": "Missouri (USSSA)",
-            "reason": "Extraction failed",
-            "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
-            "resolved_at": ""
-        },
-        {
-            "name": "https://okbaseball.usssa.com/event/easter-egg-surprise-fri-sat-only",
-            "url": "https://okbaseball.usssa.com/event/easter-egg-surprise-fri-sat-only",
-            "location": "Oklahoma (USSSA)",
-            "reason": "Extraction failed",
-            "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T17:33:02.862757+00:00",
+            "fail_count": 2,
             "resolved_at": ""
         },
         {
@@ -476,18 +446,8 @@
             "location": "Oklahoma (USSSA)",
             "reason": "Extraction failed",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
-            "resolved_at": ""
-        },
-        {
-            "name": "https://mobaseball.usssa.com/event/42-legend-series-mid-mo-classic",
-            "url": "https://mobaseball.usssa.com/event/42-legend-series-mid-mo-classic",
-            "location": "Missouri (USSSA)",
-            "reason": "Validation failed: State-FullName is required.",
-            "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:53:26.987343+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -496,8 +456,8 @@
             "location": "Georgia (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:18:39.264808+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -506,8 +466,8 @@
             "location": "Maine (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:20:36.914745+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -516,8 +476,8 @@
             "location": "Massachusetts (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:21:53.548102+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -526,8 +486,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:25:58.619394+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -536,8 +496,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:00.590000+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -546,8 +506,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:02.034240+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -556,8 +516,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:03.371577+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -566,8 +526,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:04.760498+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -576,8 +536,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:06.133995+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -586,8 +546,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:07.592305+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -596,8 +556,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:08.960964+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -606,8 +566,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:10.339092+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -616,8 +576,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:11.765380+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -626,8 +586,8 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "fail_count": 1,
+            "last_failed_at": "2026-04-01T18:26:13.110824+00:00",
+            "fail_count": 3,
             "resolved_at": ""
         },
         {
@@ -636,7 +596,37 @@
             "location": "New Hampshire (PerfectGame)",
             "reason": "Validation failed: State-FullName is required.",
             "first_failed_at": "2026-02-16T20:38:35.108666+00:00",
-            "last_failed_at": "2026-02-16T20:38:35.108666+00:00",
+            "last_failed_at": "2026-04-01T18:26:14.450637+00:00",
+            "fail_count": 3,
+            "resolved_at": ""
+        },
+        {
+            "name": "https://www.perfectgame.org/schedule/groupedevents.aspx?gid=25081",
+            "url": "https://www.perfectgame.org/Schedule/GroupedEvents.aspx?gid=25081",
+            "location": "Alabama (PerfectGame)",
+            "reason": "Validation failed: State-FullName is required.",
+            "first_failed_at": "2026-04-01T16:46:11.323593+00:00",
+            "last_failed_at": "2026-04-01T18:16:35.195958+00:00",
+            "fail_count": 2,
+            "resolved_at": ""
+        },
+        {
+            "name": "https://www.perfectgame.org/schedule/groupedevents.aspx?gid=25063",
+            "url": "https://www.perfectgame.org/Schedule/GroupedEvents.aspx?gid=25063",
+            "location": "Georgia (PerfectGame)",
+            "reason": "Validation failed: State-FullName is required.",
+            "first_failed_at": "2026-04-01T16:49:12.445019+00:00",
+            "last_failed_at": "2026-04-01T18:18:40.719507+00:00",
+            "fail_count": 2,
+            "resolved_at": ""
+        },
+        {
+            "name": "https://www.perfectgame.org/schedule/groupedevents.aspx?gid=23317",
+            "url": "https://www.perfectgame.org/Schedule/GroupedEvents.aspx?gid=23317",
+            "location": "Michigan (PerfectGame)",
+            "reason": "[Errno 22] Invalid argument: 'events.json'",
+            "first_failed_at": "2026-04-01T18:22:25.126921+00:00",
+            "last_failed_at": "2026-04-01T18:22:25.126921+00:00",
             "fail_count": 1,
             "resolved_at": ""
         }

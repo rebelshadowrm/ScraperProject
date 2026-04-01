@@ -1,0 +1,209 @@
+2026-04-01 13:14:25,955 - INFO - Logger initialized.
+2026-04-01 13:14:25,955 - INFO - Run log created for NCSScraper.
+2026-04-01 13:14:35,188 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-04-01 13:14:35,189 - INFO - Processing location: Alabama (NCS)
+2026-04-01 13:14:35,189 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AL
+2026-04-01 13:14:41,794 - INFO - Found 15 new event links on page 1 (total 15).
+2026-04-01 13:14:43,797 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-AL
+2026-04-01 13:14:46,395 - INFO - Found 14 new event links on page 2 (total 29).
+2026-04-01 13:14:46,396 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:14:46,397 - INFO - Total event links collected: 29
+2026-04-01 13:14:46,397 - INFO - Collected 29 event links using https://playncs.com/baseball/Events?countryState=US-AL for Alabama (NCS).
+2026-04-01 13:14:47,632 - INFO - Total unique events to process for Alabama (NCS): 0
+2026-04-01 13:14:47,632 - INFO - No unprocessed events for Alabama (NCS). Skipping Excel creation.
+2026-04-01 13:14:47,632 - INFO - Processing location: Alaska (NCS)
+2026-04-01 13:14:47,632 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AK
+2026-04-01 13:14:48,607 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:14:48,607 - INFO - Total event links collected: 0
+2026-04-01 13:14:48,607 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-AK for Alaska (NCS).
+2026-04-01 13:14:48,840 - INFO - Total unique events to process for Alaska (NCS): 0
+2026-04-01 13:14:48,840 - INFO - No unprocessed events for Alaska (NCS). Skipping Excel creation.
+2026-04-01 13:14:48,840 - INFO - Processing location: Arizona (NCS)
+2026-04-01 13:14:48,840 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AZ
+2026-04-01 13:14:51,266 - INFO - Found 15 new event links on page 1 (total 15).
+2026-04-01 13:14:53,268 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-AZ
+2026-04-01 13:14:55,685 - INFO - Found 15 new event links on page 2 (total 30).
+2026-04-01 13:14:57,687 - INFO - Scraping page 3: https://playncs.com/baseball/Events?page=3&countryState=US-AZ
+2026-04-01 13:14:58,778 - INFO - Found 10 new event links on page 3 (total 40).
+2026-04-01 13:14:58,779 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:14:58,779 - INFO - Total event links collected: 40
+2026-04-01 13:14:58,780 - INFO - Collected 40 event links using https://playncs.com/baseball/Events?countryState=US-AZ for Arizona (NCS).
+2026-04-01 13:15:04,600 - INFO - Total unique events to process for Arizona (NCS): 0
+2026-04-01 13:15:04,600 - INFO - No unprocessed events for Arizona (NCS). Skipping Excel creation.
+2026-04-01 13:15:04,600 - INFO - Processing location: Arkansas (NCS)
+2026-04-01 13:15:04,600 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AR
+2026-04-01 13:15:04,840 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:04,840 - INFO - Total event links collected: 0
+2026-04-01 13:15:04,840 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-AR for Arkansas (NCS).
+2026-04-01 13:15:05,087 - INFO - Total unique events to process for Arkansas (NCS): 0
+2026-04-01 13:15:05,087 - INFO - No unprocessed events for Arkansas (NCS). Skipping Excel creation.
+2026-04-01 13:15:05,087 - INFO - Processing location: California (NCS)
+2026-04-01 13:15:05,087 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CA
+2026-04-01 13:15:06,305 - INFO - Found 15 new event links on page 1 (total 15).
+2026-04-01 13:15:08,307 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-CA
+2026-04-01 13:15:09,222 - INFO - Found 15 new event links on page 2 (total 30).
+2026-04-01 13:15:11,224 - INFO - Scraping page 3: https://playncs.com/baseball/Events?page=3&countryState=US-CA
+2026-04-01 13:15:12,255 - INFO - Found 15 new event links on page 3 (total 45).
+2026-04-01 13:15:14,257 - INFO - Scraping page 4: https://playncs.com/baseball/Events?page=4&countryState=US-CA
+2026-04-01 13:15:15,271 - INFO - Found 15 new event links on page 4 (total 60).
+2026-04-01 13:15:17,272 - INFO - Scraping page 5: https://playncs.com/baseball/Events?page=5&countryState=US-CA
+2026-04-01 13:15:18,120 - INFO - Found 15 new event links on page 5 (total 75).
+2026-04-01 13:15:20,122 - INFO - Scraping page 6: https://playncs.com/baseball/Events?page=6&countryState=US-CA
+2026-04-01 13:15:21,109 - INFO - Found 15 new event links on page 6 (total 90).
+2026-04-01 13:15:23,111 - INFO - Scraping page 7: https://playncs.com/baseball/Events?page=7&countryState=US-CA
+2026-04-01 13:15:23,923 - INFO - Found 15 new event links on page 7 (total 105).
+2026-04-01 13:15:25,926 - INFO - Scraping page 8: https://playncs.com/baseball/Events?page=8&countryState=US-CA
+2026-04-01 13:15:27,025 - INFO - Found 15 new event links on page 8 (total 120).
+2026-04-01 13:15:29,027 - INFO - Scraping page 9: https://playncs.com/baseball/Events?page=9&countryState=US-CA
+2026-04-01 13:15:29,688 - INFO - Found 7 new event links on page 9 (total 127).
+2026-04-01 13:15:29,690 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:29,690 - INFO - Total event links collected: 127
+2026-04-01 13:15:29,690 - INFO - Collected 127 event links using https://playncs.com/baseball/Events?countryState=US-CA for California (NCS).
+2026-04-01 13:15:34,599 - INFO - Total unique events to process for California (NCS): 0
+2026-04-01 13:15:34,599 - INFO - No unprocessed events for California (NCS). Skipping Excel creation.
+2026-04-01 13:15:34,599 - INFO - Processing location: Colorado (NCS)
+2026-04-01 13:15:34,599 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CO
+2026-04-01 13:15:34,804 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:34,804 - INFO - Total event links collected: 0
+2026-04-01 13:15:34,804 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-CO for Colorado (NCS).
+2026-04-01 13:15:35,013 - INFO - Total unique events to process for Colorado (NCS): 0
+2026-04-01 13:15:35,013 - INFO - No unprocessed events for Colorado (NCS). Skipping Excel creation.
+2026-04-01 13:15:35,013 - INFO - Processing location: Connecticut (NCS)
+2026-04-01 13:15:35,013 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CT
+2026-04-01 13:15:35,304 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:35,305 - INFO - Total event links collected: 0
+2026-04-01 13:15:35,305 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-CT for Connecticut (NCS).
+2026-04-01 13:15:35,540 - INFO - Total unique events to process for Connecticut (NCS): 0
+2026-04-01 13:15:35,540 - INFO - No unprocessed events for Connecticut (NCS). Skipping Excel creation.
+2026-04-01 13:15:35,540 - INFO - Processing location: Delaware (NCS)
+2026-04-01 13:15:35,540 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-DE
+2026-04-01 13:15:35,747 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:35,747 - INFO - Total event links collected: 0
+2026-04-01 13:15:35,748 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-DE for Delaware (NCS).
+2026-04-01 13:15:35,966 - INFO - Total unique events to process for Delaware (NCS): 0
+2026-04-01 13:15:35,967 - INFO - No unprocessed events for Delaware (NCS). Skipping Excel creation.
+2026-04-01 13:15:35,967 - INFO - Processing location: Florida (NCS)
+2026-04-01 13:15:35,967 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-FL
+2026-04-01 13:15:36,446 - INFO - Found 9 new event links on page 1 (total 9).
+2026-04-01 13:15:36,448 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:36,448 - INFO - Total event links collected: 9
+2026-04-01 13:15:36,448 - INFO - Collected 9 event links using https://playncs.com/baseball/Events?countryState=US-FL for Florida (NCS).
+2026-04-01 13:15:37,033 - INFO - Total unique events to process for Florida (NCS): 0
+2026-04-01 13:15:37,033 - INFO - No unprocessed events for Florida (NCS). Skipping Excel creation.
+2026-04-01 13:15:37,033 - INFO - Processing location: Georgia (NCS)
+2026-04-01 13:15:37,033 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-GA
+2026-04-01 13:15:37,901 - INFO - Found 12 new event links on page 1 (total 12).
+2026-04-01 13:15:37,903 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:37,903 - INFO - Total event links collected: 12
+2026-04-01 13:15:37,903 - INFO - Collected 12 event links using https://playncs.com/baseball/Events?countryState=US-GA for Georgia (NCS).
+2026-04-01 13:15:38,589 - INFO - Total unique events to process for Georgia (NCS): 0
+2026-04-01 13:15:38,589 - INFO - No unprocessed events for Georgia (NCS). Skipping Excel creation.
+2026-04-01 13:15:38,589 - INFO - Processing location: Hawaii (NCS)
+2026-04-01 13:15:38,590 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-HI
+2026-04-01 13:15:38,836 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:38,836 - INFO - Total event links collected: 0
+2026-04-01 13:15:38,836 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-HI for Hawaii (NCS).
+2026-04-01 13:15:39,068 - INFO - Total unique events to process for Hawaii (NCS): 0
+2026-04-01 13:15:39,068 - INFO - No unprocessed events for Hawaii (NCS). Skipping Excel creation.
+2026-04-01 13:15:39,068 - INFO - Processing location: Idaho (NCS)
+2026-04-01 13:15:39,068 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-ID
+2026-04-01 13:15:39,745 - INFO - Found 5 new event links on page 1 (total 5).
+2026-04-01 13:15:39,746 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:39,747 - INFO - Total event links collected: 5
+2026-04-01 13:15:39,747 - INFO - Collected 5 event links using https://playncs.com/baseball/Events?countryState=US-ID for Idaho (NCS).
+2026-04-01 13:15:40,166 - INFO - Total unique events to process for Idaho (NCS): 0
+2026-04-01 13:15:40,166 - INFO - No unprocessed events for Idaho (NCS). Skipping Excel creation.
+2026-04-01 13:15:40,167 - INFO - Processing location: Illinois (NCS)
+2026-04-01 13:15:40,167 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IL
+2026-04-01 13:15:40,368 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:40,368 - INFO - Total event links collected: 0
+2026-04-01 13:15:40,368 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IL for Illinois (NCS).
+2026-04-01 13:15:40,578 - INFO - Total unique events to process for Illinois (NCS): 0
+2026-04-01 13:15:40,579 - INFO - No unprocessed events for Illinois (NCS). Skipping Excel creation.
+2026-04-01 13:15:40,579 - INFO - Processing location: Indiana (NCS)
+2026-04-01 13:15:40,579 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IN
+2026-04-01 13:15:40,777 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:40,777 - INFO - Total event links collected: 0
+2026-04-01 13:15:40,777 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IN for Indiana (NCS).
+2026-04-01 13:15:41,005 - INFO - Total unique events to process for Indiana (NCS): 0
+2026-04-01 13:15:41,005 - INFO - No unprocessed events for Indiana (NCS). Skipping Excel creation.
+2026-04-01 13:15:41,005 - INFO - Processing location: Iowa (NCS)
+2026-04-01 13:15:41,005 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IA
+2026-04-01 13:15:41,222 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:41,222 - INFO - Total event links collected: 0
+2026-04-01 13:15:41,222 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IA for Iowa (NCS).
+2026-04-01 13:15:41,435 - INFO - Total unique events to process for Iowa (NCS): 0
+2026-04-01 13:15:41,435 - INFO - No unprocessed events for Iowa (NCS). Skipping Excel creation.
+2026-04-01 13:15:41,435 - INFO - Processing location: Kansas (NCS)
+2026-04-01 13:15:41,435 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-KS
+2026-04-01 13:15:41,646 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:41,647 - INFO - Total event links collected: 0
+2026-04-01 13:15:41,647 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-KS for Kansas (NCS).
+2026-04-01 13:15:41,886 - INFO - Total unique events to process for Kansas (NCS): 0
+2026-04-01 13:15:41,886 - INFO - No unprocessed events for Kansas (NCS). Skipping Excel creation.
+2026-04-01 13:15:41,886 - INFO - Processing location: Kentucky (NCS)
+2026-04-01 13:15:41,886 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-KY
+2026-04-01 13:15:42,089 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:42,089 - INFO - Total event links collected: 0
+2026-04-01 13:15:42,089 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-KY for Kentucky (NCS).
+2026-04-01 13:15:42,313 - INFO - Total unique events to process for Kentucky (NCS): 0
+2026-04-01 13:15:42,313 - INFO - No unprocessed events for Kentucky (NCS). Skipping Excel creation.
+2026-04-01 13:15:42,313 - INFO - Processing location: Louisiana (NCS)
+2026-04-01 13:15:42,313 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-LA
+2026-04-01 13:15:42,548 - INFO - Found 4 new event links on page 1 (total 4).
+2026-04-01 13:15:42,549 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:42,549 - INFO - Total event links collected: 4
+2026-04-01 13:15:42,549 - INFO - Collected 4 event links using https://playncs.com/baseball/Events?countryState=US-LA for Louisiana (NCS).
+2026-04-01 13:15:42,946 - INFO - Total unique events to process for Louisiana (NCS): 0
+2026-04-01 13:15:42,946 - INFO - No unprocessed events for Louisiana (NCS). Skipping Excel creation.
+2026-04-01 13:15:42,946 - INFO - Processing location: Maine (NCS)
+2026-04-01 13:15:42,946 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-ME
+2026-04-01 13:15:43,184 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:43,184 - INFO - Total event links collected: 0
+2026-04-01 13:15:43,184 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-ME for Maine (NCS).
+2026-04-01 13:15:43,442 - INFO - Total unique events to process for Maine (NCS): 0
+2026-04-01 13:15:43,442 - INFO - No unprocessed events for Maine (NCS). Skipping Excel creation.
+2026-04-01 13:15:43,442 - INFO - Processing location: Maryland (NCS)
+2026-04-01 13:15:43,442 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MD
+2026-04-01 13:15:43,651 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:43,651 - INFO - Total event links collected: 0
+2026-04-01 13:15:43,651 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MD for Maryland (NCS).
+2026-04-01 13:15:43,873 - INFO - Total unique events to process for Maryland (NCS): 0
+2026-04-01 13:15:43,873 - INFO - No unprocessed events for Maryland (NCS). Skipping Excel creation.
+2026-04-01 13:15:43,873 - INFO - Processing location: Massachusetts (NCS)
+2026-04-01 13:15:43,874 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MA
+2026-04-01 13:15:44,077 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:44,078 - INFO - Total event links collected: 0
+2026-04-01 13:15:44,078 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MA for Massachusetts (NCS).
+2026-04-01 13:15:44,293 - INFO - Total unique events to process for Massachusetts (NCS): 0
+2026-04-01 13:15:44,293 - INFO - No unprocessed events for Massachusetts (NCS). Skipping Excel creation.
+2026-04-01 13:15:44,293 - INFO - Processing location: Michigan (NCS)
+2026-04-01 13:15:44,293 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MI
+2026-04-01 13:15:44,509 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:44,509 - INFO - Total event links collected: 0
+2026-04-01 13:15:44,509 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MI for Michigan (NCS).
+2026-04-01 13:15:44,739 - INFO - Total unique events to process for Michigan (NCS): 0
+2026-04-01 13:15:44,739 - INFO - No unprocessed events for Michigan (NCS). Skipping Excel creation.
+2026-04-01 13:15:44,739 - INFO - Processing location: Minnesota (NCS)
+2026-04-01 13:15:44,739 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MN
+2026-04-01 13:15:44,937 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:44,937 - INFO - Total event links collected: 0
+2026-04-01 13:15:44,937 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MN for Minnesota (NCS).
+2026-04-01 13:15:45,184 - INFO - Total unique events to process for Minnesota (NCS): 0
+2026-04-01 13:15:45,184 - INFO - No unprocessed events for Minnesota (NCS). Skipping Excel creation.
+2026-04-01 13:15:45,184 - INFO - Processing location: Mississippi (NCS)
+2026-04-01 13:15:45,184 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MS
+2026-04-01 13:15:45,454 - INFO - Found 4 new event links on page 1 (total 4).
+2026-04-01 13:15:45,455 - INFO - Next button missing or disabled. End of pagination.
+2026-04-01 13:15:45,456 - INFO - Total event links collected: 4
+2026-04-01 13:15:45,456 - INFO - Collected 4 event links using https://playncs.com/baseball/Events?countryState=US-MS for Mississippi (NCS).
+2026-04-01 13:15:45,856 - INFO - Total unique events to process for Mississippi (NCS): 0
+2026-04-01 13:15:45,856 - INFO - No unprocessed events for Mississippi (NCS). Skipping Excel creation.
+2026-04-01 13:15:45,856 - INFO - Processing location: Missouri (NCS)
+2026-04-01 13:15:45,856 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MO
+2026-04-01 13:15:46,079 - INFO - No NCS events found on page 1. Stopping pagination.
+2026-04-01 13:15:46,080 - INFO - Total event links collected: 0
+2026-04-01 13:15:46,080 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MO for Missouri (NCS).
+2026-04-01 13:15:46,125 - ERROR - An error occurred in CLI run: [Errno 22] Invalid argument: 'events.json'
+2026-04-01 13:15:48,833 - INFO - Effective scraper: PGScraper
+2026-04-01 13:15:48,833 - INFO - Selected location: ALL

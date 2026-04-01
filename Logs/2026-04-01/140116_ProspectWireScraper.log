@@ -1,0 +1,55 @@
+2026-04-01 14:01:16,978 - INFO - Logger initialized.
+2026-04-01 14:01:16,978 - INFO - Run log created for ProspectWireScraper.
+2026-04-01 14:01:17,050 - INFO - Skipping Selenium startup for ProspectWireScraper.
+2026-04-01 14:01:17,051 - INFO - Initializing event source for ProspectWire...
+2026-04-01 14:01:18,817 - INFO - [ProspectWire] Attempting direct API pull.
+2026-04-01 14:01:26,713 - INFO - [ProspectWire] Loaded 336 raw event object(s) from direct API.
+2026-04-01 14:01:26,713 - INFO - [ProspectWire] Direct API pull succeeded with 3 page(s).
+2026-04-01 14:01:26,715 - INFO - [ProspectWire] Returning 0 event link(s) for state AL from direct API.
+2026-04-01 14:01:26,720 - INFO - Collected 0 event links using direct API for Alabama (ProspectWire).
+2026-04-01 14:01:26,720 - INFO - Filtering loaded events into output: Alabama (ProspectWire)
+2026-04-01 14:01:26,920 - INFO - Total unique events to process for Alabama (ProspectWire): 0
+2026-04-01 14:01:26,920 - INFO - No unprocessed events for Alabama (ProspectWire). Skipping Excel creation.
+2026-04-01 14:01:26,920 - INFO - Processing location: Alaska (ProspectWire)
+2026-04-01 14:01:26,921 - INFO - [ProspectWire] Returning 0 event link(s) for state AK from direct API.
+2026-04-01 14:01:26,921 - INFO - Collected 0 event links using direct API for Alaska (ProspectWire).
+2026-04-01 14:01:26,921 - INFO - Filtering loaded events into output: Alaska (ProspectWire)
+2026-04-01 14:01:27,123 - INFO - Total unique events to process for Alaska (ProspectWire): 0
+2026-04-01 14:01:27,123 - INFO - No unprocessed events for Alaska (ProspectWire). Skipping Excel creation.
+2026-04-01 14:01:27,123 - INFO - Processing location: Arizona (ProspectWire)
+2026-04-01 14:01:27,125 - INFO - [ProspectWire] Returning 3 event link(s) for state AZ from direct API.
+2026-04-01 14:01:27,125 - INFO - Collected 3 event links using direct API for Arizona (ProspectWire).
+2026-04-01 14:01:27,125 - INFO - Filtering loaded events into output: Arizona (ProspectWire)
+2026-04-01 14:01:27,423 - INFO - Total unique events to process for Arizona (ProspectWire): 3
+2026-04-01 14:01:27,425 - INFO - [Excel] Copied template to Sheets\2026-04-01\ProspectWire\Arizona_2026-04-01.xlsx
+2026-04-01 14:01:27,425 - INFO - Excel output file for Arizona (ProspectWire) will be: Sheets\2026-04-01\ProspectWire\Arizona_2026-04-01.xlsx
+2026-04-01 14:01:27,425 - INFO - Processing batch 1/1.
+2026-04-01 14:01:28,470 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 14:01:28,475 - INFO - [Excel] Wrote rows 3..5 (key col 1)
+2026-04-01 14:01:28,869 - INFO - [Excel] Appended 3 rows. New bottom row: 5.
+2026-04-01 14:01:29,602 - INFO - Saved batch 1 to Excel (template append).
+2026-04-01 14:01:29,602 - INFO - Completed location: Arizona (ProspectWire)
+2026-04-01 14:01:29,602 - INFO - Processing location: Arkansas (ProspectWire)
+2026-04-01 14:01:29,603 - INFO - [ProspectWire] Returning 0 event link(s) for state AR from direct API.
+2026-04-01 14:01:29,603 - INFO - Collected 0 event links using direct API for Arkansas (ProspectWire).
+2026-04-01 14:01:29,603 - INFO - Filtering loaded events into output: Arkansas (ProspectWire)
+2026-04-01 14:01:29,806 - INFO - Total unique events to process for Arkansas (ProspectWire): 0
+2026-04-01 14:01:29,806 - INFO - No unprocessed events for Arkansas (ProspectWire). Skipping Excel creation.
+2026-04-01 14:01:29,807 - INFO - Processing location: California (ProspectWire)
+2026-04-01 14:01:29,808 - INFO - [ProspectWire] Returning 8 event link(s) for state CA from direct API.
+2026-04-01 14:01:29,808 - INFO - Collected 8 event links using direct API for California (ProspectWire).
+2026-04-01 14:01:29,808 - INFO - Filtering loaded events into output: California (ProspectWire)
+2026-04-01 14:01:30,293 - INFO - Total unique events to process for California (ProspectWire): 8
+2026-04-01 14:01:30,295 - INFO - [Excel] Copied template to Sheets\2026-04-01\ProspectWire\California_2026-04-01.xlsx
+2026-04-01 14:01:30,295 - INFO - Excel output file for California (ProspectWire) will be: Sheets\2026-04-01\ProspectWire\California_2026-04-01.xlsx
+2026-04-01 14:01:30,295 - INFO - Processing batch 1/1.
+2026-04-01 14:01:32,605 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-04-01 14:01:32,611 - INFO - [Excel] Wrote rows 3..10 (key col 1)
+2026-04-01 14:01:33,035 - INFO - [Excel] Appended 8 rows. New bottom row: 10.
+2026-04-01 14:01:35,016 - INFO - Saved batch 1 to Excel (template append).
+2026-04-01 14:01:35,016 - INFO - Completed location: California (ProspectWire)
+2026-04-01 14:01:35,017 - INFO - Processing location: Colorado (ProspectWire)
+2026-04-01 14:01:35,018 - INFO - [ProspectWire] Returning 0 event link(s) for state CO from direct API.
+2026-04-01 14:01:35,018 - INFO - Collected 0 event links using direct API for Colorado (ProspectWire).
+2026-04-01 14:01:35,018 - INFO - Filtering loaded events into output: Colorado (ProspectWire)
+2026-04-01 14:01:35,058 - ERROR - An error occurred in CLI run: [Errno 22] Invalid argument: 'events.json'

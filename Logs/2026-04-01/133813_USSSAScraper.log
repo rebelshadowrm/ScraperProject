@@ -1,0 +1,497 @@
+2026-04-01 13:38:13,603 - INFO - Logger initialized.
+2026-04-01 13:38:13,603 - INFO - Run log created for USSSAScraper.
+2026-04-01 13:38:22,930 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-04-01 13:38:22,931 - INFO - Processing location: Alabama (USSSA)
+2026-04-01 13:38:26,576 - INFO - Total pages found: 10
+2026-04-01 13:38:26,576 - INFO - Scraping page 1: https://albaseball.usssa.com/events/
+2026-04-01 13:38:30,220 - INFO - Scraping page 2: https://albaseball.usssa.com/events/?paged=2
+2026-04-01 13:38:35,676 - INFO - Scraping page 3: https://albaseball.usssa.com/events/?paged=3
+2026-04-01 13:38:41,757 - INFO - Scraping page 4: https://albaseball.usssa.com/events/?paged=4
+2026-04-01 13:38:46,979 - INFO - Scraping page 5: https://albaseball.usssa.com/events/?paged=5
+2026-04-01 13:38:52,221 - INFO - Scraping page 6: https://albaseball.usssa.com/events/?paged=6
+2026-04-01 13:38:57,794 - INFO - Scraping page 7: https://albaseball.usssa.com/events/?paged=7
+2026-04-01 13:39:03,131 - INFO - Scraping page 8: https://albaseball.usssa.com/events/?paged=8
+2026-04-01 13:39:08,307 - INFO - Scraping page 9: https://albaseball.usssa.com/events/?paged=9
+2026-04-01 13:39:17,842 - INFO - Scraping page 10: https://albaseball.usssa.com/events/?paged=10
+2026-04-01 13:39:23,278 - INFO - Total event links collected: 120
+2026-04-01 13:39:23,278 - INFO - Collected 120 event links using https://albaseball.usssa.com/events/ for Alabama (USSSA).
+2026-04-01 13:39:27,880 - INFO - Total unique events to process for Alabama (USSSA): 0
+2026-04-01 13:39:27,880 - INFO - No unprocessed events for Alabama (USSSA). Skipping Excel creation.
+2026-04-01 13:39:27,880 - INFO - Processing location: Alaska (USSSA)
+2026-04-01 13:39:30,748 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:39:30,748 - INFO - Total pages found: 0
+2026-04-01 13:39:30,748 - INFO - No USSSA events found for https://akbaseball.usssa.com/events/.
+2026-04-01 13:39:30,748 - INFO - Collected 0 event links using https://akbaseball.usssa.com/events/ for Alaska (USSSA).
+2026-04-01 13:39:31,009 - INFO - Total unique events to process for Alaska (USSSA): 0
+2026-04-01 13:39:31,009 - INFO - No unprocessed events for Alaska (USSSA). Skipping Excel creation.
+2026-04-01 13:39:31,009 - INFO - Processing location: Arizona (USSSA)
+2026-04-01 13:39:32,476 - INFO - Total pages found: 1
+2026-04-01 13:39:32,476 - INFO - Scraping page 1: https://azbaseball.usssa.com/events/
+2026-04-01 13:39:36,106 - INFO - Total event links collected: 8
+2026-04-01 13:39:36,106 - INFO - Collected 8 event links using https://azbaseball.usssa.com/events/ for Arizona (USSSA).
+2026-04-01 13:39:36,610 - INFO - Skipping 2 stale unprocessed event(s) for Arizona (USSSA) because they were not rediscovered in the current run.
+2026-04-01 13:39:36,610 - INFO - Total unique events to process for Arizona (USSSA): 0
+2026-04-01 13:39:36,611 - INFO - No unprocessed events for Arizona (USSSA). Skipping Excel creation.
+2026-04-01 13:39:36,611 - INFO - Processing location: Arkansas (USSSA)
+2026-04-01 13:39:38,200 - INFO - Total pages found: 5
+2026-04-01 13:39:38,200 - INFO - Scraping page 1: https://arbaseball.usssa.com/events/
+2026-04-01 13:39:41,823 - INFO - Scraping page 2: https://arbaseball.usssa.com/events/?paged=2
+2026-04-01 13:39:47,512 - INFO - Scraping page 3: https://arbaseball.usssa.com/events/?paged=3
+2026-04-01 13:39:54,332 - INFO - Scraping page 4: https://arbaseball.usssa.com/events/?paged=4
+2026-04-01 13:40:01,613 - INFO - Scraping page 5: https://arbaseball.usssa.com/events/?paged=5
+2026-04-01 13:40:07,066 - INFO - Total event links collected: 58
+2026-04-01 13:40:07,066 - INFO - Collected 58 event links using https://arbaseball.usssa.com/events/ for Arkansas (USSSA).
+2026-04-01 13:40:09,378 - INFO - Total unique events to process for Arkansas (USSSA): 0
+2026-04-01 13:40:09,379 - INFO - No unprocessed events for Arkansas (USSSA). Skipping Excel creation.
+2026-04-01 13:40:09,379 - INFO - Processing location: California (USSSA)
+2026-04-01 13:40:10,998 - INFO - Total pages found: 12
+2026-04-01 13:40:10,998 - INFO - Scraping page 1: https://cabaseball.usssa.com/events/
+2026-04-01 13:40:14,647 - INFO - Scraping page 2: https://cabaseball.usssa.com/events/?paged=2
+2026-04-01 13:40:20,543 - INFO - Scraping page 3: https://cabaseball.usssa.com/events/?paged=3
+2026-04-01 13:40:26,651 - INFO - Scraping page 4: https://cabaseball.usssa.com/events/?paged=4
+2026-04-01 13:40:32,278 - INFO - Scraping page 5: https://cabaseball.usssa.com/events/?paged=5
+2026-04-01 13:40:37,897 - INFO - Scraping page 6: https://cabaseball.usssa.com/events/?paged=6
+2026-04-01 13:40:43,505 - INFO - Scraping page 7: https://cabaseball.usssa.com/events/?paged=7
+2026-04-01 13:40:49,302 - INFO - Scraping page 8: https://cabaseball.usssa.com/events/?paged=8
+2026-04-01 13:40:54,936 - INFO - Scraping page 9: https://cabaseball.usssa.com/events/?paged=9
+2026-04-01 13:41:00,513 - INFO - Scraping page 10: https://cabaseball.usssa.com/events/?paged=10
+2026-04-01 13:41:06,561 - INFO - Scraping page 11: https://cabaseball.usssa.com/events/?paged=11
+2026-04-01 13:41:12,103 - INFO - Scraping page 12: https://cabaseball.usssa.com/events/?paged=12
+2026-04-01 13:41:17,933 - INFO - Total event links collected: 135
+2026-04-01 13:41:17,934 - INFO - Collected 135 event links using https://cabaseball.usssa.com/events/ for California (USSSA).
+2026-04-01 13:41:23,111 - INFO - Skipping 4 stale unprocessed event(s) for California (USSSA) because they were not rediscovered in the current run.
+2026-04-01 13:41:23,111 - INFO - Total unique events to process for California (USSSA): 0
+2026-04-01 13:41:23,111 - INFO - No unprocessed events for California (USSSA). Skipping Excel creation.
+2026-04-01 13:41:23,112 - INFO - Processing location: Colorado (USSSA)
+2026-04-01 13:41:24,433 - INFO - Total pages found: 2
+2026-04-01 13:41:24,433 - INFO - Scraping page 1: https://cobaseball.usssa.com/events/
+2026-04-01 13:41:28,057 - INFO - Scraping page 2: https://cobaseball.usssa.com/events/?paged=2
+2026-04-01 13:41:33,606 - INFO - Total event links collected: 22
+2026-04-01 13:41:33,606 - INFO - Collected 22 event links using https://cobaseball.usssa.com/events/ for Colorado (USSSA).
+2026-04-01 13:41:34,608 - INFO - Total unique events to process for Colorado (USSSA): 0
+2026-04-01 13:41:34,608 - INFO - No unprocessed events for Colorado (USSSA). Skipping Excel creation.
+2026-04-01 13:41:34,608 - INFO - Processing location: Connecticut (USSSA)
+2026-04-01 13:41:37,250 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:41:37,250 - INFO - Total pages found: 0
+2026-04-01 13:41:37,250 - INFO - No USSSA events found for https://ctbaseball.usssa.com/events/.
+2026-04-01 13:41:37,250 - INFO - Collected 0 event links using https://ctbaseball.usssa.com/events/ for Connecticut (USSSA).
+2026-04-01 13:41:37,529 - INFO - Total unique events to process for Connecticut (USSSA): 0
+2026-04-01 13:41:37,529 - INFO - No unprocessed events for Connecticut (USSSA). Skipping Excel creation.
+2026-04-01 13:41:37,529 - INFO - Processing location: Delaware (USSSA)
+2026-04-01 13:41:40,949 - INFO - Total pages found: 1
+2026-04-01 13:41:40,949 - INFO - Scraping page 1: https://debaseball.usssa.com/events/
+2026-04-01 13:41:44,517 - INFO - Total event links collected: 3
+2026-04-01 13:41:44,517 - INFO - Collected 3 event links using https://debaseball.usssa.com/events/ for Delaware (USSSA).
+2026-04-01 13:41:44,884 - INFO - Total unique events to process for Delaware (USSSA): 0
+2026-04-01 13:41:44,884 - INFO - No unprocessed events for Delaware (USSSA). Skipping Excel creation.
+2026-04-01 13:41:44,884 - INFO - Processing location: Florida (USSSA)
+2026-04-01 13:41:46,638 - INFO - Total pages found: 9
+2026-04-01 13:41:46,639 - INFO - Scraping page 1: https://flbaseball.usssa.com/events/
+2026-04-01 13:41:50,308 - INFO - Scraping page 2: https://flbaseball.usssa.com/events/?paged=2
+2026-04-01 13:41:57,987 - INFO - Scraping page 3: https://flbaseball.usssa.com/events/?paged=3
+2026-04-01 13:42:03,894 - INFO - Scraping page 4: https://flbaseball.usssa.com/events/?paged=4
+2026-04-01 13:42:08,636 - INFO - Scraping page 5: https://flbaseball.usssa.com/events/?paged=5
+2026-04-01 13:42:14,678 - INFO - Scraping page 6: https://flbaseball.usssa.com/events/?paged=6
+2026-04-01 13:42:20,479 - INFO - Scraping page 7: https://flbaseball.usssa.com/events/?paged=7
+2026-04-01 13:42:26,567 - INFO - Scraping page 8: https://flbaseball.usssa.com/events/?paged=8
+2026-04-01 13:42:32,808 - INFO - Scraping page 9: https://flbaseball.usssa.com/events/?paged=9
+2026-04-01 13:42:39,320 - INFO - Total event links collected: 97
+2026-04-01 13:42:39,321 - INFO - Collected 97 event links using https://flbaseball.usssa.com/events/ for Florida (USSSA).
+2026-04-01 13:42:43,024 - INFO - Total unique events to process for Florida (USSSA): 0
+2026-04-01 13:42:43,024 - INFO - No unprocessed events for Florida (USSSA). Skipping Excel creation.
+2026-04-01 13:42:43,024 - INFO - Processing location: Georgia (USSSA)
+2026-04-01 13:42:45,721 - INFO - Total pages found: 1
+2026-04-01 13:42:45,722 - INFO - Scraping page 1: https://gabaseball.usssa.com/events/
+2026-04-01 13:42:49,388 - INFO - Total event links collected: 7
+2026-04-01 13:42:49,388 - INFO - Collected 7 event links using https://gabaseball.usssa.com/events/ for Georgia (USSSA).
+2026-04-01 13:42:49,905 - INFO - Total unique events to process for Georgia (USSSA): 0
+2026-04-01 13:42:49,905 - INFO - No unprocessed events for Georgia (USSSA). Skipping Excel creation.
+2026-04-01 13:42:49,905 - INFO - Processing location: Hawaii (USSSA)
+2026-04-01 13:42:53,160 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:42:53,160 - INFO - Total pages found: 0
+2026-04-01 13:42:53,160 - INFO - No USSSA events found for https://hibaseball.usssa.com/events/.
+2026-04-01 13:42:53,161 - INFO - Collected 0 event links using https://hibaseball.usssa.com/events/ for Hawaii (USSSA).
+2026-04-01 13:42:53,430 - INFO - Total unique events to process for Hawaii (USSSA): 0
+2026-04-01 13:42:53,430 - INFO - No unprocessed events for Hawaii (USSSA). Skipping Excel creation.
+2026-04-01 13:42:53,430 - INFO - Processing location: Idaho (USSSA)
+2026-04-01 13:42:56,212 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:42:56,213 - INFO - Total pages found: 0
+2026-04-01 13:42:56,213 - INFO - No USSSA events found for https://idbaseball.usssa.com/events/.
+2026-04-01 13:42:56,213 - INFO - Collected 0 event links using https://idbaseball.usssa.com/events/ for Idaho (USSSA).
+2026-04-01 13:42:56,503 - INFO - Total unique events to process for Idaho (USSSA): 0
+2026-04-01 13:42:56,503 - INFO - No unprocessed events for Idaho (USSSA). Skipping Excel creation.
+2026-04-01 13:42:56,503 - INFO - Processing location: Illinois (USSSA)
+2026-04-01 13:42:57,996 - INFO - Total pages found: 11
+2026-04-01 13:42:57,996 - INFO - Scraping page 1: https://ilbaseball.usssa.com/events/
+2026-04-01 13:43:01,619 - INFO - Scraping page 2: https://ilbaseball.usssa.com/events/?paged=2
+2026-04-01 13:43:07,058 - INFO - Scraping page 3: https://ilbaseball.usssa.com/events/?paged=3
+2026-04-01 13:43:12,441 - INFO - Scraping page 4: https://ilbaseball.usssa.com/events/?paged=4
+2026-04-01 13:43:17,844 - INFO - Scraping page 5: https://ilbaseball.usssa.com/events/?paged=5
+2026-04-01 13:43:23,561 - INFO - Scraping page 6: https://ilbaseball.usssa.com/events/?paged=6
+2026-04-01 13:43:29,681 - INFO - Scraping page 7: https://ilbaseball.usssa.com/events/?paged=7
+2026-04-01 13:43:37,416 - INFO - Scraping page 8: https://ilbaseball.usssa.com/events/?paged=8
+2026-04-01 13:43:43,970 - INFO - Scraping page 9: https://ilbaseball.usssa.com/events/?paged=9
+2026-04-01 13:43:49,345 - INFO - Scraping page 10: https://ilbaseball.usssa.com/events/?paged=10
+2026-04-01 13:43:54,691 - INFO - Scraping page 11: https://ilbaseball.usssa.com/events/?paged=11
+2026-04-01 13:43:59,993 - INFO - Total event links collected: 124
+2026-04-01 13:43:59,993 - INFO - Collected 124 event links using https://ilbaseball.usssa.com/events/ for Illinois (USSSA).
+2026-04-01 13:44:04,737 - INFO - Total unique events to process for Illinois (USSSA): 0
+2026-04-01 13:44:04,737 - INFO - No unprocessed events for Illinois (USSSA). Skipping Excel creation.
+2026-04-01 13:44:04,737 - INFO - Processing location: Indiana (USSSA)
+2026-04-01 13:44:06,028 - INFO - Total pages found: 13
+2026-04-01 13:44:06,028 - INFO - Scraping page 1: https://inbaseball.usssa.com/events/
+2026-04-01 13:44:09,751 - INFO - Scraping page 2: https://inbaseball.usssa.com/events/?paged=2
+2026-04-01 13:44:15,563 - INFO - Scraping page 3: https://inbaseball.usssa.com/events/?paged=3
+2026-04-01 13:44:21,568 - INFO - Scraping page 4: https://inbaseball.usssa.com/events/?paged=4
+2026-04-01 13:44:27,185 - INFO - Scraping page 5: https://inbaseball.usssa.com/events/?paged=5
+2026-04-01 13:44:32,928 - INFO - Scraping page 6: https://inbaseball.usssa.com/events/?paged=6
+2026-04-01 13:44:38,788 - INFO - Scraping page 7: https://inbaseball.usssa.com/events/?paged=7
+2026-04-01 13:44:44,524 - INFO - Scraping page 8: https://inbaseball.usssa.com/events/?paged=8
+2026-04-01 13:44:50,311 - INFO - Scraping page 9: https://inbaseball.usssa.com/events/?paged=9
+2026-04-01 13:44:56,223 - INFO - Scraping page 10: https://inbaseball.usssa.com/events/?paged=10
+2026-04-01 13:45:02,055 - INFO - Scraping page 11: https://inbaseball.usssa.com/events/?paged=11
+2026-04-01 13:45:08,732 - INFO - Scraping page 12: https://inbaseball.usssa.com/events/?paged=12
+2026-04-01 13:45:15,237 - INFO - Scraping page 13: https://inbaseball.usssa.com/events/?paged=13
+2026-04-01 13:45:21,007 - INFO - Total event links collected: 147
+2026-04-01 13:45:21,007 - INFO - Collected 147 event links using https://inbaseball.usssa.com/events/ for Indiana (USSSA).
+2026-04-01 13:45:26,725 - INFO - Total unique events to process for Indiana (USSSA): 0
+2026-04-01 13:45:26,725 - INFO - No unprocessed events for Indiana (USSSA). Skipping Excel creation.
+2026-04-01 13:45:26,725 - INFO - Processing location: Iowa (USSSA)
+2026-04-01 13:45:28,488 - INFO - Total pages found: 13
+2026-04-01 13:45:28,488 - INFO - Scraping page 1: https://iabaseball.usssa.com/events/
+2026-04-01 13:45:32,151 - INFO - Scraping page 2: https://iabaseball.usssa.com/events/?paged=2
+2026-04-01 13:45:38,383 - INFO - Scraping page 3: https://iabaseball.usssa.com/events/?paged=3
+2026-04-01 13:45:43,954 - INFO - Scraping page 4: https://iabaseball.usssa.com/events/?paged=4
+2026-04-01 13:45:49,926 - INFO - Scraping page 5: https://iabaseball.usssa.com/events/?paged=5
+2026-04-01 13:45:55,786 - INFO - Scraping page 6: https://iabaseball.usssa.com/events/?paged=6
+2026-04-01 13:46:01,522 - INFO - Scraping page 7: https://iabaseball.usssa.com/events/?paged=7
+2026-04-01 13:46:07,248 - INFO - Scraping page 8: https://iabaseball.usssa.com/events/?paged=8
+2026-04-01 13:46:13,079 - INFO - Scraping page 9: https://iabaseball.usssa.com/events/?paged=9
+2026-04-01 13:46:18,705 - INFO - Scraping page 10: https://iabaseball.usssa.com/events/?paged=10
+2026-04-01 13:46:24,576 - INFO - Scraping page 11: https://iabaseball.usssa.com/events/?paged=11
+2026-04-01 13:46:30,381 - INFO - Scraping page 12: https://iabaseball.usssa.com/events/?paged=12
+2026-04-01 13:46:36,174 - INFO - Scraping page 13: https://iabaseball.usssa.com/events/?paged=13
+2026-04-01 13:46:42,051 - INFO - Total event links collected: 156
+2026-04-01 13:46:42,051 - INFO - Collected 156 event links using https://iabaseball.usssa.com/events/ for Iowa (USSSA).
+2026-04-01 13:46:47,867 - INFO - Total unique events to process for Iowa (USSSA): 0
+2026-04-01 13:46:47,867 - INFO - No unprocessed events for Iowa (USSSA). Skipping Excel creation.
+2026-04-01 13:46:47,867 - INFO - Processing location: Kansas (USSSA)
+2026-04-01 13:46:49,505 - INFO - Total pages found: 5
+2026-04-01 13:46:49,505 - INFO - Scraping page 1: https://ksbaseball.usssa.com/events/
+2026-04-01 13:46:53,185 - INFO - Scraping page 2: https://ksbaseball.usssa.com/events/?paged=2
+2026-04-01 13:46:59,329 - INFO - Scraping page 3: https://ksbaseball.usssa.com/events/?paged=3
+2026-04-01 13:47:05,756 - INFO - Scraping page 4: https://ksbaseball.usssa.com/events/?paged=4
+2026-04-01 13:47:11,363 - INFO - Scraping page 5: https://ksbaseball.usssa.com/events/?paged=5
+2026-04-01 13:47:16,712 - INFO - Total event links collected: 49
+2026-04-01 13:47:16,713 - INFO - Collected 49 event links using https://ksbaseball.usssa.com/events/ for Kansas (USSSA).
+2026-04-01 13:47:18,669 - INFO - Total unique events to process for Kansas (USSSA): 0
+2026-04-01 13:47:18,669 - INFO - No unprocessed events for Kansas (USSSA). Skipping Excel creation.
+2026-04-01 13:47:18,669 - INFO - Processing location: Kentucky (USSSA)
+2026-04-01 13:47:20,444 - INFO - Total pages found: 7
+2026-04-01 13:47:20,444 - INFO - Scraping page 1: https://kybaseball.usssa.com/events/
+2026-04-01 13:47:24,157 - INFO - Scraping page 2: https://kybaseball.usssa.com/events/?paged=2
+2026-04-01 13:47:29,553 - INFO - Scraping page 3: https://kybaseball.usssa.com/events/?paged=3
+2026-04-01 13:47:35,460 - INFO - Scraping page 4: https://kybaseball.usssa.com/events/?paged=4
+2026-04-01 13:47:40,855 - INFO - Scraping page 5: https://kybaseball.usssa.com/events/?paged=5
+2026-04-01 13:47:46,462 - INFO - Scraping page 6: https://kybaseball.usssa.com/events/?paged=6
+2026-04-01 13:47:51,887 - INFO - Scraping page 7: https://kybaseball.usssa.com/events/?paged=7
+2026-04-01 13:47:57,270 - INFO - Total event links collected: 78
+2026-04-01 13:47:57,270 - INFO - Collected 78 event links using https://kybaseball.usssa.com/events/ for Kentucky (USSSA).
+2026-04-01 13:48:00,460 - INFO - Total unique events to process for Kentucky (USSSA): 0
+2026-04-01 13:48:00,460 - INFO - No unprocessed events for Kentucky (USSSA). Skipping Excel creation.
+2026-04-01 13:48:00,460 - INFO - Processing location: Louisiana (USSSA)
+2026-04-01 13:48:02,172 - INFO - Total pages found: 6
+2026-04-01 13:48:02,172 - INFO - Scraping page 1: https://labaseball.usssa.com/events/
+2026-04-01 13:48:05,941 - INFO - Scraping page 2: https://labaseball.usssa.com/events/?paged=2
+2026-04-01 13:48:11,119 - INFO - Scraping page 3: https://labaseball.usssa.com/events/?paged=3
+2026-04-01 13:48:16,037 - INFO - Scraping page 4: https://labaseball.usssa.com/events/?paged=4
+2026-04-01 13:48:21,229 - INFO - Scraping page 5: https://labaseball.usssa.com/events/?paged=5
+2026-04-01 13:48:26,117 - INFO - Scraping page 6: https://labaseball.usssa.com/events/?paged=6
+2026-04-01 13:48:32,301 - INFO - Total event links collected: 67
+2026-04-01 13:48:32,301 - INFO - Collected 67 event links using https://labaseball.usssa.com/events/ for Louisiana (USSSA).
+2026-04-01 13:48:35,008 - INFO - Total unique events to process for Louisiana (USSSA): 0
+2026-04-01 13:48:35,009 - INFO - No unprocessed events for Louisiana (USSSA). Skipping Excel creation.
+2026-04-01 13:48:35,009 - INFO - Processing location: Maine (USSSA)
+2026-04-01 13:48:36,487 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:48:36,487 - INFO - Total pages found: 0
+2026-04-01 13:48:36,487 - INFO - No USSSA events found for https://mebaseball.usssa.com/events/.
+2026-04-01 13:48:36,487 - INFO - Collected 0 event links using https://mebaseball.usssa.com/events/ for Maine (USSSA).
+2026-04-01 13:48:36,821 - INFO - Total unique events to process for Maine (USSSA): 0
+2026-04-01 13:48:36,822 - INFO - No unprocessed events for Maine (USSSA). Skipping Excel creation.
+2026-04-01 13:48:36,822 - INFO - Processing location: Maryland (USSSA)
+2026-04-01 13:48:38,231 - INFO - Total pages found: 1
+2026-04-01 13:48:38,231 - INFO - Scraping page 1: https://mdbaseball.usssa.com/events/
+2026-04-01 13:48:41,784 - INFO - Total event links collected: 6
+2026-04-01 13:48:41,784 - INFO - Collected 6 event links using https://mdbaseball.usssa.com/events/ for Maryland (USSSA).
+2026-04-01 13:48:42,259 - INFO - Total unique events to process for Maryland (USSSA): 0
+2026-04-01 13:48:42,259 - INFO - No unprocessed events for Maryland (USSSA). Skipping Excel creation.
+2026-04-01 13:48:42,259 - INFO - Processing location: Massachusetts (USSSA)
+2026-04-01 13:48:43,725 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:48:43,725 - INFO - Total pages found: 0
+2026-04-01 13:48:43,725 - INFO - No USSSA events found for https://mabaseball.usssa.com/events/.
+2026-04-01 13:48:43,725 - INFO - Collected 0 event links using https://mabaseball.usssa.com/events/ for Massachusetts (USSSA).
+2026-04-01 13:48:44,018 - INFO - Total unique events to process for Massachusetts (USSSA): 0
+2026-04-01 13:48:44,018 - INFO - No unprocessed events for Massachusetts (USSSA). Skipping Excel creation.
+2026-04-01 13:48:44,018 - INFO - Processing location: Michigan (USSSA)
+2026-04-01 13:48:45,444 - INFO - Total pages found: 3
+2026-04-01 13:48:45,444 - INFO - Scraping page 1: https://mibaseball.usssa.com/events/
+2026-04-01 13:48:49,099 - INFO - Scraping page 2: https://mibaseball.usssa.com/events/?paged=2
+2026-04-01 13:48:53,506 - INFO - Scraping page 3: https://mibaseball.usssa.com/events/?paged=3
+2026-04-01 13:48:57,962 - INFO - Total event links collected: 35
+2026-04-01 13:48:57,962 - INFO - Collected 35 event links using https://mibaseball.usssa.com/events/ for Michigan (USSSA).
+2026-04-01 13:48:59,407 - INFO - Total unique events to process for Michigan (USSSA): 0
+2026-04-01 13:48:59,408 - INFO - No unprocessed events for Michigan (USSSA). Skipping Excel creation.
+2026-04-01 13:48:59,408 - INFO - Processing location: Minnesota (USSSA)
+2026-04-01 13:49:00,989 - INFO - Total pages found: 1
+2026-04-01 13:49:00,989 - INFO - Scraping page 1: https://mnbaseball.usssa.com/events/
+2026-04-01 13:49:04,623 - INFO - Total event links collected: 6
+2026-04-01 13:49:04,623 - INFO - Collected 6 event links using https://mnbaseball.usssa.com/events/ for Minnesota (USSSA).
+2026-04-01 13:49:05,092 - INFO - Total unique events to process for Minnesota (USSSA): 0
+2026-04-01 13:49:05,092 - INFO - No unprocessed events for Minnesota (USSSA). Skipping Excel creation.
+2026-04-01 13:49:05,092 - INFO - Processing location: Mississippi (USSSA)
+2026-04-01 13:49:06,702 - INFO - Total pages found: 4
+2026-04-01 13:49:06,702 - INFO - Scraping page 1: https://msbaseball.usssa.com/events/
+2026-04-01 13:49:10,376 - INFO - Scraping page 2: https://msbaseball.usssa.com/events/?paged=2
+2026-04-01 13:49:14,975 - INFO - Scraping page 3: https://msbaseball.usssa.com/events/?paged=3
+2026-04-01 13:49:19,457 - INFO - Scraping page 4: https://msbaseball.usssa.com/events/?paged=4
+2026-04-01 13:49:23,849 - INFO - Total event links collected: 37
+2026-04-01 13:49:23,849 - INFO - Collected 37 event links using https://msbaseball.usssa.com/events/ for Mississippi (USSSA).
+2026-04-01 13:49:25,391 - INFO - Total unique events to process for Mississippi (USSSA): 0
+2026-04-01 13:49:25,391 - INFO - No unprocessed events for Mississippi (USSSA). Skipping Excel creation.
+2026-04-01 13:49:25,391 - INFO - Processing location: Missouri (USSSA)
+2026-04-01 13:49:27,107 - INFO - Total pages found: 6
+2026-04-01 13:49:27,107 - INFO - Scraping page 1: https://mobaseball.usssa.com/events/
+2026-04-01 13:49:30,799 - INFO - Scraping page 2: https://mobaseball.usssa.com/events/?paged=2
+2026-04-01 13:49:35,228 - INFO - Scraping page 3: https://mobaseball.usssa.com/events/?paged=3
+2026-04-01 13:49:39,644 - INFO - Scraping page 4: https://mobaseball.usssa.com/events/?paged=4
+2026-04-01 13:49:44,077 - INFO - Scraping page 5: https://mobaseball.usssa.com/events/?paged=5
+2026-04-01 13:49:48,665 - INFO - Scraping page 6: https://mobaseball.usssa.com/events/?paged=6
+2026-04-01 13:49:53,354 - INFO - Total event links collected: 64
+2026-04-01 13:49:53,354 - INFO - Collected 64 event links using https://mobaseball.usssa.com/events/ for Missouri (USSSA).
+2026-04-01 13:49:56,026 - INFO - Total unique events to process for Missouri (USSSA): 0
+2026-04-01 13:49:56,027 - INFO - No unprocessed events for Missouri (USSSA). Skipping Excel creation.
+2026-04-01 13:49:56,027 - INFO - Processing location: Montana (USSSA)
+2026-04-01 13:50:27,413 - WARNING - Timed out while determining USSSA pagination. Defaulting to 0 pages.
+2026-04-01 13:50:27,413 - INFO - Total pages found: 0
+2026-04-01 13:50:27,414 - INFO - No USSSA events found for https://mtbaseball.usssa.com/events/.
+2026-04-01 13:50:27,414 - INFO - Collected 0 event links using https://mtbaseball.usssa.com/events/ for Montana (USSSA).
+2026-04-01 13:50:27,638 - INFO - Total unique events to process for Montana (USSSA): 0
+2026-04-01 13:50:27,639 - INFO - No unprocessed events for Montana (USSSA). Skipping Excel creation.
+2026-04-01 13:50:27,639 - INFO - Processing location: Nebraska (USSSA)
+2026-04-01 13:50:29,350 - INFO - Total pages found: 8
+2026-04-01 13:50:29,350 - INFO - Scraping page 1: https://nebaseball.usssa.com/events/
+2026-04-01 13:50:33,107 - INFO - Scraping page 2: https://nebaseball.usssa.com/events/?paged=2
+2026-04-01 13:50:37,524 - INFO - Scraping page 3: https://nebaseball.usssa.com/events/?paged=3
+2026-04-01 13:50:42,000 - INFO - Scraping page 4: https://nebaseball.usssa.com/events/?paged=4
+2026-04-01 13:50:46,481 - INFO - Scraping page 5: https://nebaseball.usssa.com/events/?paged=5
+2026-04-01 13:50:52,906 - INFO - Scraping page 6: https://nebaseball.usssa.com/events/?paged=6
+2026-04-01 13:50:57,380 - INFO - Scraping page 7: https://nebaseball.usssa.com/events/?paged=7
+2026-04-01 13:51:01,751 - INFO - Scraping page 8: https://nebaseball.usssa.com/events/?paged=8
+2026-04-01 13:51:06,291 - INFO - Total event links collected: 87
+2026-04-01 13:51:06,291 - INFO - Collected 87 event links using https://nebaseball.usssa.com/events/ for Nebraska (USSSA).
+2026-04-01 13:51:09,755 - INFO - Skipping 1 stale unprocessed event(s) for Nebraska (USSSA) because they were not rediscovered in the current run.
+2026-04-01 13:51:09,755 - INFO - Total unique events to process for Nebraska (USSSA): 0
+2026-04-01 13:51:09,755 - INFO - No unprocessed events for Nebraska (USSSA). Skipping Excel creation.
+2026-04-01 13:51:09,755 - INFO - Processing location: Nevada (USSSA)
+2026-04-01 13:51:12,500 - INFO - Total pages found: 2
+2026-04-01 13:51:12,500 - INFO - Scraping page 1: https://nvbaseball.usssa.com/events/
+2026-04-01 13:51:16,205 - INFO - Scraping page 2: https://nvbaseball.usssa.com/events/?paged=2
+2026-04-01 13:51:20,539 - INFO - Total event links collected: 13
+2026-04-01 13:51:20,539 - INFO - Collected 13 event links using https://nvbaseball.usssa.com/events/ for Nevada (USSSA).
+2026-04-01 13:51:21,256 - INFO - Total unique events to process for Nevada (USSSA): 0
+2026-04-01 13:51:21,256 - INFO - No unprocessed events for Nevada (USSSA). Skipping Excel creation.
+2026-04-01 13:51:21,256 - INFO - Processing location: New Hampshire (USSSA)
+2026-04-01 13:51:22,732 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:51:22,732 - INFO - Total pages found: 0
+2026-04-01 13:51:22,732 - INFO - No USSSA events found for https://nhbaseball.usssa.com/events/.
+2026-04-01 13:51:22,732 - INFO - Collected 0 event links using https://nhbaseball.usssa.com/events/ for New Hampshire (USSSA).
+2026-04-01 13:51:23,014 - INFO - Total unique events to process for New Hampshire (USSSA): 0
+2026-04-01 13:51:23,014 - INFO - No unprocessed events for New Hampshire (USSSA). Skipping Excel creation.
+2026-04-01 13:51:23,014 - INFO - Processing location: New Jersey (USSSA)
+2026-04-01 13:51:24,600 - INFO - Total pages found: 1
+2026-04-01 13:51:24,600 - INFO - Scraping page 1: https://njbaseball.usssa.com/events/
+2026-04-01 13:51:28,220 - INFO - Total event links collected: 7
+2026-04-01 13:51:28,220 - INFO - Collected 7 event links using https://njbaseball.usssa.com/events/ for New Jersey (USSSA).
+2026-04-01 13:51:28,720 - INFO - Total unique events to process for New Jersey (USSSA): 0
+2026-04-01 13:51:28,720 - INFO - No unprocessed events for New Jersey (USSSA). Skipping Excel creation.
+2026-04-01 13:51:28,720 - INFO - Processing location: New Mexico (USSSA)
+2026-04-01 13:51:30,205 - INFO - Total pages found: 2
+2026-04-01 13:51:30,205 - INFO - Scraping page 1: https://nmbaseball.usssa.com/events/
+2026-04-01 13:51:33,926 - INFO - Scraping page 2: https://nmbaseball.usssa.com/events/?paged=2
+2026-04-01 13:51:38,282 - INFO - Total event links collected: 16
+2026-04-01 13:51:38,282 - INFO - Collected 16 event links using https://nmbaseball.usssa.com/events/ for New Mexico (USSSA).
+2026-04-01 13:51:39,147 - INFO - Total unique events to process for New Mexico (USSSA): 0
+2026-04-01 13:51:39,147 - INFO - No unprocessed events for New Mexico (USSSA). Skipping Excel creation.
+2026-04-01 13:51:39,147 - INFO - Processing location: New York (USSSA)
+2026-04-01 13:51:40,627 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:51:40,627 - INFO - Total pages found: 0
+2026-04-01 13:51:40,628 - INFO - No USSSA events found for https://nybaseball.usssa.com/events/.
+2026-04-01 13:51:40,628 - INFO - Collected 0 event links using https://nybaseball.usssa.com/events/ for New York (USSSA).
+2026-04-01 13:51:40,935 - INFO - Total unique events to process for New York (USSSA): 0
+2026-04-01 13:51:40,935 - INFO - No unprocessed events for New York (USSSA). Skipping Excel creation.
+2026-04-01 13:51:40,935 - INFO - Processing location: North Carolina (USSSA)
+2026-04-01 13:51:42,472 - INFO - Total pages found: 3
+2026-04-01 13:51:42,472 - INFO - Scraping page 1: https://ncbaseball.usssa.com/events/
+2026-04-01 13:51:46,171 - INFO - Scraping page 2: https://ncbaseball.usssa.com/events/?paged=2
+2026-04-01 13:51:50,996 - INFO - Scraping page 3: https://ncbaseball.usssa.com/events/?paged=3
+2026-04-01 13:51:55,427 - INFO - Total event links collected: 26
+2026-04-01 13:51:55,428 - INFO - Collected 26 event links using https://ncbaseball.usssa.com/events/ for North Carolina (USSSA).
+2026-04-01 13:51:56,574 - INFO - Total unique events to process for North Carolina (USSSA): 0
+2026-04-01 13:51:56,574 - INFO - No unprocessed events for North Carolina (USSSA). Skipping Excel creation.
+2026-04-01 13:51:56,574 - INFO - Processing location: North Dakota (USSSA)
+2026-04-01 13:51:57,371 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:51:57,371 - INFO - Total pages found: 0
+2026-04-01 13:51:57,371 - INFO - No USSSA events found for https://ndbaseball.usssa.com/events/.
+2026-04-01 13:51:57,371 - INFO - Collected 0 event links using https://ndbaseball.usssa.com/events/ for North Dakota (USSSA).
+2026-04-01 13:51:57,625 - INFO - Total unique events to process for North Dakota (USSSA): 0
+2026-04-01 13:51:57,625 - INFO - No unprocessed events for North Dakota (USSSA). Skipping Excel creation.
+2026-04-01 13:51:57,625 - INFO - Processing location: Ohio (USSSA)
+2026-04-01 13:51:59,231 - INFO - Total pages found: 3
+2026-04-01 13:51:59,232 - INFO - Scraping page 1: https://ohbaseball.usssa.com/events/
+2026-04-01 13:52:02,836 - INFO - Scraping page 2: https://ohbaseball.usssa.com/events/?paged=2
+2026-04-01 13:52:07,424 - INFO - Scraping page 3: https://ohbaseball.usssa.com/events/?paged=3
+2026-04-01 13:52:11,775 - INFO - Total event links collected: 29
+2026-04-01 13:52:11,775 - INFO - Collected 29 event links using https://ohbaseball.usssa.com/events/ for Ohio (USSSA).
+2026-04-01 13:52:13,063 - INFO - Total unique events to process for Ohio (USSSA): 0
+2026-04-01 13:52:13,064 - INFO - No unprocessed events for Ohio (USSSA). Skipping Excel creation.
+2026-04-01 13:52:13,064 - INFO - Processing location: Oklahoma (USSSA)
+2026-04-01 13:52:14,720 - INFO - Total pages found: 7
+2026-04-01 13:52:14,720 - INFO - Scraping page 1: https://okbaseball.usssa.com/events/
+2026-04-01 13:52:18,473 - INFO - Scraping page 2: https://okbaseball.usssa.com/events/?paged=2
+2026-04-01 13:52:22,861 - INFO - Scraping page 3: https://okbaseball.usssa.com/events/?paged=3
+2026-04-01 13:52:27,350 - INFO - Scraping page 4: https://okbaseball.usssa.com/events/?paged=4
+2026-04-01 13:52:31,742 - INFO - Scraping page 5: https://okbaseball.usssa.com/events/?paged=5
+2026-04-01 13:52:36,216 - INFO - Scraping page 6: https://okbaseball.usssa.com/events/?paged=6
+2026-04-01 13:52:42,123 - INFO - Scraping page 7: https://okbaseball.usssa.com/events/?paged=7
+2026-04-01 13:52:46,518 - INFO - Total event links collected: 80
+2026-04-01 13:52:46,519 - INFO - Collected 80 event links using https://okbaseball.usssa.com/events/ for Oklahoma (USSSA).
+2026-04-01 13:52:49,615 - INFO - Total unique events to process for Oklahoma (USSSA): 1
+2026-04-01 13:52:49,616 - INFO - Excel output file for Oklahoma (USSSA) will be: Sheets\2026-04-01\USSSA\Oklahoma_2026-04-01.xlsx
+2026-04-01 13:52:49,616 - INFO - Processing batch 1/1.
+2026-04-01 13:52:49,616 - INFO - Extracting event details from: https://okbaseball.usssa.com/event/obrien-summer-solstice
+2026-04-01 13:53:21,710 - ERROR - Timeout/NoSuchElement error at https://okbaseball.usssa.com/event/obrien-summer-solstice: Message: 
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:199:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:552:5
+dom.find/</<@chrome://remote/content/shared/DOM.sys.mjs:136:16
+
+2026-04-01 13:53:26,710 - ERROR - Failed to extract data for URL: https://okbaseball.usssa.com/event/obrien-summer-solstice after 1 retries.
+2026-04-01 13:53:26,711 - WARNING - Extraction failed for URL: https://okbaseball.usssa.com/event/obrien-summer-solstice.
+2026-04-01 13:53:26,989 - INFO - Cleaned up 1 downloaded .htm/.html files in C:\Users\rebel\Downloads\scrapping_project\ScraperProject\_selenium_downloads
+2026-04-01 13:53:26,989 - INFO - Completed location: Oklahoma (USSSA)
+2026-04-01 13:53:26,989 - INFO - Processing location: Oregon (USSSA)
+2026-04-01 13:53:28,588 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:53:28,588 - INFO - Total pages found: 0
+2026-04-01 13:53:28,588 - INFO - No USSSA events found for https://orbaseball.usssa.com/events/.
+2026-04-01 13:53:28,588 - INFO - Collected 0 event links using https://orbaseball.usssa.com/events/ for Oregon (USSSA).
+2026-04-01 13:53:28,864 - INFO - Total unique events to process for Oregon (USSSA): 0
+2026-04-01 13:53:28,864 - INFO - No unprocessed events for Oregon (USSSA). Skipping Excel creation.
+2026-04-01 13:53:28,865 - INFO - Processing location: Pennsylvania (USSSA)
+2026-04-01 13:53:30,312 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:53:30,312 - INFO - Total pages found: 0
+2026-04-01 13:53:30,312 - INFO - No USSSA events found for https://pabaseball.usssa.com/events/.
+2026-04-01 13:53:30,312 - INFO - Collected 0 event links using https://pabaseball.usssa.com/events/ for Pennsylvania (USSSA).
+2026-04-01 13:53:30,592 - INFO - Total unique events to process for Pennsylvania (USSSA): 0
+2026-04-01 13:53:30,592 - INFO - No unprocessed events for Pennsylvania (USSSA). Skipping Excel creation.
+2026-04-01 13:53:30,592 - INFO - Processing location: Rhode Island (USSSA)
+2026-04-01 13:53:31,426 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:53:31,426 - INFO - Total pages found: 0
+2026-04-01 13:53:31,426 - INFO - No USSSA events found for https://ribaseball.usssa.com/events/.
+2026-04-01 13:53:31,426 - INFO - Collected 0 event links using https://ribaseball.usssa.com/events/ for Rhode Island (USSSA).
+2026-04-01 13:53:31,669 - INFO - Total unique events to process for Rhode Island (USSSA): 0
+2026-04-01 13:53:31,669 - INFO - No unprocessed events for Rhode Island (USSSA). Skipping Excel creation.
+2026-04-01 13:53:31,669 - INFO - Processing location: South Carolina (USSSA)
+2026-04-01 13:53:34,368 - INFO - Total pages found: 1
+2026-04-01 13:53:34,368 - INFO - Scraping page 1: https://scbaseball.usssa.com/events/
+2026-04-01 13:53:37,959 - INFO - Total event links collected: 5
+2026-04-01 13:53:37,959 - INFO - Collected 5 event links using https://scbaseball.usssa.com/events/ for South Carolina (USSSA).
+2026-04-01 13:53:38,405 - INFO - Total unique events to process for South Carolina (USSSA): 0
+2026-04-01 13:53:38,405 - INFO - No unprocessed events for South Carolina (USSSA). Skipping Excel creation.
+2026-04-01 13:53:38,405 - INFO - Processing location: South Dakota (USSSA)
+2026-04-01 13:53:39,772 - INFO - Total pages found: 1
+2026-04-01 13:53:39,772 - INFO - Scraping page 1: https://sdbaseball.usssa.com/events/
+2026-04-01 13:53:43,385 - INFO - Total event links collected: 4
+2026-04-01 13:53:43,385 - INFO - Collected 4 event links using https://sdbaseball.usssa.com/events/ for South Dakota (USSSA).
+2026-04-01 13:53:43,760 - INFO - Total unique events to process for South Dakota (USSSA): 0
+2026-04-01 13:53:43,760 - INFO - No unprocessed events for South Dakota (USSSA). Skipping Excel creation.
+2026-04-01 13:53:43,760 - INFO - Processing location: Tennessee (USSSA)
+2026-04-01 13:53:46,657 - INFO - Total pages found: 7
+2026-04-01 13:53:46,657 - INFO - Scraping page 1: https://tnbaseball.usssa.com/events/
+2026-04-01 13:53:50,414 - INFO - Scraping page 2: https://tnbaseball.usssa.com/events/?paged=2
+2026-04-01 13:53:54,728 - INFO - Scraping page 3: https://tnbaseball.usssa.com/events/?paged=3
+2026-04-01 13:53:59,054 - INFO - Scraping page 4: https://tnbaseball.usssa.com/events/?paged=4
+2026-04-01 13:54:03,642 - INFO - Scraping page 5: https://tnbaseball.usssa.com/events/?paged=5
+2026-04-01 13:54:08,058 - INFO - Scraping page 6: https://tnbaseball.usssa.com/events/?paged=6
+2026-04-01 13:54:12,424 - INFO - Scraping page 7: https://tnbaseball.usssa.com/events/?paged=7
+2026-04-01 13:54:16,769 - INFO - Total event links collected: 79
+2026-04-01 13:54:16,770 - INFO - Collected 79 event links using https://tnbaseball.usssa.com/events/ for Tennessee (USSSA).
+2026-04-01 13:54:19,858 - INFO - Total unique events to process for Tennessee (USSSA): 0
+2026-04-01 13:54:19,858 - INFO - No unprocessed events for Tennessee (USSSA). Skipping Excel creation.
+2026-04-01 13:54:19,859 - INFO - Processing location: Texas (USSSA)
+2026-04-01 13:54:21,660 - INFO - Total pages found: 8
+2026-04-01 13:54:21,660 - INFO - Scraping page 1: https://txbaseball.usssa.com/events/
+2026-04-01 13:54:25,454 - INFO - Scraping page 2: https://txbaseball.usssa.com/events/?paged=2
+2026-04-01 13:54:29,791 - INFO - Scraping page 3: https://txbaseball.usssa.com/events/?paged=3
+2026-04-01 13:54:34,629 - INFO - Scraping page 4: https://txbaseball.usssa.com/events/?paged=4
+2026-04-01 13:54:38,984 - INFO - Scraping page 5: https://txbaseball.usssa.com/events/?paged=5
+2026-04-01 13:54:43,474 - INFO - Scraping page 6: https://txbaseball.usssa.com/events/?paged=6
+2026-04-01 13:54:47,953 - INFO - Scraping page 7: https://txbaseball.usssa.com/events/?paged=7
+2026-04-01 13:54:52,371 - INFO - Scraping page 8: https://txbaseball.usssa.com/events/?paged=8
+2026-04-01 13:54:56,734 - INFO - Total event links collected: 93
+2026-04-01 13:54:56,734 - INFO - Collected 93 event links using https://txbaseball.usssa.com/events/ for Texas (USSSA).
+2026-04-01 13:55:00,662 - INFO - Total unique events to process for Texas (USSSA): 0
+2026-04-01 13:55:00,662 - INFO - No unprocessed events for Texas (USSSA). Skipping Excel creation.
+2026-04-01 13:55:00,662 - INFO - Processing location: Utah (USSSA)
+2026-04-01 13:55:02,344 - INFO - Total pages found: 2
+2026-04-01 13:55:02,344 - INFO - Scraping page 1: https://utbaseball.usssa.com/events/
+2026-04-01 13:55:06,024 - INFO - Scraping page 2: https://utbaseball.usssa.com/events/?paged=2
+2026-04-01 13:55:10,736 - INFO - Total event links collected: 16
+2026-04-01 13:55:10,736 - INFO - Collected 16 event links using https://utbaseball.usssa.com/events/ for Utah (USSSA).
+2026-04-01 13:55:11,556 - INFO - Total unique events to process for Utah (USSSA): 0
+2026-04-01 13:55:11,556 - INFO - No unprocessed events for Utah (USSSA). Skipping Excel creation.
+2026-04-01 13:55:11,556 - INFO - Processing location: Vermont (USSSA)
+2026-04-01 13:55:12,990 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:55:12,990 - INFO - Total pages found: 0
+2026-04-01 13:55:12,990 - INFO - No USSSA events found for https://vtbaseball.usssa.com/events/.
+2026-04-01 13:55:12,990 - INFO - Collected 0 event links using https://vtbaseball.usssa.com/events/ for Vermont (USSSA).
+2026-04-01 13:55:13,266 - INFO - Total unique events to process for Vermont (USSSA): 0
+2026-04-01 13:55:13,266 - INFO - No unprocessed events for Vermont (USSSA). Skipping Excel creation.
+2026-04-01 13:55:13,266 - INFO - Processing location: Virginia (USSSA)
+2026-04-01 13:55:14,797 - INFO - Total pages found: 4
+2026-04-01 13:55:14,797 - INFO - Scraping page 1: https://vabaseball.usssa.com/events/
+2026-04-01 13:55:18,466 - INFO - Scraping page 2: https://vabaseball.usssa.com/events/?paged=2
+2026-04-01 13:55:23,723 - INFO - Scraping page 3: https://vabaseball.usssa.com/events/?paged=3
+2026-04-01 13:55:28,229 - INFO - Scraping page 4: https://vabaseball.usssa.com/events/?paged=4
+2026-04-01 13:55:32,566 - INFO - Total event links collected: 48
+2026-04-01 13:55:32,566 - INFO - Collected 48 event links using https://vabaseball.usssa.com/events/ for Virginia (USSSA).
+2026-04-01 13:55:34,639 - INFO - Total unique events to process for Virginia (USSSA): 0
+2026-04-01 13:55:34,639 - INFO - No unprocessed events for Virginia (USSSA). Skipping Excel creation.
+2026-04-01 13:55:34,639 - INFO - Processing location: Washington (USSSA)
+2026-04-01 13:55:36,341 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:55:36,341 - INFO - Total pages found: 0
+2026-04-01 13:55:36,341 - INFO - No USSSA events found for https://wabaseball.usssa.com/events/.
+2026-04-01 13:55:36,342 - INFO - Collected 0 event links using https://wabaseball.usssa.com/events/ for Washington (USSSA).
+2026-04-01 13:55:36,611 - INFO - Total unique events to process for Washington (USSSA): 0
+2026-04-01 13:55:36,611 - INFO - No unprocessed events for Washington (USSSA). Skipping Excel creation.
+2026-04-01 13:55:36,611 - INFO - Processing location: West Virginia (USSSA)
+2026-04-01 13:55:39,863 - INFO - Total pages found: 1
+2026-04-01 13:55:39,863 - INFO - Scraping page 1: https://wvbaseball.usssa.com/events/
+2026-04-01 13:55:43,510 - INFO - Total event links collected: 7
+2026-04-01 13:55:43,511 - INFO - Collected 7 event links using https://wvbaseball.usssa.com/events/ for West Virginia (USSSA).
+2026-04-01 13:55:43,999 - INFO - Total unique events to process for West Virginia (USSSA): 0
+2026-04-01 13:55:43,999 - INFO - No unprocessed events for West Virginia (USSSA). Skipping Excel creation.
+2026-04-01 13:55:43,999 - INFO - Processing location: Wisconsin (USSSA)
+2026-04-01 13:55:45,414 - INFO - Total pages found: 1
+2026-04-01 13:55:45,414 - INFO - Scraping page 1: https://wibaseball.usssa.com/events/
+2026-04-01 13:55:48,981 - INFO - Total event links collected: 12
+2026-04-01 13:55:48,981 - INFO - Collected 12 event links using https://wibaseball.usssa.com/events/ for Wisconsin (USSSA).
+2026-04-01 13:55:49,691 - INFO - Total unique events to process for Wisconsin (USSSA): 0
+2026-04-01 13:55:49,691 - INFO - No unprocessed events for Wisconsin (USSSA). Skipping Excel creation.
+2026-04-01 13:55:49,691 - INFO - Processing location: Wyoming (USSSA)
+2026-04-01 13:55:50,872 - INFO - USSSA listing has no events for this location.
+2026-04-01 13:55:50,872 - INFO - Total pages found: 0
+2026-04-01 13:55:50,872 - INFO - No USSSA events found for https://wybaseball.usssa.com/events/.
+2026-04-01 13:55:50,872 - INFO - Collected 0 event links using https://wybaseball.usssa.com/events/ for Wyoming (USSSA).
+2026-04-01 13:55:51,148 - INFO - Total unique events to process for Wyoming (USSSA): 0
+2026-04-01 13:55:51,148 - INFO - No unprocessed events for Wyoming (USSSA). Skipping Excel creation.

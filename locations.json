@@ -106,6 +106,7 @@
         "FiveToolYouth (Play365Base)": "./scrapers/play365/fivetoolyouth_scraper.py:FiveToolYouthScraper",
         "Play24Sports (Play365Base)": "./scrapers/play365/play24sports_scraper.py:Play24SportsScraper",
         "PlayPPS (Play365Base)": "./scrapers/play365/playpps_scraper.py:PlayPPSScraper",
+        "ProspectWire (Play365Base)": "./scrapers/play365/prospectwire_scraper.py:ProspectWireScraper",
         "PlayRBI (Play365Base)": "./scrapers/play365/playrbi_scraper.py:PlayRBIScraper",
         "2DSportsYouth (Play365Base)": "./scrapers/play365/twodsportsyouth_scraper.py:TwoDSportsYouthScraper",
         "2DSportsHighSchool (Play365Base)": "./scrapers/play365/twodsportshighschool_scraper.py:TwoDSportsHighSchoolScraper",

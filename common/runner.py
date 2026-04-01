@@ -343,14 +343,34 @@ def process_location(
 
     save_events(events_data, json_file)
 
-    # 3) Filter unprocessed events for this location
+    # 3) Filter unprocessed events for this location, but only if rediscovered
+    # in the current listing pass. This prevents stale historical failures from
+    # being retried forever after they have disappeared from the source site.
+    discovered_now = {normalize_url(link) for link in new_links}
+
     unprocessed_events = [
         {"name": key, "url": details["url"]}
         for key, details in events_data["events"].items()
         if not details.get("processed", False)
         and details.get("location") == location_name
         and not details.get("is_deleted", False)
+        and key in discovered_now
     ]
+
+    stale_carryover_count = sum(
+        1
+        for key, details in events_data["events"].items()
+        if not details.get("processed", False)
+        and details.get("location") == location_name
+        and not details.get("is_deleted", False)
+        and key not in discovered_now
+    )
+    if stale_carryover_count:
+        logger.info(
+            "Skipping %d stale unprocessed event(s) for %s because they were not rediscovered in the current run.",
+            stale_carryover_count,
+            location_name,
+        )
 
     # Deduplicate by normalized URL
     seen = set()

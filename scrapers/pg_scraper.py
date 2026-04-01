@@ -169,6 +169,19 @@ def extract_competition_levels_from_parentheses(text: str) -> List[str]:
 
 class PGScraper(BaseScraper):
     SCRAPER_NAME = "PerfectGame"
+    BATCH_DELAY_SECONDS = 0
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "config"
+
+    def _state_from_selected_location(self, selected_location: str) -> str:
+        label = (selected_location or "").strip()
+        if not label:
+            return ""
+        m = re.match(r"^(.*?)\s*\(", label)
+        state_label = m.group(1).strip() if m else label
+        state_obj = states.lookup(state_label)
+        return state_obj.name if state_obj else state_label
 
 
     def __init__(self, *args, **kwargs):
@@ -224,10 +237,12 @@ class PGScraper(BaseScraper):
                     logger.info(f"Found grouped event link: {group_url}")
 
             try:
-                # Locate the Next Page button and check if it is clickable
-                next_button = WebDriverWait(driver, wait_time).until(
-                    EC.element_to_be_clickable((By.XPATH, "//button[@title='Next Page']"))
-                )
+                next_buttons = driver.find_elements(By.XPATH, "//button[@title='Next Page']")
+                if not next_buttons:
+                    logger.info("Next page button not present. Ending pagination.")
+                    break
+
+                next_button = next_buttons[0]
                 btn_class = next_button.get_attribute("class")
                 btn_onclick = next_button.get_attribute("onclick")
                 if ("disabled" in btn_class) or (btn_onclick and btn_onclick.strip() == "return false;"):
@@ -789,6 +804,7 @@ class PGScraper(BaseScraper):
     def extract_event_details(self, url: str, driver, max_retries: int = 1, **kwargs) -> dict:
         url = url.rstrip('/.')  # remove trailing slash or period
         logger.info(f"Extracting PerfectGame events from URL: {url}")
+        selected_state_fallback = self._state_from_selected_location(kwargs.get("selected_location", ""))
         attempts = 0
         while attempts < max_retries:
             attempts += 1
@@ -809,7 +825,11 @@ class PGScraper(BaseScraper):
                 events = self._parse_grouped_page(driver, soup)
                 if not events:
                     logger.info("No grouped event data found; falling back to single event parser.")
-                    return self._parse_single_event_page(driver, url)
+                    return self._parse_single_event_page(
+                        driver,
+                        url,
+                        selected_state_fallback=selected_state_fallback,
+                    )
 
                 age_groups = []
                 comp_levels = []
@@ -886,12 +906,16 @@ class PGScraper(BaseScraper):
                 if best_loc:
                     row["Address"] = best_loc.get("Address", "")
                     row["City"] = best_loc.get("City", first_event.get("city", ""))
-                    row["State-FullName"] = best_loc.get("State-FullName", first_event.get("state", ""))
+                    row["State-FullName"] = (
+                        best_loc.get("State-FullName")
+                        or first_event.get("state", "")
+                        or selected_state_fallback
+                    )
                     row["Zip"] = best_loc.get("Zip", "")
                 else:
                     row["Address"] = ""
                     row["City"] = first_event.get("city", "")
-                    row["State-FullName"] = first_event.get("state", "")
+                    row["State-FullName"] = first_event.get("state", "") or selected_state_fallback
                     row["Zip"] = ""
 
                 logger.info(f"Extracted event details from URL: {url}")
@@ -911,7 +935,7 @@ class PGScraper(BaseScraper):
         logger.info(f"Failed to extract data for URL: {url} after {max_retries} retries.")
         return {}
 
-    def _parse_single_event_page(self, driver, url: str) -> dict:
+    def _parse_single_event_page(self, driver, url: str, selected_state_fallback: str = "") -> dict:
         url = url.rstrip('/.')
         soup = self._get_soup(driver, url)
         final_url = driver.current_url.rstrip('/.')
@@ -967,12 +991,12 @@ class PGScraper(BaseScraper):
             if best_loc:
                 row["Address"] = best_loc.get("Address", "")
                 row["City"] = best_loc.get("City", "")
-                row["State-FullName"] = best_loc.get("State-FullName", "")
+                row["State-FullName"] = best_loc.get("State-FullName", "") or selected_state_fallback
                 row["Zip"] = best_loc.get("Zip", "")
             else:
                 row["Address"] = ""
                 row["City"] = ""
-                row["State-FullName"] = ""
+                row["State-FullName"] = selected_state_fallback
                 row["Zip"] = ""
             row["Are-there-multiple_locations"] = "No"
 

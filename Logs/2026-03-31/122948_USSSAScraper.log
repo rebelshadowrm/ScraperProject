@@ -1,0 +1,18 @@
+2026-03-31 12:29:48,950 - INFO - Logger initialized.
+2026-03-31 12:29:48,950 - INFO - Run log created for USSSAScraper.
+2026-03-31 12:29:58,410 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-03-31 12:29:58,411 - INFO - Processing location: Wyoming (USSSA)
+2026-03-31 12:30:35,990 - ERROR - Error determining total pages: Message: 
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:199:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:552:5
+dom.find/</<@chrome://remote/content/shared/DOM.sys.mjs:136:16
+
+2026-03-31 12:30:35,996 - INFO - Total pages found: 1
+2026-03-31 12:30:35,996 - INFO - Scraping page 1: https://wybaseball.usssa.com/events/
+2026-03-31 12:31:23,569 - WARNING - Timeout while loading page 1. Continuing to next page.
+2026-03-31 12:31:26,570 - INFO - Total event links collected: 0
+2026-03-31 12:31:26,570 - INFO - Collected 0 event links using https://wybaseball.usssa.com/events/ for Wyoming (USSSA).
+2026-03-31 12:31:26,570 - INFO - Total unique events to process for Wyoming (USSSA): 0
+2026-03-31 12:31:26,570 - INFO - No unprocessed events for Wyoming (USSSA). Skipping Excel creation.

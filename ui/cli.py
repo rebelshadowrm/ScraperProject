@@ -24,6 +24,9 @@ from common.config import OUTPUT_COLUMNS
 from common.data_control import rollback_events
 
 from common.prompt_utils import (
+    ALL_SCRAPERS_SENTINEL,
+    VALIDATION_SCRAPERS_SENTINEL,
+    get_scraper_classes,
     prompt_main_action,
     prompt_for_scraper,
     prompt_for_location,
@@ -267,16 +270,34 @@ def _run_play365_batch(
     _cleanup_manual_play365_workspace(workspace_root)
 
 
-def _run_scrape_flow(*, test_mode: bool = False):
+def _resolve_all_locations_for_scraper(all_locations, scraper):
+    scraper_name = getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__)
+
+    if scraper_name == "Play365Base":
+        play365_targets = {
+            name: url for name, url in all_locations.items()
+            if "(Play365Base)" in name
+        }
+        if not play365_targets:
+            return "None Found", "", scraper
+        return "ALL_PLAY365_SCRAPERS", play365_targets, scraper
+
+    if getattr(scraper, "uses_dynamic_locations", None) and scraper.uses_dynamic_locations() and hasattr(scraper, "get_dynamic_locations"):
+        filtered_locations = scraper.get_dynamic_locations()
+    else:
+        filtered_locations = {
+            name: url for name, url in all_locations.items()
+            if f"({scraper_name})" in name
+        }
+
+    if not filtered_locations:
+        return "None Found", "", scraper
+
+    return "ALL", filtered_locations, scraper
+
+
+def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bool = False):
     global logger
-
-    scraper = prompt_for_scraper()
-    log_progress(logger, "Selected scraper: %s", scraper.__class__.__name__)
-
-    locations = load_locations(LOCATIONS_FILE)
-    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
-    log_progress(logger, "Effective scraper: %s", scraper.__class__.__name__)
-    log_progress(logger, "Selected location: %s", selected_location)
 
     json_file = JSON_FILE
     failed_events_file = FAILED_EVENTS_FILE
@@ -380,6 +401,54 @@ def _run_scrape_flow(*, test_mode: bool = False):
         logging.shutdown()
 
 
+def _run_scrape_flow(*, test_mode: bool = False):
+    scraper = prompt_for_scraper()
+    locations = load_locations(LOCATIONS_FILE)
+
+    if scraper in {ALL_SCRAPERS_SENTINEL, VALIDATION_SCRAPERS_SENTINEL}:
+        selected_batch = scraper
+        log_progress(logger, "Selected scraper: %s", selected_batch)
+        scraper_classes = get_scraper_classes()
+        if selected_batch == VALIDATION_SCRAPERS_SENTINEL:
+            wanted = {"NCS", "PerfectGame", "USSSA"}
+            scraper_classes = [
+                cls for cls in scraper_classes
+                if getattr(cls, "SCRAPER_NAME", cls.__name__) in wanted
+            ]
+
+        for scraper_cls in scraper_classes:
+            if _shutdown_check():
+                log_progress(logger, "Shutdown detected. Stopping all-scraper batch.")
+                break
+
+            active_scraper = scraper_cls()
+            selected_location, loc_info, active_scraper = _resolve_all_locations_for_scraper(locations, active_scraper)
+            if selected_location == "None Found":
+                logger.warning("Skipping %s because no locations were resolved.", active_scraper.__class__.__name__)
+                continue
+
+            log_progress(logger, "Effective scraper: %s", active_scraper.__class__.__name__)
+            log_progress(logger, "Selected location: %s", selected_location)
+            _run_selected_scraper(
+                scraper=active_scraper,
+                selected_location=selected_location,
+                loc_info=loc_info,
+                test_mode=test_mode,
+            )
+        return
+
+    log_progress(logger, "Selected scraper: %s", scraper.__class__.__name__)
+    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
+    log_progress(logger, "Effective scraper: %s", scraper.__class__.__name__)
+    log_progress(logger, "Selected location: %s", selected_location)
+    _run_selected_scraper(
+        scraper=scraper,
+        selected_location=selected_location,
+        loc_info=loc_info,
+        test_mode=test_mode,
+    )
+
+
 def _run_data_control():
     print("\nData Control\n------------")
     print("1) Roll back newly added events")
@@ -424,14 +493,19 @@ def _run_data_control():
 
 # -------------------- CLI ENTRYPOINT -------------------------
 def run_cli():
-    action = prompt_main_action()
+    try:
+        action = prompt_main_action()
 
-    if action == "1":
-        _run_data_control()
-    elif action == "2":
-        _run_scrape_flow(test_mode=False)
-    elif action == "3":
-        _run_scrape_flow(test_mode=True)
+        if action == "1":
+            _run_data_control()
+        elif action == "2":
+            _run_scrape_flow(test_mode=False)
+        elif action == "3":
+            _run_scrape_flow(test_mode=True)
+    except KeyboardInterrupt:
+        print("\nOperation cancelled.")
+        flush_logs()
+        logging.shutdown()
 
 
 if __name__ == "__main__":

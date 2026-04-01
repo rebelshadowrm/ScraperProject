@@ -1,0 +1,1255 @@
+2026-03-31 13:25:15,852 - INFO - Logger initialized.
+2026-03-31 13:25:15,852 - INFO - Run log created for NCSScraper.
+2026-03-31 13:25:25,590 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-03-31 13:25:25,590 - INFO - Processing location: Alabama (NCS)
+2026-03-31 13:25:25,590 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AL
+2026-03-31 13:25:26,984 - INFO - Found 15 new event links on page 1 (total 15).
+2026-03-31 13:25:28,986 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-AL
+2026-03-31 13:25:29,590 - INFO - Found 14 new event links on page 2 (total 29).
+2026-03-31 13:25:29,593 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:25:29,593 - INFO - Total event links collected: 29
+2026-03-31 13:25:29,593 - INFO - Collected 29 event links using https://playncs.com/baseball/Events?countryState=US-AL for Alabama (NCS).
+2026-03-31 13:25:29,597 - INFO - Total unique events to process for Alabama (NCS): 29
+2026-03-31 13:25:29,600 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Alabama_2026-03-31.xlsx
+2026-03-31 13:25:29,600 - INFO - Excel output file for Alabama (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Alabama_2026-03-31.xlsx
+2026-03-31 13:25:29,600 - INFO - Processing batch 1/3.
+2026-03-31 13:25:29,600 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12221/2026-ncs-easter-bunny-bash
+2026-03-31 13:25:30,598 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12264/ncs-easter-bunny-bash
+2026-03-31 13:25:31,540 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12918/ncs-rec-season-opening-day
+2026-03-31 13:25:32,269 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12222/2026-ncs-beastmode-belt-bash
+2026-03-31 13:25:34,656 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12265/ncs-beastmode
+2026-03-31 13:25:36,564 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12223/2026-ncs-amateur-baseball-championship
+2026-03-31 13:25:38,053 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12266/ncs-battle-of-the-belts-turf-wars
+2026-03-31 13:25:38,886 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12198/2025-ncs-southeast-top-gun-super-nit
+2026-03-31 13:25:39,825 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12228/2026-ncs-rip-city-championship
+2026-03-31 13:25:41,207 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12919/ncs-rec-state-warmup
+2026-03-31 13:25:46,531 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:25:46,540 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 13:25:47,041 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 13:25:47,059 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:25:47,060 - INFO - Batch 1 completed. Waiting 32.89s before next batch.
+2026-03-31 13:26:19,953 - INFO - Processing batch 2/3.
+2026-03-31 13:26:19,954 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12224/2026-ncs-champs-wear-belts
+2026-03-31 13:26:21,013 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12269/ncs-wood-bat-belt-championship-mlb-style
+2026-03-31 13:26:21,954 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12225/2026-ncs-mothers-day-classic
+2026-03-31 13:26:22,817 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12270/ncs-mothers-day-classic
+2026-03-31 13:26:23,725 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12810/2026-ncs-rec-state-championship
+2026-03-31 13:26:24,664 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11472/2026-ncs-southeast-alabama-state-championship
+2026-03-31 13:26:25,823 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12226/2026-ncs-memorial-day-bash
+2026-03-31 13:26:26,783 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12424/ncs-memorial-day-bash
+2026-03-31 13:26:27,644 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12425/ncs-memorial-day-bash
+2026-03-31 13:26:28,392 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12812/2026-ncs-rec-world-series
+2026-03-31 13:26:29,699 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:26:29,709 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-03-31 13:26:30,211 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-03-31 13:26:30,230 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:26:30,230 - INFO - Batch 2 completed. Waiting 31.08s before next batch.
+2026-03-31 13:27:01,315 - INFO - Processing batch 3/3.
+2026-03-31 13:27:01,315 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11471/2026-ncs-southeast-state-championship
+2026-03-31 13:27:07,017 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12199/2026-southeast-king-of-ncs-super-nit
+2026-03-31 13:27:11,864 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11470/2026-ncs-southeast-albertville-world-series-week-1
+2026-03-31 13:27:18,630 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12229/2026-ncs-summer-showdown
+2026-03-31 13:27:20,510 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11468/2026-ncs-southeast-albertville-world-series-week-2
+2026-03-31 13:27:21,523 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12230/2026-ncs-line-drive-classic
+2026-03-31 13:27:22,413 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12227/2026-ncs-southeast-d3-national-championship
+2026-03-31 13:27:23,207 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12426/ncs-last-inning
+2026-03-31 13:27:24,090 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12231/2026-ncs-prospects-college-showcase-and-exposure
+2026-03-31 13:27:25,394 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:27:25,406 - INFO - [Excel] Wrote rows 23..31 (key col 1)
+2026-03-31 13:27:25,953 - INFO - [Excel] Appended 9 rows. New bottom row: 31.
+2026-03-31 13:27:25,970 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 13:27:25,970 - INFO - Completed location: Alabama (NCS)
+2026-03-31 13:27:25,970 - INFO - Processing location: Alaska (NCS)
+2026-03-31 13:27:25,971 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AK
+2026-03-31 13:27:41,257 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:27:41,258 - INFO - Total event links collected: 0
+2026-03-31 13:27:41,258 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-AK for Alaska (NCS).
+2026-03-31 13:27:41,259 - INFO - Total unique events to process for Alaska (NCS): 0
+2026-03-31 13:27:41,259 - INFO - No unprocessed events for Alaska (NCS). Skipping Excel creation.
+2026-03-31 13:27:41,259 - INFO - Processing location: Arizona (NCS)
+2026-03-31 13:27:41,259 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AZ
+2026-03-31 13:27:42,746 - INFO - Found 15 new event links on page 1 (total 15).
+2026-03-31 13:27:44,748 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-AZ
+2026-03-31 13:27:45,802 - INFO - Found 15 new event links on page 2 (total 30).
+2026-03-31 13:27:47,804 - INFO - Scraping page 3: https://playncs.com/baseball/Events?page=3&countryState=US-AZ
+2026-03-31 13:27:48,801 - INFO - Found 10 new event links on page 3 (total 40).
+2026-03-31 13:27:48,802 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:27:48,802 - INFO - Total event links collected: 40
+2026-03-31 13:27:48,802 - INFO - Collected 40 event links using https://playncs.com/baseball/Events?countryState=US-AZ for Arizona (NCS).
+2026-03-31 13:27:48,812 - INFO - Total unique events to process for Arizona (NCS): 40
+2026-03-31 13:27:48,814 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Arizona_2026-03-31.xlsx
+2026-03-31 13:27:48,814 - INFO - Excel output file for Arizona (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Arizona_2026-03-31.xlsx
+2026-03-31 13:27:48,814 - INFO - Processing batch 1/4.
+2026-03-31 13:27:48,814 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11888/yuma-baseball-spring-league
+2026-03-31 13:27:51,116 - INFO - Skipping non-future event for https://playncs.com/baseball/Events/Details/11888/yuma-baseball-spring-league: start date Feb 1 2026.
+2026-03-31 13:27:51,119 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12093/1-day-easter-classic
+2026-03-31 13:27:52,729 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12705/10th-annual-southwest-super-regional
+2026-03-31 13:27:53,717 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12094/asu-series-ncs-spring-fling
+2026-03-31 13:27:54,759 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12940/inaugural-cactus-cup
+2026-03-31 13:27:55,717 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11865/slam-diego-sunday-series-3-game-guaranteed-blitz
+2026-03-31 13:27:56,676 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12748/asu-series-autism-awareness-spring-fling-ii
+2026-03-31 13:27:57,599 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11551/tucson-spring-championship
+2026-03-31 13:27:58,435 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11866/slam-diego-sunday-series-3-game-guaranteed-blitz
+2026-03-31 13:27:59,330 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11335/3rd-annual-cinco-de-mayo-classic-d3-open
+2026-03-31 13:28:00,625 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:28:00,632 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:28:00,635 - INFO - [Excel] Wrote rows 3..11 (key col 1)
+2026-03-31 13:28:01,145 - INFO - [Excel] Appended 9 rows. New bottom row: 11.
+2026-03-31 13:28:01,173 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:28:01,174 - INFO - Batch 1 completed. Waiting 32.41s before next batch.
+2026-03-31 13:28:33,588 - INFO - Processing batch 2/4.
+2026-03-31 13:28:33,588 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12808/elite-moms-playing-for-our-moms
+2026-03-31 13:28:34,815 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13103/yuma-cinco-de-mayo-classic
+2026-03-31 13:28:35,714 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12297/asu-series-2nd-annual-mothers-day-classic
+2026-03-31 13:28:37,204 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12722/bombs-for-moms-mothers-day-classic
+2026-03-31 13:28:38,316 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11552/mothers-day-classic
+2026-03-31 13:28:39,153 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11868/slam-diego-sunday-series-3-game-guaranteed-blitz
+2026-03-31 13:28:40,010 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12868/futuras-estrellas
+2026-03-31 13:28:40,867 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11839/san-diego-memorial-day-classic-d3-and-open-7u-8u695-9u-12u795-13u-14u895
+2026-03-31 13:28:41,717 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11334/4th-annual-memorial-day-classic-in-payson-4gg
+2026-03-31 13:28:42,644 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11553/arizona-memorial-day-championship
+2026-03-31 13:28:44,123 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:28:44,131 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:28:44,133 - INFO - [Excel] Wrote rows 12..21 (key col 1)
+2026-03-31 13:28:44,574 - INFO - [Excel] Appended 10 rows. New bottom row: 21.
+2026-03-31 13:28:44,603 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:28:44,603 - INFO - Batch 2 completed. Waiting 32.73s before next batch.
+2026-03-31 13:29:17,331 - INFO - Processing batch 3/4.
+2026-03-31 13:29:17,331 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11843/bullhead-city-river-rumble
+2026-03-31 13:29:18,505 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11842/tucson-sandlot-showdown-4gg
+2026-03-31 13:29:19,504 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12566/ncs-west-coast-summer-prospect-games-individual-player-8u-12u
+2026-03-31 13:29:20,455 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12942/best-of-the-best-texas-state-championship-free-open-d3-divisions-5gg
+2026-03-31 13:29:21,288 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11765/southwest-world-series
+2026-03-31 13:29:22,178 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12922/san-diego-summer-championship-d3-only
+2026-03-31 13:29:22,922 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12747/summer-state-championships
+2026-03-31 13:29:24,168 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13100/yuma-baseball-summer-league
+2026-03-31 13:29:25,120 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12921/san-diego-international-championship-d3-and-open-5-gg
+2026-03-31 13:29:25,935 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11294/2026-latin-american-world-series-individual-player-registration
+2026-03-31 13:29:27,230 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:29:27,237 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:29:27,237 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:29:27,240 - INFO - [Excel] Wrote rows 22..31 (key col 1)
+2026-03-31 13:29:27,688 - INFO - [Excel] Appended 10 rows. New bottom row: 31.
+2026-03-31 13:29:27,716 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 13:29:27,716 - INFO - Batch 3 completed. Waiting 34.95s before next batch.
+2026-03-31 13:30:02,664 - INFO - Processing batch 4/4.
+2026-03-31 13:30:02,664 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11288/2026-latin-american-world-series
+2026-03-31 13:30:05,097 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13098/tucson-midnight-classic-i
+2026-03-31 13:30:05,908 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11633/san-diego-world-series
+2026-03-31 13:30:09,042 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12752/white-mountain-summer-slam-4gg-show-low
+2026-03-31 13:30:10,382 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12084/ncs-all-world-prospect-games-individual-player-event
+2026-03-31 13:30:11,331 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11586/ncs-south-coast-world-series
+2026-03-31 13:30:12,597 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11305/2026-ncs-caribbean-world-series-individual-player-registration
+2026-03-31 13:30:13,395 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/10710/2026-puerto-rico-caribbean-world-series
+2026-03-31 13:30:14,303 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12749/balling-in-the-pines
+2026-03-31 13:30:15,963 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13099/tucson-midnight-classic-ii
+2026-03-31 13:30:17,213 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:30:17,220 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:30:17,220 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:30:17,222 - INFO - [Excel] Wrote rows 32..41 (key col 1)
+2026-03-31 13:30:17,664 - INFO - [Excel] Appended 10 rows. New bottom row: 41.
+2026-03-31 13:30:17,691 - INFO - Saved batch 4 to Excel (template append).
+2026-03-31 13:30:17,692 - INFO - Completed location: Arizona (NCS)
+2026-03-31 13:30:17,692 - INFO - Processing location: Arkansas (NCS)
+2026-03-31 13:30:17,692 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-AR
+2026-03-31 13:30:32,951 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:30:32,951 - INFO - Total event links collected: 0
+2026-03-31 13:30:32,951 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-AR for Arkansas (NCS).
+2026-03-31 13:30:32,954 - INFO - Total unique events to process for Arkansas (NCS): 0
+2026-03-31 13:30:32,954 - INFO - No unprocessed events for Arkansas (NCS). Skipping Excel creation.
+2026-03-31 13:30:32,954 - INFO - Processing location: California (NCS)
+2026-03-31 13:30:32,954 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CA
+2026-03-31 13:30:34,190 - INFO - Found 15 new event links on page 1 (total 15).
+2026-03-31 13:30:36,192 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-CA
+2026-03-31 13:30:37,154 - INFO - Found 15 new event links on page 2 (total 30).
+2026-03-31 13:30:39,157 - INFO - Scraping page 3: https://playncs.com/baseball/Events?page=3&countryState=US-CA
+2026-03-31 13:30:40,269 - INFO - Found 15 new event links on page 3 (total 45).
+2026-03-31 13:30:42,271 - INFO - Scraping page 4: https://playncs.com/baseball/Events?page=4&countryState=US-CA
+2026-03-31 13:30:43,487 - INFO - Found 15 new event links on page 4 (total 60).
+2026-03-31 13:30:45,489 - INFO - Scraping page 5: https://playncs.com/baseball/Events?page=5&countryState=US-CA
+2026-03-31 13:30:46,376 - INFO - Found 15 new event links on page 5 (total 75).
+2026-03-31 13:30:48,378 - INFO - Scraping page 6: https://playncs.com/baseball/Events?page=6&countryState=US-CA
+2026-03-31 13:30:49,127 - INFO - Found 15 new event links on page 6 (total 90).
+2026-03-31 13:30:51,129 - INFO - Scraping page 7: https://playncs.com/baseball/Events?page=7&countryState=US-CA
+2026-03-31 13:30:52,191 - INFO - Found 15 new event links on page 7 (total 105).
+2026-03-31 13:30:54,193 - INFO - Scraping page 8: https://playncs.com/baseball/Events?page=8&countryState=US-CA
+2026-03-31 13:30:55,253 - INFO - Found 14 new event links on page 8 (total 119).
+2026-03-31 13:30:55,254 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:30:55,254 - INFO - Total event links collected: 119
+2026-03-31 13:30:55,254 - INFO - Collected 119 event links using https://playncs.com/baseball/Events?countryState=US-CA for California (NCS).
+2026-03-31 13:30:55,306 - INFO - Total unique events to process for California (NCS): 110
+2026-03-31 13:30:55,308 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\California_2026-03-31.xlsx
+2026-03-31 13:30:55,308 - INFO - Excel output file for California (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\California_2026-03-31.xlsx
+2026-03-31 13:30:55,308 - INFO - Processing batch 1/11.
+2026-03-31 13:30:55,309 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12805/1-day-easter-saturday-fallbrook-ca
+2026-03-31 13:30:56,175 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12186/april-fools
+2026-03-31 13:30:57,057 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13062/easter-classic-1-day-eggtravaganza-pismo-beach
+2026-03-31 13:30:58,155 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13007/easter-classic-1-day
+2026-03-31 13:31:00,434 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12273/xcs-easter-bash-one-day
+2026-03-31 13:31:03,398 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13046/diamond-dash
+2026-03-31 13:31:04,298 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12187/diamond-dash-d3
+2026-03-31 13:31:05,123 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12857/ncs-best-of-the-west-slugfest
+2026-03-31 13:31:08,238 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12558/socal-best-of-the-west-nit-2x-points-la-mirada-regional
+2026-03-31 13:31:09,023 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11521/spring-shootout-tourney-refund-to-champs
+2026-03-31 13:31:10,972 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:31:10,981 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 13:31:11,422 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 13:31:11,484 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:31:11,485 - INFO - Batch 1 completed. Waiting 35.00s before next batch.
+2026-03-31 13:31:46,483 - INFO - Processing batch 2/11.
+2026-03-31 13:31:46,483 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12289/xcs-best-of-the-west-super-nit-great-park-lfsp
+2026-03-31 13:31:47,927 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12797/1-day-ncs-tournament-perris-ca
+2026-03-31 13:31:48,949 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12548/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:31:49,733 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12501/spring-blitz-bash-d3-ncs-sd
+2026-03-31 13:31:50,488 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11807/bakersfield-spring-swing-classic
+2026-03-31 13:31:51,443 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12188/bunny-ball
+2026-03-31 13:31:52,230 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13097/bunny-ball
+2026-03-31 13:31:53,204 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12559/spring-bash-nit-2x-points-la-mirada-regional
+2026-03-31 13:31:54,121 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13025/spring-strikeout-palmdale
+2026-03-31 13:31:54,914 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12385/xcs-spring-bash-nit
+2026-03-31 13:31:56,905 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:31:56,913 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-03-31 13:31:57,336 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-03-31 13:31:57,391 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:31:57,391 - INFO - Batch 2 completed. Waiting 30.40s before next batch.
+2026-03-31 13:32:27,792 - INFO - Processing batch 3/11.
+2026-03-31 13:32:27,792 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12783/1-day-spring-fling
+2026-03-31 13:32:28,775 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12549/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:32:29,532 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11523/autism-awareness
+2026-03-31 13:32:30,710 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11957/beach-ballin
+2026-03-31 13:32:31,653 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12189/game-master
+2026-03-31 13:32:32,510 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12386/xcs-rbi-classic
+2026-03-31 13:32:33,375 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12784/1-day-autism-awareness-tournament
+2026-03-31 13:32:34,228 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12550/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:32:35,081 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11808/bakersfield-cinco-de-mayo
+2026-03-31 13:32:36,088 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12190/cinco-de-mayo-classic
+2026-03-31 13:32:38,205 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:32:38,213 - INFO - [Excel] Wrote rows 23..32 (key col 1)
+2026-03-31 13:32:38,651 - INFO - [Excel] Appended 10 rows. New bottom row: 32.
+2026-03-31 13:32:38,715 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 13:32:38,715 - INFO - Batch 3 completed. Waiting 32.32s before next batch.
+2026-03-31 13:33:11,033 - INFO - Processing batch 4/11.
+2026-03-31 13:33:11,033 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11983/cinco-de-mayo-classic
+2026-03-31 13:33:12,024 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12551/cinco-de-mayo-super-nit-2x-points-west-covina-bld
+2026-03-31 13:33:12,785 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12387/xcs-cinco-de-mayo-super-nit
+2026-03-31 13:33:13,627 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12798/1-day-cinco-de-mayo-tournament-temecula
+2026-03-31 13:33:14,424 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12503/may-baseball-blitz-d3-ncs-sd
+2026-03-31 13:33:15,244 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13015/mothers-day-classic-1-day-sat
+2026-03-31 13:33:16,068 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12624/mothers-day-1-day-event
+2026-03-31 13:33:16,927 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12485/xcs-mothers-day-one-day
+2026-03-31 13:33:17,802 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12858/ncs-may-beach-mash-classic
+2026-03-31 13:33:18,635 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12799/1-day-mothers-day-sunday-tournament-perris-ca
+2026-03-31 13:33:19,825 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:33:19,834 - INFO - [Excel] Wrote rows 33..42 (key col 1)
+2026-03-31 13:33:20,262 - INFO - [Excel] Appended 10 rows. New bottom row: 42.
+2026-03-31 13:33:20,316 - INFO - Saved batch 4 to Excel (template append).
+2026-03-31 13:33:20,316 - INFO - Batch 4 completed. Waiting 32.43s before next batch.
+2026-03-31 13:33:52,750 - INFO - Processing batch 5/11.
+2026-03-31 13:33:52,750 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12097/the-show-very-limited-space
+2026-03-31 13:33:53,451 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12787/2-day-memorial-day-warm-up-d3
+2026-03-31 13:33:54,388 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11809/bakersfield-may-classic
+2026-03-31 13:33:55,140 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11529/may-day-slugfest-ws-paid-berth
+2026-03-31 13:33:56,800 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11984/ncs-mayhem
+2026-03-31 13:33:57,685 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12191/ncs-mayhem
+2026-03-31 13:33:58,507 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12859/ncs-west-coast-elite-invitational
+2026-03-31 13:33:59,405 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12486/xcs-stars-stripes
+2026-03-31 13:34:00,210 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12504/memorial-day-warm-up-blitz-d3-ncs-sd
+2026-03-31 13:34:01,096 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12555/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:34:02,259 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:34:02,268 - INFO - [Excel] Wrote rows 43..52 (key col 1)
+2026-03-31 13:34:02,721 - INFO - [Excel] Appended 10 rows. New bottom row: 52.
+2026-03-31 13:34:02,782 - INFO - Saved batch 5 to Excel (template append).
+2026-03-31 13:34:02,782 - INFO - Batch 5 completed. Waiting 31.93s before next batch.
+2026-03-31 13:34:34,712 - INFO - Processing batch 6/11.
+2026-03-31 13:34:34,713 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12505/15th-annual-ncs-memorial-day-classic-d3-open
+2026-03-31 13:34:36,663 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12192/memorial-day
+2026-03-31 13:34:37,483 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11985/memorial-day-classic
+2026-03-31 13:34:38,365 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12487/xcs-memorial-day-state-championships
+2026-03-31 13:34:39,543 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12806/1-day-ncs-tournament-fallbrook-ca
+2026-03-31 13:34:40,345 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12305/2026-redding-almost-summertime-tournament
+2026-03-31 13:34:41,361 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13090/beat-the-heat-rec-and-all-star-teams-only
+2026-03-31 13:34:42,193 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11986/may-jamboree
+2026-03-31 13:34:43,634 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12134/may-jamboree
+2026-03-31 13:34:44,606 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11532/may-mayhem
+2026-03-31 13:34:46,912 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:34:46,920 - INFO - [Excel] Wrote rows 53..62 (key col 1)
+2026-03-31 13:34:47,330 - INFO - [Excel] Appended 10 rows. New bottom row: 62.
+2026-03-31 13:34:47,385 - INFO - Saved batch 6 to Excel (template append).
+2026-03-31 13:34:47,385 - INFO - Batch 6 completed. Waiting 32.53s before next batch.
+2026-03-31 13:35:19,911 - INFO - Processing batch 7/11.
+2026-03-31 13:35:19,911 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12523/xcs-all-star-classic
+2026-03-31 13:35:20,841 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12800/1-day-ncs-tournament-perris-ca
+2026-03-31 13:35:21,663 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12790/2-day-world-series-warmup-up-week-1
+2026-03-31 13:35:22,473 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12098/all-star-classic
+2026-03-31 13:35:23,223 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11810/bakersfield-schools-out-for-summer
+2026-03-31 13:35:23,995 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11958/beach-ballin
+2026-03-31 13:35:25,419 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12031/june-jamboree
+2026-03-31 13:35:26,349 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12524/xcs-all-star-bash
+2026-03-31 13:35:27,576 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12552/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:35:28,595 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12791/2-day-world-series-warmup-up-week-2
+2026-03-31 13:35:29,993 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:35:30,002 - INFO - [Excel] Wrote rows 63..72 (key col 1)
+2026-03-31 13:35:30,441 - INFO - [Excel] Appended 10 rows. New bottom row: 72.
+2026-03-31 13:35:30,495 - INFO - Saved batch 7 to Excel (template append).
+2026-03-31 13:35:30,496 - INFO - Batch 7 completed. Waiting 30.88s before next batch.
+2026-03-31 13:36:01,381 - INFO - Processing batch 8/11.
+2026-03-31 13:36:01,381 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12024/monster-mash
+2026-03-31 13:36:02,220 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12447/monster-mash
+2026-03-31 13:36:03,063 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12135/monster-mash
+2026-03-31 13:36:04,002 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12860/ncs-all-star-rings-classic
+2026-03-31 13:36:04,785 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11533/state-championships
+2026-03-31 13:36:05,788 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12525/xcs-all-star-summer-slam
+2026-03-31 13:36:06,565 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12553/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:36:07,295 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12786/2-day-fathers-day-classic-d3
+2026-03-31 13:36:08,042 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12136/ncs-state-championships
+2026-03-31 13:36:09,070 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12025/ncs-state-championships-d3-only
+2026-03-31 13:36:10,282 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:36:10,292 - INFO - [Excel] Wrote rows 73..82 (key col 1)
+2026-03-31 13:36:10,760 - INFO - [Excel] Appended 10 rows. New bottom row: 82.
+2026-03-31 13:36:10,822 - INFO - Saved batch 8 to Excel (template append).
+2026-03-31 13:36:10,823 - INFO - Batch 8 completed. Waiting 31.94s before next batch.
+2026-03-31 13:36:42,764 - INFO - Processing batch 9/11.
+2026-03-31 13:36:42,764 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12100/swing-n-surf
+2026-03-31 13:36:43,668 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12526/xcs-all-star-extravaganza
+2026-03-31 13:36:44,461 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12554/one-day-shootout-1-day-event-la-puente-sports-complex
+2026-03-31 13:36:45,628 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13026/midnight-madness-can-you-survive-the-madness-its-back
+2026-03-31 13:36:47,398 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12358/basebrawl-d3-only
+2026-03-31 13:36:48,313 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12861/ncs-channel-coast-championships
+2026-03-31 13:36:49,121 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12101/surfs-up
+2026-03-31 13:36:49,892 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11535/world-series-tune-up
+2026-03-31 13:36:50,821 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12527/xcs-summer-slam
+2026-03-31 13:36:51,604 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12359/stars-and-stripes-games-done-before-sunset-saturday
+2026-03-31 13:36:52,809 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:36:52,817 - INFO - [Excel] Wrote rows 83..92 (key col 1)
+2026-03-31 13:36:53,247 - INFO - [Excel] Appended 10 rows. New bottom row: 92.
+2026-03-31 13:36:53,304 - INFO - Saved batch 9 to Excel (template append).
+2026-03-31 13:36:53,304 - INFO - Batch 9 completed. Waiting 32.39s before next batch.
+2026-03-31 13:37:25,695 - INFO - Processing batch 10/11.
+2026-03-31 13:37:25,696 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13027/stars-and-stripes-games-done-before-sunset-saturday
+2026-03-31 13:37:26,643 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11634/orange-county-world-series
+2026-03-31 13:37:27,604 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11538/all-american-games
+2026-03-31 13:37:28,537 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12102/summer-games-a-pospect-360-event
+2026-03-31 13:37:29,356 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12360/summer-slam
+2026-03-31 13:37:30,256 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13028/summer-slam-d3-only
+2026-03-31 13:37:31,158 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12104/8u-world-series-and-events
+2026-03-31 13:37:33,015 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12862/ncs-west-coast-wave-open
+2026-03-31 13:37:33,926 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12103/swing-n-cruz-new
+2026-03-31 13:37:34,735 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11537/cen-cal-world-series
+2026-03-31 13:37:36,261 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:37:36,271 - INFO - [Excel] Wrote rows 93..102 (key col 1)
+2026-03-31 13:37:36,726 - INFO - [Excel] Appended 10 rows. New bottom row: 102.
+2026-03-31 13:37:36,784 - INFO - Saved batch 10 to Excel (template append).
+2026-03-31 13:37:36,784 - INFO - Batch 10 completed. Waiting 34.96s before next batch.
+2026-03-31 13:38:11,749 - INFO - Processing batch 11/11.
+2026-03-31 13:38:11,749 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12788/2-day-super-challenge-d3
+2026-03-31 13:38:12,593 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12105/summer-bash-mystery-ring-event
+2026-03-31 13:38:13,370 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12361/summer-heat
+2026-03-31 13:38:14,269 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13029/summer-heat
+2026-03-31 13:38:15,216 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12362/dog-days-of-summer
+2026-03-31 13:38:16,057 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12863/ncs-kool-off-santa-barbara-open
+2026-03-31 13:38:16,865 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12789/2-day-back-to-school-d3-open-divisions
+2026-03-31 13:38:17,697 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13030/end-of-season-finale
+2026-03-31 13:38:18,572 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12032/end-of-season-finale
+2026-03-31 13:38:19,452 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12941/ncs-last-chance-beach-bash
+2026-03-31 13:38:20,763 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:38:20,770 - INFO - [Excel] Wrote rows 103..112 (key col 1)
+2026-03-31 13:38:21,226 - INFO - [Excel] Appended 10 rows. New bottom row: 112.
+2026-03-31 13:38:21,288 - INFO - Saved batch 11 to Excel (template append).
+2026-03-31 13:38:21,288 - INFO - Completed location: California (NCS)
+2026-03-31 13:38:21,288 - INFO - Processing location: Colorado (NCS)
+2026-03-31 13:38:21,289 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CO
+2026-03-31 13:38:36,571 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:38:36,571 - INFO - Total event links collected: 0
+2026-03-31 13:38:36,571 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-CO for Colorado (NCS).
+2026-03-31 13:38:36,576 - INFO - Total unique events to process for Colorado (NCS): 0
+2026-03-31 13:38:36,576 - INFO - No unprocessed events for Colorado (NCS). Skipping Excel creation.
+2026-03-31 13:38:36,576 - INFO - Processing location: Connecticut (NCS)
+2026-03-31 13:38:36,576 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-CT
+2026-03-31 13:38:51,847 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:38:51,847 - INFO - Total event links collected: 0
+2026-03-31 13:38:51,847 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-CT for Connecticut (NCS).
+2026-03-31 13:38:51,852 - INFO - Total unique events to process for Connecticut (NCS): 0
+2026-03-31 13:38:51,852 - INFO - No unprocessed events for Connecticut (NCS). Skipping Excel creation.
+2026-03-31 13:38:51,853 - INFO - Processing location: Delaware (NCS)
+2026-03-31 13:38:51,853 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-DE
+2026-03-31 13:39:07,106 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:39:07,107 - INFO - Total event links collected: 0
+2026-03-31 13:39:07,107 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-DE for Delaware (NCS).
+2026-03-31 13:39:07,112 - INFO - Total unique events to process for Delaware (NCS): 0
+2026-03-31 13:39:07,112 - INFO - No unprocessed events for Delaware (NCS). Skipping Excel creation.
+2026-03-31 13:39:07,112 - INFO - Processing location: Florida (NCS)
+2026-03-31 13:39:07,112 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-FL
+2026-03-31 13:39:07,561 - INFO - Found 9 new event links on page 1 (total 9).
+2026-03-31 13:39:07,564 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:39:07,564 - INFO - Total event links collected: 9
+2026-03-31 13:39:07,564 - INFO - Collected 9 event links using https://playncs.com/baseball/Events?countryState=US-FL for Florida (NCS).
+2026-03-31 13:39:07,575 - INFO - Total unique events to process for Florida (NCS): 9
+2026-03-31 13:39:07,577 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Florida_2026-03-31.xlsx
+2026-03-31 13:39:07,577 - INFO - Excel output file for Florida (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Florida_2026-03-31.xlsx
+2026-03-31 13:39:07,578 - INFO - Processing batch 1/1.
+2026-03-31 13:39:07,578 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12296/ncs-palm-beach-spring-bash
+2026-03-31 13:39:08,438 - INFO - Skipping non-future event for https://playncs.com/baseball/Events/Details/12296/ncs-palm-beach-spring-bash: start date Mar 22 2026.
+2026-03-31 13:39:08,444 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12263/ncs-mvp-games
+2026-03-31 13:39:09,233 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12261/ncs-cinco-de-mayo
+2026-03-31 13:39:10,124 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12363/ncs-palm-beach-mothers-day-bash-tournament
+2026-03-31 13:39:10,910 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12912/ncs-all-american-mothers-day-showdown-rings-bats
+2026-03-31 13:39:11,683 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12267/ncs-wood-bat-strikes-back
+2026-03-31 13:39:12,567 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13112/ncs-south-florida-summer-championship-tournament
+2026-03-31 13:39:13,502 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12271/ncs-florida-state-championship-key-west-fathers-day-weekend
+2026-03-31 13:39:14,329 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11766/ncs-florida-world-series
+2026-03-31 13:39:15,598 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:39:15,607 - INFO - [Excel] Wrote rows 3..10 (key col 1)
+2026-03-31 13:39:16,068 - INFO - [Excel] Appended 8 rows. New bottom row: 10.
+2026-03-31 13:39:16,119 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:39:16,119 - INFO - Completed location: Florida (NCS)
+2026-03-31 13:39:16,119 - INFO - Processing location: Georgia (NCS)
+2026-03-31 13:39:16,119 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-GA
+2026-03-31 13:39:16,776 - INFO - Found 12 new event links on page 1 (total 12).
+2026-03-31 13:39:16,778 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:39:16,778 - INFO - Total event links collected: 12
+2026-03-31 13:39:16,778 - INFO - Collected 12 event links using https://playncs.com/baseball/Events?countryState=US-GA for Georgia (NCS).
+2026-03-31 13:39:16,791 - INFO - Total unique events to process for Georgia (NCS): 12
+2026-03-31 13:39:16,793 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Georgia_2026-03-31.xlsx
+2026-03-31 13:39:16,793 - INFO - Excel output file for Georgia (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Georgia_2026-03-31.xlsx
+2026-03-31 13:39:16,793 - INFO - Processing batch 1/2.
+2026-03-31 13:39:16,793 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11674/bunny-bash
+2026-03-31 13:39:17,593 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11675/42-classic
+2026-03-31 13:39:18,363 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11696/rally-cap-classic
+2026-03-31 13:39:19,141 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11698/tacos-tagouts
+2026-03-31 13:39:19,920 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11699/mamas-takeover
+2026-03-31 13:39:20,690 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11700/bases-loaded-bash
+2026-03-31 13:39:21,468 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11702/heat-check-classic
+2026-03-31 13:39:22,259 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11701/wood-bat-classic
+2026-03-31 13:39:23,034 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11703/world-series-warmup
+2026-03-31 13:39:23,836 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11704/swing-for-the-fences
+2026-03-31 13:39:25,080 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:39:25,090 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 13:39:25,556 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 13:39:25,617 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:39:25,618 - INFO - Batch 1 completed. Waiting 31.94s before next batch.
+2026-03-31 13:39:57,554 - INFO - Processing batch 2/2.
+2026-03-31 13:39:57,554 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11705/dugout-dads-classic
+2026-03-31 13:39:58,420 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11706/stars-stripes-dingers
+2026-03-31 13:39:59,553 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:39:59,559 - INFO - [Excel] Wrote rows 13..14 (key col 1)
+2026-03-31 13:39:59,982 - INFO - [Excel] Appended 2 rows. New bottom row: 14.
+2026-03-31 13:39:59,995 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:39:59,995 - INFO - Completed location: Georgia (NCS)
+2026-03-31 13:39:59,996 - INFO - Processing location: Hawaii (NCS)
+2026-03-31 13:39:59,996 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-HI
+2026-03-31 13:40:15,250 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:40:15,250 - INFO - Total event links collected: 0
+2026-03-31 13:40:15,250 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-HI for Hawaii (NCS).
+2026-03-31 13:40:15,257 - INFO - Total unique events to process for Hawaii (NCS): 0
+2026-03-31 13:40:15,257 - INFO - No unprocessed events for Hawaii (NCS). Skipping Excel creation.
+2026-03-31 13:40:15,257 - INFO - Processing location: Idaho (NCS)
+2026-03-31 13:40:15,257 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-ID
+2026-03-31 13:40:16,065 - INFO - Found 5 new event links on page 1 (total 5).
+2026-03-31 13:40:16,066 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:40:16,066 - INFO - Total event links collected: 5
+2026-03-31 13:40:16,067 - INFO - Collected 5 event links using https://playncs.com/baseball/Events?countryState=US-ID for Idaho (NCS).
+2026-03-31 13:40:16,075 - INFO - Total unique events to process for Idaho (NCS): 5
+2026-03-31 13:40:16,077 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Idaho_2026-03-31.xlsx
+2026-03-31 13:40:16,077 - INFO - Excel output file for Idaho (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Idaho_2026-03-31.xlsx
+2026-03-31 13:40:16,077 - INFO - Processing batch 1/1.
+2026-03-31 13:40:16,077 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11333/5th-annual-cinco-de-mayo-classic-d3-open
+2026-03-31 13:40:18,606 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11343/4th-annual-memorial-day-classic-world-series-nit-qualifier
+2026-03-31 13:40:19,885 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11344/2nd-annual-ncs-northwest-spring-world-series-5gg-d3-open
+2026-03-31 13:40:21,942 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11336/3rd-annual-firecracker-classic-4gg-d3-open
+2026-03-31 13:40:23,177 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11338/5th-annual-idaho-classic-4gg-d3-open
+2026-03-31 13:40:24,760 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:40:24,767 - INFO - [Excel] Wrote rows 3..7 (key col 1)
+2026-03-31 13:40:25,215 - INFO - [Excel] Appended 5 rows. New bottom row: 7.
+2026-03-31 13:40:25,253 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:40:25,253 - INFO - Completed location: Idaho (NCS)
+2026-03-31 13:40:25,253 - INFO - Processing location: Illinois (NCS)
+2026-03-31 13:40:25,253 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IL
+2026-03-31 13:40:40,529 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:40:40,530 - INFO - Total event links collected: 0
+2026-03-31 13:40:40,530 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IL for Illinois (NCS).
+2026-03-31 13:40:40,537 - INFO - Total unique events to process for Illinois (NCS): 0
+2026-03-31 13:40:40,537 - INFO - No unprocessed events for Illinois (NCS). Skipping Excel creation.
+2026-03-31 13:40:40,537 - INFO - Processing location: Indiana (NCS)
+2026-03-31 13:40:40,537 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IN
+2026-03-31 13:40:55,906 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:40:55,906 - INFO - Total event links collected: 0
+2026-03-31 13:40:55,906 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IN for Indiana (NCS).
+2026-03-31 13:40:55,911 - INFO - Total unique events to process for Indiana (NCS): 0
+2026-03-31 13:40:55,911 - INFO - No unprocessed events for Indiana (NCS). Skipping Excel creation.
+2026-03-31 13:40:55,912 - INFO - Processing location: Iowa (NCS)
+2026-03-31 13:40:55,912 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-IA
+2026-03-31 13:41:11,163 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:41:11,163 - INFO - Total event links collected: 0
+2026-03-31 13:41:11,163 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-IA for Iowa (NCS).
+2026-03-31 13:41:11,168 - INFO - Total unique events to process for Iowa (NCS): 0
+2026-03-31 13:41:11,168 - INFO - No unprocessed events for Iowa (NCS). Skipping Excel creation.
+2026-03-31 13:41:11,168 - INFO - Processing location: Kansas (NCS)
+2026-03-31 13:41:11,168 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-KS
+2026-03-31 13:41:26,425 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:41:26,426 - INFO - Total event links collected: 0
+2026-03-31 13:41:26,426 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-KS for Kansas (NCS).
+2026-03-31 13:41:26,431 - INFO - Total unique events to process for Kansas (NCS): 0
+2026-03-31 13:41:26,431 - INFO - No unprocessed events for Kansas (NCS). Skipping Excel creation.
+2026-03-31 13:41:26,431 - INFO - Processing location: Kentucky (NCS)
+2026-03-31 13:41:26,431 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-KY
+2026-03-31 13:41:41,686 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:41:41,686 - INFO - Total event links collected: 0
+2026-03-31 13:41:41,686 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-KY for Kentucky (NCS).
+2026-03-31 13:41:41,691 - INFO - Total unique events to process for Kentucky (NCS): 0
+2026-03-31 13:41:41,691 - INFO - No unprocessed events for Kentucky (NCS). Skipping Excel creation.
+2026-03-31 13:41:41,691 - INFO - Processing location: Louisiana (NCS)
+2026-03-31 13:41:41,691 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-LA
+2026-03-31 13:41:41,963 - INFO - Found 4 new event links on page 1 (total 4).
+2026-03-31 13:41:41,965 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:41:41,965 - INFO - Total event links collected: 4
+2026-03-31 13:41:41,965 - INFO - Collected 4 event links using https://playncs.com/baseball/Events?countryState=US-LA for Louisiana (NCS).
+2026-03-31 13:41:41,973 - INFO - Total unique events to process for Louisiana (NCS): 4
+2026-03-31 13:41:41,975 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Louisiana_2026-03-31.xlsx
+2026-03-31 13:41:41,975 - INFO - Excel output file for Louisiana (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Louisiana_2026-03-31.xlsx
+2026-03-31 13:41:41,975 - INFO - Processing batch 1/1.
+2026-03-31 13:41:41,975 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12467/aprils-fools-gold
+2026-03-31 13:41:42,724 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12468/may-homerun-showers
+2026-03-31 13:41:43,564 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12469/jammin-in-june
+2026-03-31 13:41:44,357 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12466/summer-bash
+2026-03-31 13:41:45,482 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:41:45,489 - INFO - [Excel] Wrote rows 3..6 (key col 1)
+2026-03-31 13:41:45,919 - INFO - [Excel] Appended 4 rows. New bottom row: 6.
+2026-03-31 13:41:45,944 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:41:45,945 - INFO - Completed location: Louisiana (NCS)
+2026-03-31 13:41:45,945 - INFO - Processing location: Maine (NCS)
+2026-03-31 13:41:45,945 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-ME
+2026-03-31 13:42:01,212 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:42:01,213 - INFO - Total event links collected: 0
+2026-03-31 13:42:01,213 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-ME for Maine (NCS).
+2026-03-31 13:42:01,220 - INFO - Total unique events to process for Maine (NCS): 0
+2026-03-31 13:42:01,220 - INFO - No unprocessed events for Maine (NCS). Skipping Excel creation.
+2026-03-31 13:42:01,220 - INFO - Processing location: Maryland (NCS)
+2026-03-31 13:42:01,220 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MD
+2026-03-31 13:42:16,481 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:42:16,482 - INFO - Total event links collected: 0
+2026-03-31 13:42:16,482 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MD for Maryland (NCS).
+2026-03-31 13:42:16,487 - INFO - Total unique events to process for Maryland (NCS): 0
+2026-03-31 13:42:16,487 - INFO - No unprocessed events for Maryland (NCS). Skipping Excel creation.
+2026-03-31 13:42:16,487 - INFO - Processing location: Massachusetts (NCS)
+2026-03-31 13:42:16,488 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MA
+2026-03-31 13:42:31,718 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:42:31,719 - INFO - Total event links collected: 0
+2026-03-31 13:42:31,719 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MA for Massachusetts (NCS).
+2026-03-31 13:42:31,724 - INFO - Total unique events to process for Massachusetts (NCS): 0
+2026-03-31 13:42:31,725 - INFO - No unprocessed events for Massachusetts (NCS). Skipping Excel creation.
+2026-03-31 13:42:31,725 - INFO - Processing location: Michigan (NCS)
+2026-03-31 13:42:31,725 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MI
+2026-03-31 13:42:46,974 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:42:46,974 - INFO - Total event links collected: 0
+2026-03-31 13:42:46,974 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MI for Michigan (NCS).
+2026-03-31 13:42:46,980 - INFO - Total unique events to process for Michigan (NCS): 0
+2026-03-31 13:42:46,980 - INFO - No unprocessed events for Michigan (NCS). Skipping Excel creation.
+2026-03-31 13:42:46,980 - INFO - Processing location: Minnesota (NCS)
+2026-03-31 13:42:46,980 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MN
+2026-03-31 13:43:02,215 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:43:02,215 - INFO - Total event links collected: 0
+2026-03-31 13:43:02,215 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MN for Minnesota (NCS).
+2026-03-31 13:43:02,221 - INFO - Total unique events to process for Minnesota (NCS): 0
+2026-03-31 13:43:02,221 - INFO - No unprocessed events for Minnesota (NCS). Skipping Excel creation.
+2026-03-31 13:43:02,221 - INFO - Processing location: Mississippi (NCS)
+2026-03-31 13:43:02,221 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MS
+2026-03-31 13:43:02,497 - INFO - Found 4 new event links on page 1 (total 4).
+2026-03-31 13:43:02,498 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:43:02,498 - INFO - Total event links collected: 4
+2026-03-31 13:43:02,498 - INFO - Collected 4 event links using https://playncs.com/baseball/Events?countryState=US-MS for Mississippi (NCS).
+2026-03-31 13:43:02,506 - INFO - Total unique events to process for Mississippi (NCS): 4
+2026-03-31 13:43:02,508 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Mississippi_2026-03-31.xlsx
+2026-03-31 13:43:02,508 - INFO - Excel output file for Mississippi (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Mississippi_2026-03-31.xlsx
+2026-03-31 13:43:02,508 - INFO - Processing batch 1/1.
+2026-03-31 13:43:02,508 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12903/2026-ncs-belts-at-bankfirst
+2026-03-31 13:43:03,251 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12331/2026-ncs-super-nit
+2026-03-31 13:43:04,079 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12194/2026-ncs-mississippi-state-championship
+2026-03-31 13:43:04,870 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12904/2026-ncs-memorial-day-at-bankfirst
+2026-03-31 13:43:06,032 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:43:06,039 - INFO - [Excel] Wrote rows 3..6 (key col 1)
+2026-03-31 13:43:06,482 - INFO - [Excel] Appended 4 rows. New bottom row: 6.
+2026-03-31 13:43:06,508 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:43:06,508 - INFO - Completed location: Mississippi (NCS)
+2026-03-31 13:43:06,508 - INFO - Processing location: Missouri (NCS)
+2026-03-31 13:43:06,508 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MO
+2026-03-31 13:43:21,746 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:43:21,747 - INFO - Total event links collected: 0
+2026-03-31 13:43:21,747 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MO for Missouri (NCS).
+2026-03-31 13:43:21,752 - INFO - Total unique events to process for Missouri (NCS): 0
+2026-03-31 13:43:21,752 - INFO - No unprocessed events for Missouri (NCS). Skipping Excel creation.
+2026-03-31 13:43:21,752 - INFO - Processing location: Montana (NCS)
+2026-03-31 13:43:21,753 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-MT
+2026-03-31 13:43:36,995 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:43:36,995 - INFO - Total event links collected: 0
+2026-03-31 13:43:36,995 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-MT for Montana (NCS).
+2026-03-31 13:43:37,001 - INFO - Total unique events to process for Montana (NCS): 0
+2026-03-31 13:43:37,001 - INFO - No unprocessed events for Montana (NCS). Skipping Excel creation.
+2026-03-31 13:43:37,001 - INFO - Processing location: Nebraska (NCS)
+2026-03-31 13:43:37,002 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NE
+2026-03-31 13:43:52,283 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:43:52,284 - INFO - Total event links collected: 0
+2026-03-31 13:43:52,284 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-NE for Nebraska (NCS).
+2026-03-31 13:43:52,290 - INFO - Total unique events to process for Nebraska (NCS): 0
+2026-03-31 13:43:52,291 - INFO - No unprocessed events for Nebraska (NCS). Skipping Excel creation.
+2026-03-31 13:43:52,291 - INFO - Processing location: Nevada (NCS)
+2026-03-31 13:43:52,291 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NV
+2026-03-31 13:43:52,679 - INFO - Found 4 new event links on page 1 (total 4).
+2026-03-31 13:43:52,681 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:43:52,682 - INFO - Total event links collected: 4
+2026-03-31 13:43:52,682 - INFO - Collected 4 event links using https://playncs.com/baseball/Events?countryState=US-NV for Nevada (NCS).
+2026-03-31 13:43:52,691 - INFO - Total unique events to process for Nevada (NCS): 4
+2026-03-31 13:43:52,693 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Nevada_2026-03-31.xlsx
+2026-03-31 13:43:52,693 - INFO - Excel output file for Nevada (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Nevada_2026-03-31.xlsx
+2026-03-31 13:43:52,693 - INFO - Processing batch 1/1.
+2026-03-31 13:43:52,693 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12178/diamond-dash-nv
+2026-03-31 13:43:53,451 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12179/game-master
+2026-03-31 13:43:54,273 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11433/inaugural-silver-state-showdown
+2026-03-31 13:43:55,156 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11260/the-ultimate-baseball-world-series-15th-annual
+2026-03-31 13:43:56,877 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:43:56,885 - INFO - [Excel] Wrote rows 3..6 (key col 1)
+2026-03-31 13:43:57,343 - INFO - [Excel] Appended 4 rows. New bottom row: 6.
+2026-03-31 13:43:57,373 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:43:57,373 - INFO - Completed location: Nevada (NCS)
+2026-03-31 13:43:57,373 - INFO - Processing location: New Hampshire (NCS)
+2026-03-31 13:43:57,373 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NH
+2026-03-31 13:44:12,652 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:44:12,652 - INFO - Total event links collected: 0
+2026-03-31 13:44:12,652 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-NH for New Hampshire (NCS).
+2026-03-31 13:44:12,657 - INFO - Total unique events to process for New Hampshire (NCS): 0
+2026-03-31 13:44:12,657 - INFO - No unprocessed events for New Hampshire (NCS). Skipping Excel creation.
+2026-03-31 13:44:12,658 - INFO - Processing location: New Jersey (NCS)
+2026-03-31 13:44:12,658 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NJ
+2026-03-31 13:44:27,895 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:44:27,895 - INFO - Total event links collected: 0
+2026-03-31 13:44:27,895 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-NJ for New Jersey (NCS).
+2026-03-31 13:44:27,900 - INFO - Total unique events to process for New Jersey (NCS): 0
+2026-03-31 13:44:27,900 - INFO - No unprocessed events for New Jersey (NCS). Skipping Excel creation.
+2026-03-31 13:44:27,900 - INFO - Processing location: New Mexico (NCS)
+2026-03-31 13:44:27,901 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NM
+2026-03-31 13:44:28,184 - INFO - Found 3 new event links on page 1 (total 3).
+2026-03-31 13:44:28,186 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:44:28,186 - INFO - Total event links collected: 3
+2026-03-31 13:44:28,186 - INFO - Collected 3 event links using https://playncs.com/baseball/Events?countryState=US-NM for New Mexico (NCS).
+2026-03-31 13:44:28,195 - INFO - Total unique events to process for New Mexico (NCS): 0
+2026-03-31 13:44:28,195 - INFO - No unprocessed events for New Mexico (NCS). Skipping Excel creation.
+2026-03-31 13:44:28,195 - INFO - Processing location: New York (NCS)
+2026-03-31 13:44:28,195 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NY
+2026-03-31 13:44:43,460 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:44:43,460 - INFO - Total event links collected: 0
+2026-03-31 13:44:43,460 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-NY for New York (NCS).
+2026-03-31 13:44:43,468 - INFO - Total unique events to process for New York (NCS): 0
+2026-03-31 13:44:43,468 - INFO - No unprocessed events for New York (NCS). Skipping Excel creation.
+2026-03-31 13:44:43,468 - INFO - Processing location: North Carolina (NCS)
+2026-03-31 13:44:43,468 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-NC
+2026-03-31 13:44:58,807 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:44:58,807 - INFO - Total event links collected: 0
+2026-03-31 13:44:58,808 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-NC for North Carolina (NCS).
+2026-03-31 13:44:58,814 - INFO - Total unique events to process for North Carolina (NCS): 0
+2026-03-31 13:44:58,814 - INFO - No unprocessed events for North Carolina (NCS). Skipping Excel creation.
+2026-03-31 13:44:58,814 - INFO - Processing location: North Dakota (NCS)
+2026-03-31 13:44:58,814 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-ND
+2026-03-31 13:45:14,056 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:45:14,056 - INFO - Total event links collected: 0
+2026-03-31 13:45:14,056 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-ND for North Dakota (NCS).
+2026-03-31 13:45:14,063 - INFO - Total unique events to process for North Dakota (NCS): 0
+2026-03-31 13:45:14,063 - INFO - No unprocessed events for North Dakota (NCS). Skipping Excel creation.
+2026-03-31 13:45:14,063 - INFO - Processing location: Ohio (NCS)
+2026-03-31 13:45:14,064 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-OH
+2026-03-31 13:45:29,303 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:45:29,303 - INFO - Total event links collected: 0
+2026-03-31 13:45:29,303 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-OH for Ohio (NCS).
+2026-03-31 13:45:29,309 - INFO - Total unique events to process for Ohio (NCS): 0
+2026-03-31 13:45:29,309 - INFO - No unprocessed events for Ohio (NCS). Skipping Excel creation.
+2026-03-31 13:45:29,309 - INFO - Processing location: Oklahoma (NCS)
+2026-03-31 13:45:29,309 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-OK
+2026-03-31 13:45:44,559 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:45:44,560 - INFO - Total event links collected: 0
+2026-03-31 13:45:44,560 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-OK for Oklahoma (NCS).
+2026-03-31 13:45:44,566 - INFO - Total unique events to process for Oklahoma (NCS): 0
+2026-03-31 13:45:44,566 - INFO - No unprocessed events for Oklahoma (NCS). Skipping Excel creation.
+2026-03-31 13:45:44,566 - INFO - Processing location: Oregon (NCS)
+2026-03-31 13:45:44,566 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-OR
+2026-03-31 13:45:44,871 - INFO - Found 6 new event links on page 1 (total 6).
+2026-03-31 13:45:44,873 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:45:44,873 - INFO - Total event links collected: 6
+2026-03-31 13:45:44,873 - INFO - Collected 6 event links using https://playncs.com/baseball/Events?countryState=US-OR for Oregon (NCS).
+2026-03-31 13:45:44,891 - INFO - Total unique events to process for Oregon (NCS): 6
+2026-03-31 13:45:44,893 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Oregon_2026-03-31.xlsx
+2026-03-31 13:45:44,893 - INFO - Excel output file for Oregon (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Oregon_2026-03-31.xlsx
+2026-03-31 13:45:44,893 - INFO - Processing batch 1/1.
+2026-03-31 13:45:44,893 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11531/2nd-annual-oregon-spring-state-championship
+2026-03-31 13:45:45,743 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11530/2nd-annual-klamath-falls-summer-tournament
+2026-03-31 13:45:46,537 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11632/2026-central-oregon-summer-tournament-13u-14u-high-school-only
+2026-03-31 13:45:47,421 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12008/grand-slam-classic
+2026-03-31 13:45:48,286 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11332/2nd-annual-southern-oregon-summer-slam-4gg-early-bird-discount-through-march-31st
+2026-03-31 13:45:49,161 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11668/2026-oregon-summer-state-championship
+2026-03-31 13:45:50,400 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:45:50,409 - INFO - [Excel] Wrote rows 3..8 (key col 1)
+2026-03-31 13:45:50,912 - INFO - [Excel] Appended 6 rows. New bottom row: 8.
+2026-03-31 13:45:50,959 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:45:50,960 - INFO - Completed location: Oregon (NCS)
+2026-03-31 13:45:50,960 - INFO - Processing location: Pennsylvania (NCS)
+2026-03-31 13:45:50,960 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-PA
+2026-03-31 13:46:06,219 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:46:06,219 - INFO - Total event links collected: 0
+2026-03-31 13:46:06,219 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-PA for Pennsylvania (NCS).
+2026-03-31 13:46:06,225 - INFO - Total unique events to process for Pennsylvania (NCS): 0
+2026-03-31 13:46:06,225 - INFO - No unprocessed events for Pennsylvania (NCS). Skipping Excel creation.
+2026-03-31 13:46:06,225 - INFO - Processing location: Rhode Island (NCS)
+2026-03-31 13:46:06,225 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-RI
+2026-03-31 13:46:21,506 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:46:21,507 - INFO - Total event links collected: 0
+2026-03-31 13:46:21,507 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-RI for Rhode Island (NCS).
+2026-03-31 13:46:21,513 - INFO - Total unique events to process for Rhode Island (NCS): 0
+2026-03-31 13:46:21,513 - INFO - No unprocessed events for Rhode Island (NCS). Skipping Excel creation.
+2026-03-31 13:46:21,513 - INFO - Processing location: South Carolina (NCS)
+2026-03-31 13:46:21,513 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-SC
+2026-03-31 13:46:36,763 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:46:36,764 - INFO - Total event links collected: 0
+2026-03-31 13:46:36,764 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-SC for South Carolina (NCS).
+2026-03-31 13:46:36,770 - INFO - Total unique events to process for South Carolina (NCS): 0
+2026-03-31 13:46:36,770 - INFO - No unprocessed events for South Carolina (NCS). Skipping Excel creation.
+2026-03-31 13:46:36,770 - INFO - Processing location: South Dakota (NCS)
+2026-03-31 13:46:36,770 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-SD
+2026-03-31 13:46:52,022 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 13:46:52,022 - INFO - Total event links collected: 0
+2026-03-31 13:46:52,022 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-SD for South Dakota (NCS).
+2026-03-31 13:46:52,028 - INFO - Total unique events to process for South Dakota (NCS): 0
+2026-03-31 13:46:52,028 - INFO - No unprocessed events for South Dakota (NCS). Skipping Excel creation.
+2026-03-31 13:46:52,028 - INFO - Processing location: Tennessee (NCS)
+2026-03-31 13:46:52,028 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-TN
+2026-03-31 13:46:52,916 - INFO - Found 14 new event links on page 1 (total 14).
+2026-03-31 13:46:52,918 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:46:52,918 - INFO - Total event links collected: 14
+2026-03-31 13:46:52,918 - INFO - Collected 14 event links using https://playncs.com/baseball/Events?countryState=US-TN for Tennessee (NCS).
+2026-03-31 13:46:52,937 - INFO - Total unique events to process for Tennessee (NCS): 14
+2026-03-31 13:46:52,939 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Tennessee_2026-03-31.xlsx
+2026-03-31 13:46:52,939 - INFO - Excel output file for Tennessee (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Tennessee_2026-03-31.xlsx
+2026-03-31 13:46:52,939 - INFO - Processing batch 1/2.
+2026-03-31 13:46:52,939 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11949/battle-on-the-levee-7u-and-8u-combined
+2026-03-31 13:46:54,803 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12059/sandlot-spring-bling
+2026-03-31 13:46:55,594 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12477/ncs-battle-of-the-belts
+2026-03-31 13:46:56,370 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12060/sandlot-slugfest
+2026-03-31 13:46:57,116 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12936/ncs-rec-championship-series
+2026-03-31 13:46:57,868 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11950/the-sandlot-7u-and-8u-will-be-combined
+2026-03-31 13:46:58,650 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12478/ncs-tennessee-state-championship
+2026-03-31 13:46:59,456 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12061/sandlot-sports-survivor-series-knoxville-area-championship
+2026-03-31 13:47:00,219 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11952/germantown-aces-classic
+2026-03-31 13:47:01,028 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11469/2026-ncs-southeast-scenic-city-world-series
+2026-03-31 13:47:02,580 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:47:02,592 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 13:47:03,115 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 13:47:03,209 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:47:03,209 - INFO - Batch 1 completed. Waiting 31.30s before next batch.
+2026-03-31 13:47:34,514 - INFO - Processing batch 2/2.
+2026-03-31 13:47:34,514 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11953/field-of-dreams
+2026-03-31 13:47:35,471 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12062/sandlot-superheroes
+2026-03-31 13:47:36,243 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12063/sandlot-sports-lumberjack-series-wood-bat
+2026-03-31 13:47:37,150 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11467/2026-ncs-southeast-great-smoky-mountains-world-series
+2026-03-31 13:47:38,408 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:47:38,414 - INFO - [Excel] Wrote rows 13..16 (key col 1)
+2026-03-31 13:47:38,834 - INFO - [Excel] Appended 4 rows. New bottom row: 16.
+2026-03-31 13:47:38,868 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:47:38,869 - INFO - Completed location: Tennessee (NCS)
+2026-03-31 13:47:38,869 - INFO - Processing location: Texas (NCS)
+2026-03-31 13:47:38,869 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-TX
+2026-03-31 13:47:39,880 - INFO - Found 15 new event links on page 1 (total 15).
+2026-03-31 13:47:41,884 - INFO - Scraping page 2: https://playncs.com/baseball/Events?page=2&countryState=US-TX
+2026-03-31 13:47:42,968 - INFO - Found 15 new event links on page 2 (total 30).
+2026-03-31 13:47:44,971 - INFO - Scraping page 3: https://playncs.com/baseball/Events?page=3&countryState=US-TX
+2026-03-31 13:47:46,154 - INFO - Found 15 new event links on page 3 (total 45).
+2026-03-31 13:47:48,157 - INFO - Scraping page 4: https://playncs.com/baseball/Events?page=4&countryState=US-TX
+2026-03-31 13:47:48,847 - INFO - Found 15 new event links on page 4 (total 60).
+2026-03-31 13:47:50,850 - INFO - Scraping page 5: https://playncs.com/baseball/Events?page=5&countryState=US-TX
+2026-03-31 13:47:51,974 - INFO - Found 15 new event links on page 5 (total 75).
+2026-03-31 13:47:53,976 - INFO - Scraping page 6: https://playncs.com/baseball/Events?page=6&countryState=US-TX
+2026-03-31 13:47:54,963 - INFO - Found 15 new event links on page 6 (total 90).
+2026-03-31 13:47:56,966 - INFO - Scraping page 7: https://playncs.com/baseball/Events?page=7&countryState=US-TX
+2026-03-31 13:47:58,279 - INFO - Found 15 new event links on page 7 (total 105).
+2026-03-31 13:48:00,281 - INFO - Scraping page 8: https://playncs.com/baseball/Events?page=8&countryState=US-TX
+2026-03-31 13:48:01,224 - INFO - Found 15 new event links on page 8 (total 120).
+2026-03-31 13:48:03,226 - INFO - Scraping page 9: https://playncs.com/baseball/Events?page=9&countryState=US-TX
+2026-03-31 13:48:04,386 - INFO - Found 15 new event links on page 9 (total 135).
+2026-03-31 13:48:06,389 - INFO - Scraping page 10: https://playncs.com/baseball/Events?page=10&countryState=US-TX
+2026-03-31 13:48:07,271 - INFO - Found 15 new event links on page 10 (total 150).
+2026-03-31 13:48:09,274 - INFO - Scraping page 11: https://playncs.com/baseball/Events?page=11&countryState=US-TX
+2026-03-31 13:48:10,185 - INFO - Found 15 new event links on page 11 (total 165).
+2026-03-31 13:48:12,188 - INFO - Scraping page 12: https://playncs.com/baseball/Events?page=12&countryState=US-TX
+2026-03-31 13:48:13,262 - INFO - Found 15 new event links on page 12 (total 180).
+2026-03-31 13:48:15,265 - INFO - Scraping page 13: https://playncs.com/baseball/Events?page=13&countryState=US-TX
+2026-03-31 13:48:16,238 - INFO - Found 15 new event links on page 13 (total 195).
+2026-03-31 13:48:18,240 - INFO - Scraping page 14: https://playncs.com/baseball/Events?page=14&countryState=US-TX
+2026-03-31 13:48:19,007 - INFO - Found 15 new event links on page 14 (total 210).
+2026-03-31 13:48:21,010 - INFO - Scraping page 15: https://playncs.com/baseball/Events?page=15&countryState=US-TX
+2026-03-31 13:48:21,654 - INFO - Found 15 new event links on page 15 (total 225).
+2026-03-31 13:48:23,656 - INFO - Scraping page 16: https://playncs.com/baseball/Events?page=16&countryState=US-TX
+2026-03-31 13:48:24,309 - INFO - Found 9 new event links on page 16 (total 234).
+2026-03-31 13:48:24,311 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 13:48:24,311 - INFO - Total event links collected: 234
+2026-03-31 13:48:24,311 - INFO - Collected 234 event links using https://playncs.com/baseball/Events?countryState=US-TX for Texas (NCS).
+2026-03-31 13:48:24,625 - INFO - Total unique events to process for Texas (NCS): 230
+2026-03-31 13:48:24,627 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Texas_2026-03-31.xlsx
+2026-03-31 13:48:24,627 - INFO - Excel output file for Texas (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Texas_2026-03-31.xlsx
+2026-03-31 13:48:24,627 - INFO - Processing batch 1/23.
+2026-03-31 13:48:24,628 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12142/bunny-bash-fri-sat
+2026-03-31 13:48:25,420 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12759/bunny-bash-at-the-village-7u
+2026-03-31 13:48:26,195 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12913/friday-night-lights
+2026-03-31 13:48:27,086 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11909/mavs-ballpark-downtown-spring-shootout-11u-d3-friday-pool-play-saturday-bracket-play
+2026-03-31 13:48:27,979 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11788/tsb-easter-bash-friday-pool-games-start-at-3pm-saturday-brackets-start-at-8am
+2026-03-31 13:48:29,815 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12205/turf-bunny-brawl-fri-pool-starts-12pm-sat
+2026-03-31 13:48:30,751 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12589/bunny-ball-saturday-only
+2026-03-31 13:48:31,593 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13126/bunny-ball-ii-mabank
+2026-03-31 13:48:32,330 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12342/ceb-easter-bash-one-day-saturday
+2026-03-31 13:48:33,111 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12702/easter-1-day-tcbsa
+2026-03-31 13:48:35,235 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:48:35,245 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 13:48:35,686 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 13:48:35,822 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 13:48:35,822 - INFO - Batch 1 completed. Waiting 33.30s before next batch.
+2026-03-31 13:49:09,126 - INFO - Processing batch 2/23.
+2026-03-31 13:49:09,126 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12445/easter-one-day-legacy-park-powered-by-ranch-baseball-13u
+2026-03-31 13:49:09,962 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12443/peeps-and-pitches-easter-classic-denton-one-day-saturday-only
+2026-03-31 13:49:10,683 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12667/easter-bash
+2026-03-31 13:49:11,561 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12431/usab-easter-tourney-100-entry-pap
+2026-03-31 13:49:12,353 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12120/3rd-annual-easter-classic
+2026-03-31 13:49:13,215 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12590/bases-loaded-all-teams-receive-custom-jerseys
+2026-03-31 13:49:14,119 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12314/brawl-seawall-qualifier
+2026-03-31 13:49:15,316 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12389/brawl-seawall-qualifier
+2026-03-31 13:49:16,202 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12343/ceb-spring-heat
+2026-03-31 13:49:16,940 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12716/coastal-bend-april-diamond-showdown
+2026-03-31 13:49:18,230 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:49:18,239 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:49:18,239 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:49:18,240 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-03-31 13:49:18,696 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-03-31 13:49:18,840 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 13:49:18,840 - INFO - Batch 2 completed. Waiting 33.44s before next batch.
+2026-03-31 13:49:52,278 - INFO - Processing batch 3/23.
+2026-03-31 13:49:52,279 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11627/crossroads-clash-brawl-seawall-qualifier
+2026-03-31 13:49:53,332 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12915/dinger-derby
+2026-03-31 13:49:54,115 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12937/grand-slam-tournament
+2026-03-31 13:49:54,921 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11910/mavs-ballpark-downtown-spring-shootout-12u-d3-wood-bat
+2026-03-31 13:49:55,657 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11789/ncs-dfw-super-nit-tsb
+2026-03-31 13:49:56,532 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12006/piney-woods-battle-no-pap
+2026-03-31 13:49:57,258 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11934/showdown-in-fallstown-100-turf-complex
+2026-03-31 13:49:58,217 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13051/south-padre-april-diamond-showdown
+2026-03-31 13:49:59,017 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12400/spring-slam-legacy-park-powered-by-ranch-baseball-10u-14u
+2026-03-31 13:49:59,754 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12278/the-ranch-spring-bash-denton-area
+2026-03-31 13:50:00,810 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:50:00,820 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:50:00,821 - INFO - [Excel] Wrote rows 23..32 (key col 1)
+2026-03-31 13:50:01,270 - INFO - [Excel] Appended 10 rows. New bottom row: 32.
+2026-03-31 13:50:01,411 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 13:50:01,412 - INFO - Batch 3 completed. Waiting 32.95s before next batch.
+2026-03-31 13:50:34,365 - INFO - Processing batch 4/23.
+2026-03-31 13:50:34,365 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12432/usab-golden-glove-100-entry-pap
+2026-03-31 13:50:35,802 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12420/bunny-bash-baseball-tournament
+2026-03-31 13:50:36,674 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12591/2nd-annual-firefighters-suicide-prevention-free-registration-just-pap
+2026-03-31 13:50:37,519 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12288/battle-of-the-corridors-championship
+2026-03-31 13:50:38,433 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12048/bring-the-hits-the-hardball-invitational-tournament-series-ring-events-4-game-min-8u-10u-12u
+2026-03-31 13:50:39,357 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12344/ceb-spring-showdown
+2026-03-31 13:50:40,083 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12968/coastal-bend-spring-spectacular
+2026-03-31 13:50:40,938 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12414/denton-spring-swing-classic
+2026-03-31 13:50:41,710 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11911/mavs-ballpark-downtown-spring-shootout-10u-d3
+2026-03-31 13:50:42,494 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12464/post-tax-man-matchup-4-game-guarantee-on-turf
+2026-03-31 13:50:44,068 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:50:44,074 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:50:44,077 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:50:44,077 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:50:44,078 - INFO - [Excel] Wrote rows 33..42 (key col 1)
+2026-03-31 13:50:44,538 - INFO - [Excel] Appended 10 rows. New bottom row: 42.
+2026-03-31 13:50:44,668 - INFO - Saved batch 4 to Excel (template append).
+2026-03-31 13:50:44,668 - INFO - Batch 4 completed. Waiting 34.22s before next batch.
+2026-03-31 13:51:18,889 - INFO - Processing batch 5/23.
+2026-03-31 13:51:18,889 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12926/rec-no-hitter-1st-and-2nd-place-teams-wins-batting-gloves
+2026-03-31 13:51:19,660 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12116/riverbend-battle
+2026-03-31 13:51:20,558 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12813/rya-triple-play-bash
+2026-03-31 13:51:21,357 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11890/spring-classic
+2026-03-31 13:51:22,176 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12401/spring-slam-legacy-park-powered-by-ranch-baseball-9u-13u
+2026-03-31 13:51:22,967 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12315/spring-slugfest
+2026-03-31 13:51:24,825 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11790/tsb-cowboy-classic
+2026-03-31 13:51:25,804 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12433/usab-wood-bat-tournament-100-entry-pap
+2026-03-31 13:51:26,599 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12316/brawl-seawall-qualifier
+2026-03-31 13:51:27,392 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13075/brawl-seawall-qualifier
+2026-03-31 13:51:28,519 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:51:28,529 - INFO - [Excel] Wrote rows 43..52 (key col 1)
+2026-03-31 13:51:28,995 - INFO - [Excel] Appended 10 rows. New bottom row: 52.
+2026-03-31 13:51:29,128 - INFO - Saved batch 5 to Excel (template append).
+2026-03-31 13:51:29,129 - INFO - Batch 5 completed. Waiting 30.37s before next batch.
+2026-03-31 13:51:59,499 - INFO - Processing batch 6/23.
+2026-03-31 13:51:59,499 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12865/brawl-seawall-qualifier-greenville-wrightwright
+2026-03-31 13:52:00,347 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12327/brawl-seawall-qualifier-pap
+2026-03-31 13:52:01,163 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12345/ceb-april-shootout
+2026-03-31 13:52:01,923 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12760/grand-slam-at-the-village-7u-8u
+2026-03-31 13:52:02,696 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13057/laredo-spring-spectacular
+2026-03-31 13:52:03,604 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12022/line-drives-for-liz
+2026-03-31 13:52:05,296 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11912/mavs-ballpark-downtown-spring-shootout-11u-open
+2026-03-31 13:52:06,560 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11935/red-river-classic-100-turf-complex
+2026-03-31 13:52:07,549 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12843/spring-classic-sliding-mats-to-winning-teams-in-each-division
+2026-03-31 13:52:09,216 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12773/spring-showdown-no-gate-fee
+2026-03-31 13:52:10,600 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:52:10,604 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:52:10,606 - INFO - [Excel] Wrote rows 53..62 (key col 1)
+2026-03-31 13:52:10,996 - INFO - [Excel] Appended 10 rows. New bottom row: 62.
+2026-03-31 13:52:11,123 - INFO - Saved batch 6 to Excel (template append).
+2026-03-31 13:52:11,123 - INFO - Batch 6 completed. Waiting 32.73s before next batch.
+2026-03-31 13:52:43,858 - INFO - Processing batch 7/23.
+2026-03-31 13:52:43,858 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12402/spring-slam-legacy-park-powered-by-ranch-baseball-12u-14u
+2026-03-31 13:52:44,803 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12707/the-ranch-little-elm-high-school-all-turf-10d2
+2026-03-31 13:52:45,583 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11791/tsb-texas-open-series-2
+2026-03-31 13:52:46,350 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12434/usab-gauntlet-tournament-100-entry-pap
+2026-03-31 13:52:47,421 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12049/bring-the-hits-the-hardball-invitational-tournament-series-ring-events-4-game-min-9u-11u
+2026-03-31 13:52:48,744 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12354/ceb-central-texas-state-tournament
+2026-03-31 13:52:49,726 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12465/cinco-de-mayo-4-game-guarantee-on-turf
+2026-03-31 13:52:50,590 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12318/ellis-county-highway-287-showdown
+2026-03-31 13:52:51,502 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13127/hawks-nest-10u-open
+2026-03-31 13:52:52,399 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12593/kaufman-classic-free-registration-just-pap
+2026-03-31 13:52:53,877 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:52:53,889 - INFO - [Excel] Wrote rows 63..72 (key col 1)
+2026-03-31 13:52:54,455 - INFO - [Excel] Appended 10 rows. New bottom row: 72.
+2026-03-31 13:52:54,612 - INFO - Saved batch 7 to Excel (template append).
+2026-03-31 13:52:54,613 - INFO - Batch 7 completed. Waiting 33.75s before next batch.
+2026-03-31 13:53:28,364 - INFO - Processing batch 8/23.
+2026-03-31 13:53:28,365 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11913/mavs-ballpark-downtown-diamond-duel-12u-open-wood-bat
+2026-03-31 13:53:29,174 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12761/no-hitter-at-the-village-12u-open
+2026-03-31 13:53:29,958 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12927/rec-grand-slam-free-registration-just-pap
+2026-03-31 13:53:30,756 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12717/south-coast-spring-super-series-nit-tournament-of-champions-win-a-world-series-berth
+2026-03-31 13:53:31,722 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12403/spring-showdown-legacy-park-powered-by-ranch-baseball-11u-13u
+2026-03-31 13:53:32,638 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12143/temple-showdown-pap
+2026-03-31 13:53:34,027 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12279/the-ranch-spring-showdown-denton-area
+2026-03-31 13:53:34,808 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11792/tsb-turntwo-classic
+2026-03-31 13:53:35,630 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12023/twisted-part-3-hosted-by-twisted-lines-free-jerseys-to-winners
+2026-03-31 13:53:36,426 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12435/usab-cinco-de-mayo-wood-bat-tournament-100-entry-pap
+2026-03-31 13:53:37,724 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:53:37,731 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:53:37,731 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:53:37,734 - INFO - [Excel] Wrote rows 73..82 (key col 1)
+2026-03-31 13:53:38,229 - INFO - [Excel] Appended 10 rows. New bottom row: 82.
+2026-03-31 13:53:38,374 - INFO - Saved batch 8 to Excel (template append).
+2026-03-31 13:53:38,375 - INFO - Batch 8 completed. Waiting 33.44s before next batch.
+2026-03-31 13:54:11,813 - INFO - Processing batch 9/23.
+2026-03-31 13:54:11,813 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12957/bases-loaded-sunday-only
+2026-03-31 13:54:13,055 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12088/mothers-day-showdown-on-i-30-saturday-only-pap
+2026-03-31 13:54:13,758 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13093/rio-grande-valley-mothers-day-diamond-one-day-classic-1-day-saturday-only-event
+2026-03-31 13:54:14,529 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12436/usab-mothers-day-tournament-100-entry-pap
+2026-03-31 13:54:15,301 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11936/5th-annual-kp3-tourney-week-1-glove-tourney-100-turf-complex
+2026-03-31 13:54:16,031 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11625/brawl-seawall-pap
+2026-03-31 13:54:16,795 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12346/ceb-mothers-day-mania
+2026-03-31 13:54:17,536 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12319/dugout-turf-wars
+2026-03-31 13:54:18,535 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12042/hitting-bombs-for-moms
+2026-03-31 13:54:19,314 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11914/mavs-ballpark-downtown-diamond-duel-10u-open
+2026-03-31 13:54:20,706 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:54:20,712 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:54:20,716 - INFO - [Excel] Wrote rows 83..92 (key col 1)
+2026-03-31 13:54:21,185 - INFO - [Excel] Appended 10 rows. New bottom row: 92.
+2026-03-31 13:54:21,327 - INFO - Saved batch 9 to Excel (template append).
+2026-03-31 13:54:21,327 - INFO - Batch 9 completed. Waiting 31.06s before next batch.
+2026-03-31 13:54:52,385 - INFO - Processing batch 10/23.
+2026-03-31 13:54:52,385 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12390/may-dirt-wars
+2026-03-31 13:54:53,189 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11891/mothers-day-classic
+2026-03-31 13:54:53,933 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12844/mothers-day-classic
+2026-03-31 13:54:54,841 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12928/rec-walk-off
+2026-03-31 13:54:55,579 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12404/spring-showdown-legacy-park-powered-by-ranch-baseball-10u-14u
+2026-03-31 13:54:56,396 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12708/the-ranch-little-elm-high-school-all-turf-11d3
+2026-03-31 13:54:57,176 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11793/tsb-mothers-day-classic
+2026-03-31 13:54:57,938 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12421/sun-city-showdown
+2026-03-31 13:54:58,716 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12355/ceb-south-texas-state-tournament
+2026-03-31 13:54:59,508 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13123/coastal-bend-may-madness-classic
+2026-03-31 13:55:00,628 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:55:00,639 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:55:00,639 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:55:00,640 - INFO - [Excel] Wrote rows 93..102 (key col 1)
+2026-03-31 13:55:01,098 - INFO - [Excel] Appended 10 rows. New bottom row: 102.
+2026-03-31 13:55:01,234 - INFO - Saved batch 10 to Excel (template append).
+2026-03-31 13:55:01,234 - INFO - Batch 10 completed. Waiting 33.93s before next batch.
+2026-03-31 13:55:35,168 - INFO - Processing batch 11/23.
+2026-03-31 13:55:35,169 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12121/coastal-bend-super-nit
+2026-03-31 13:55:36,065 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12595/ete-bash-free-registration-just-pap
+2026-03-31 13:55:36,960 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13128/hawks-nest-9u-open
+2026-03-31 13:55:37,701 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11915/mavs-ballpark-downtown-diamond-duel-9u-open
+2026-03-31 13:55:38,438 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12043/oil-derrick-classic
+2026-03-31 13:55:39,228 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12320/patriot-games
+2026-03-31 13:55:40,006 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12719/patriot-games
+2026-03-31 13:55:41,054 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12720/patriot-games
+2026-03-31 13:55:41,862 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12814/rya-mayfest-home-run-bash
+2026-03-31 13:55:42,634 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12144/temple-mayhem-pap
+2026-03-31 13:55:43,812 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:55:43,821 - INFO - [Excel] Wrote rows 103..112 (key col 1)
+2026-03-31 13:55:44,312 - INFO - [Excel] Appended 10 rows. New bottom row: 112.
+2026-03-31 13:55:44,462 - INFO - Saved batch 11 to Excel (template append).
+2026-03-31 13:55:44,463 - INFO - Batch 11 completed. Waiting 31.75s before next batch.
+2026-03-31 13:56:16,217 - INFO - Processing batch 12/23.
+2026-03-31 13:56:16,217 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12709/the-ranch-little-elm-high-school-all-turf-9d3
+2026-03-31 13:56:17,036 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13144/the-ranch-the-salvage-yard-all-turf-9d3
+2026-03-31 13:56:17,933 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12280/the-ranch-state-tournament-8open-10d3-12d3-13d3
+2026-03-31 13:56:18,856 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12762/triple-play-bash-at-the-village-9u
+2026-03-31 13:56:20,104 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11794/tsb-mayfest-grand-slam
+2026-03-31 13:56:21,067 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12437/usab-home-run-battle-100-entry-pap
+2026-03-31 13:56:21,967 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12958/no-hitter-sunday-only
+2026-03-31 13:56:22,762 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12658/north-texas-high-school-shootout-1-4-game-guarantee-ages-14-18
+2026-03-31 13:56:23,531 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13129/hawks-nest-11u-open
+2026-03-31 13:56:24,310 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11937/5th-annual-kp3-tourney-week-2-glove-tourney-100-turf-complex
+2026-03-31 13:56:25,798 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:56:25,807 - INFO - [Excel] Wrote rows 113..122 (key col 1)
+2026-03-31 13:56:26,241 - INFO - [Excel] Appended 10 rows. New bottom row: 122.
+2026-03-31 13:56:26,374 - INFO - Saved batch 12 to Excel (template append).
+2026-03-31 13:56:26,374 - INFO - Batch 12 completed. Waiting 30.73s before next batch.
+2026-03-31 13:56:57,105 - INFO - Processing batch 13/23.
+2026-03-31 13:56:57,106 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12416/all-american-baseball-battle-denton
+2026-03-31 13:56:57,898 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12050/bring-the-hits-the-hardball-invitational-tournament-series-ring-events-4-game-min-8ukp-10u-12u
+2026-03-31 13:56:58,930 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12347/ceb-may-classic
+2026-03-31 13:56:59,671 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12872/ceb-swing-for-the-rings
+2026-03-31 13:57:00,486 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12117/diamond-duel-at-riverbend
+2026-03-31 13:57:01,382 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12044/east-texas-state-tournament
+2026-03-31 13:57:02,404 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12596/going-yard
+2026-03-31 13:57:03,485 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11916/mavs-ballpark-downtown-diamond-duel-11u-d2
+2026-03-31 13:57:04,253 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12916/remember-the-fallen
+2026-03-31 13:57:04,998 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13124/south-texas-spring-super-series-nit-tournament-of-champions-win-a-world-series-berth
+2026-03-31 13:57:06,377 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:57:06,383 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:57:06,383 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 13:57:06,386 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:57:06,386 - INFO - [Excel] Wrote rows 123..132 (key col 1)
+2026-03-31 13:57:06,849 - INFO - [Excel] Appended 10 rows. New bottom row: 132.
+2026-03-31 13:57:06,981 - INFO - Saved batch 13 to Excel (template append).
+2026-03-31 13:57:06,982 - INFO - Batch 13 completed. Waiting 30.91s before next batch.
+2026-03-31 13:57:37,897 - INFO - Processing batch 14/23.
+2026-03-31 13:57:37,897 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12195/texas-state-tournament
+2026-03-31 13:57:38,746 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11795/texas-state-tournament-tsb
+2026-03-31 13:57:39,593 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12710/the-ranch-little-elm-high-school-all-turf-7open
+2026-03-31 13:57:40,336 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12438/usab-memorial-day-100-entry-pap
+2026-03-31 13:57:41,204 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12405/5gg-memorial-day-showdown-legacy-park-powered-by-ranch-baseball-9u-13u
+2026-03-31 13:57:42,193 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12660/north-texas-high-school-shootout-2-4-game-guarantee-ages-14-18
+2026-03-31 13:57:43,025 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12122/banana-ball-weekend-2
+2026-03-31 13:57:43,806 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12356/ceb-gulf-coast-state-tournament
+2026-03-31 13:57:44,561 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12670/college-player-classic
+2026-03-31 13:57:45,464 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12321/ellis-county-jam
+2026-03-31 13:57:46,716 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:57:46,723 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.1
+2026-03-31 13:57:46,724 - INFO - [Excel] Wrote rows 133..142 (key col 1)
+2026-03-31 13:57:47,182 - INFO - [Excel] Appended 10 rows. New bottom row: 142.
+2026-03-31 13:57:47,312 - INFO - Saved batch 14 to Excel (template append).
+2026-03-31 13:57:47,313 - INFO - Batch 14 completed. Waiting 34.50s before next batch.
+2026-03-31 13:58:21,811 - INFO - Processing batch 15/23.
+2026-03-31 13:58:21,811 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13125/laredo-spring-super-series-nit-tournament-of-champions-win-a-world-series-berth
+2026-03-31 13:58:22,644 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12415/lonestar-showdown-denton
+2026-03-31 13:58:23,408 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11917/mavs-ballpark-downtown-diamond-duel-12u-d2-wood-bat
+2026-03-31 13:58:24,343 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12866/north-texas-showdown
+2026-03-31 13:58:25,127 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12929/rec-baseball
+2026-03-31 13:58:25,916 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11892/schools-out-for-summer
+2026-03-31 13:58:26,801 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12406/spring-showdown-legacy-park-powered-by-ranch-baseball-12u-14u
+2026-03-31 13:58:27,536 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12338/summer-slam-pap
+2026-03-31 13:58:28,405 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12711/the-ranch-little-elm-high-school-all-turf-8open
+2026-03-31 13:58:29,097 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12845/triple-play-bash
+2026-03-31 13:58:30,267 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:58:30,272 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:58:30,275 - INFO - [Excel] Wrote rows 143..152 (key col 1)
+2026-03-31 13:58:30,767 - INFO - [Excel] Appended 10 rows. New bottom row: 152.
+2026-03-31 13:58:30,905 - INFO - Saved batch 15 to Excel (template append).
+2026-03-31 13:58:30,905 - INFO - Batch 15 completed. Waiting 31.21s before next batch.
+2026-03-31 13:59:02,116 - INFO - Processing batch 16/23.
+2026-03-31 13:59:02,116 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11796/tsb-lonestar-classic
+2026-03-31 13:59:03,004 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12439/usab-summer-swing-off-100-entry-pap
+2026-03-31 13:59:03,983 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12661/north-texas-high-school-shootout-3-4-game-guarantee-ages-14-18
+2026-03-31 13:59:04,799 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12366/belikecj-2026-powered-by-swing-lab-baseball-academy-pap
+2026-03-31 13:59:05,633 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11938/15th-annual-texoma-shootout-100-turf-complex
+2026-03-31 13:59:06,522 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13101/6-7-swing-into-summer-tournament
+2026-03-31 13:59:07,375 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12322/brawl-seawall-qualifier
+2026-03-31 13:59:08,167 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12391/brawl-seawall-qualifier
+2026-03-31 13:59:09,072 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12348/ceb-june-bash
+2026-03-31 13:59:09,944 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12763/june-classic-at-the-village-10u
+2026-03-31 13:59:11,073 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:59:11,082 - INFO - [Excel] Wrote rows 153..162 (key col 1)
+2026-03-31 13:59:11,531 - INFO - [Excel] Appended 10 rows. New bottom row: 162.
+2026-03-31 13:59:11,663 - INFO - Saved batch 16 to Excel (template append).
+2026-03-31 13:59:11,663 - INFO - Batch 16 completed. Waiting 30.15s before next batch.
+2026-03-31 13:59:41,810 - INFO - Processing batch 17/23.
+2026-03-31 13:59:41,811 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11918/mavs-ballpark-world-series-warm-up-10u-d2
+2026-03-31 13:59:42,557 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12930/rec-summer-ball
+2026-03-31 13:59:43,308 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13138/south-padre-summer-kickoff-classic
+2026-03-31 13:59:44,643 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12598/summer-ball
+2026-03-31 13:59:46,059 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12407/summer-bash-legacy-park-powered-by-ranch-baseball-11u-13u
+2026-03-31 13:59:47,748 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12045/the-final-countdown
+2026-03-31 13:59:48,789 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12281/the-ranch-summer-round-up-denton-area
+2026-03-31 13:59:49,541 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11797/tsb-beat-the-heat
+2026-03-31 13:59:50,815 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12440/usab-super-series-classic-100-entry-pap
+2026-03-31 13:59:53,640 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12123/world-series-warm-up
+2026-03-31 13:59:57,595 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 13:59:57,602 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 13:59:57,606 - INFO - [Excel] Wrote rows 163..172 (key col 1)
+2026-03-31 13:59:58,053 - INFO - [Excel] Appended 10 rows. New bottom row: 172.
+2026-03-31 13:59:58,182 - INFO - Saved batch 17 to Excel (template append).
+2026-03-31 13:59:58,183 - INFO - Batch 17 completed. Waiting 34.67s before next batch.
+2026-03-31 14:00:32,855 - INFO - Processing batch 18/23.
+2026-03-31 14:00:32,855 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13130/hawks-nest-8u-open
+2026-03-31 14:00:34,657 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12662/north-texas-high-school-shootout-4-4-game-guarantee-ages-14-18
+2026-03-31 14:00:35,561 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11776/17th-annual-ncs-dfw-world-series-even-age
+2026-03-31 14:00:36,945 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12349/ceb-world-series-qualifier
+2026-03-31 14:00:37,731 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12417/denton-diamond-wars-all-star-edition
+2026-03-31 14:00:38,494 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11919/mavs-ballpark-world-series-warm-up-11u-d3
+2026-03-31 14:00:39,311 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12855/ncs-summer-slam
+2026-03-31 14:00:40,078 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11626/showdown-at-the-crossroads
+2026-03-31 14:00:40,913 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12408/summer-bash-legacy-park-powered-by-ranch-baseball-9u-13u
+2026-03-31 14:00:41,870 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12323/summer-sizzler
+2026-03-31 14:00:43,829 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:00:43,838 - INFO - [Excel] Wrote rows 173..182 (key col 1)
+2026-03-31 14:00:44,290 - INFO - [Excel] Appended 10 rows. New bottom row: 182.
+2026-03-31 14:00:44,417 - INFO - Saved batch 18 to Excel (template append).
+2026-03-31 14:00:44,417 - INFO - Batch 18 completed. Waiting 32.03s before next batch.
+2026-03-31 14:01:16,445 - INFO - Processing batch 19/23.
+2026-03-31 14:01:16,445 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12846/summer-slam
+2026-03-31 14:01:17,284 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12712/the-ranch-little-elm-high-school-all-turf-9open
+2026-03-31 14:01:17,998 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12393/tsb-home-runs-for-dads
+2026-03-31 14:01:18,849 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11200/brawl-seawall-world-series
+2026-03-31 14:01:19,657 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11818/4th-annual-rec-world-series
+2026-03-31 14:01:20,493 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11777/17th-annual-ncs-dfw-world-series-odd-age
+2026-03-31 14:01:23,210 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12350/ceb-bring-the-heat
+2026-03-31 14:01:24,002 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12873/ceb-june-shootout
+2026-03-31 14:01:25,238 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11628/crossroads-diamond-duel
+2026-03-31 14:01:26,036 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11920/mavs-ballpark-world-series-warm-up-12-d3-wood-bat
+2026-03-31 14:01:27,223 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:01:27,230 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 14:01:27,230 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 14:01:27,231 - INFO - [Excel] Wrote rows 183..192 (key col 1)
+2026-03-31 14:01:27,682 - INFO - [Excel] Appended 10 rows. New bottom row: 192.
+2026-03-31 14:01:27,813 - INFO - Saved batch 19 to Excel (template append).
+2026-03-31 14:01:27,813 - INFO - Batch 19 completed. Waiting 32.52s before next batch.
+2026-03-31 14:02:00,338 - INFO - Processing batch 20/23.
+2026-03-31 14:02:00,338 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12409/summer-bash-legacy-park-powered-by-ranch-baseball-10u-14u
+2026-03-31 14:02:01,771 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12394/tsb-midsummer-clash
+2026-03-31 14:02:02,986 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12324/turf-wars
+2026-03-31 14:02:05,049 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11178/brawl-seawall-world-series
+2026-03-31 14:02:06,050 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12663/north-texas-high-school-shootout-5-4-game-guarntee-ages-14-18
+2026-03-31 14:02:07,375 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12351/ceb-june-classic
+2026-03-31 14:02:08,943 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11921/mavs-ballpark-world-series-warm-up-10u-d3
+2026-03-31 14:02:11,328 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12668/mid-summer-classic
+2026-03-31 14:02:14,334 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12600/stolen-base
+2026-03-31 14:02:15,246 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12410/summer-bash-legacy-park-powered-by-ranch-baseball-12u-14u
+2026-03-31 14:02:16,461 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:02:16,471 - INFO - [Excel] Wrote rows 193..202 (key col 1)
+2026-03-31 14:02:16,934 - INFO - [Excel] Appended 10 rows. New bottom row: 202.
+2026-03-31 14:02:17,064 - INFO - Saved batch 20 to Excel (template append).
+2026-03-31 14:02:17,065 - INFO - Batch 20 completed. Waiting 32.03s before next batch.
+2026-03-31 14:02:49,092 - INFO - Processing batch 21/23.
+2026-03-31 14:02:49,092 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12669/summer-slam
+2026-03-31 14:02:49,957 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11939/summer-slam-2k26-100-turf-complex
+2026-03-31 14:02:51,919 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12764/summer-slam-at-the-village-11u
+2026-03-31 14:02:52,849 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12282/the-ranch-summer-showdown-denton-area
+2026-03-31 14:02:53,556 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12664/north-texas-high-school-shootout-6-4-game-guarantee-ages-14-18
+2026-03-31 14:02:54,969 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12352/ceb-heating-up
+2026-03-31 14:02:55,861 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13131/hawks-nest-7u
+2026-03-31 14:02:56,741 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11922/mavs-ballpark-downtown-freedom-fest-11u-open
+2026-03-31 14:02:57,468 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12357/ceb-central-texas-world-series
+2026-03-31 14:02:58,184 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12665/north-texas-high-school-shootout-7-4-game-guarantee-ages-15-18
+2026-03-31 14:02:59,580 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:02:59,588 - INFO - [Excel] Wrote rows 203..212 (key col 1)
+2026-03-31 14:03:00,045 - INFO - [Excel] Appended 10 rows. New bottom row: 212.
+2026-03-31 14:03:00,171 - INFO - Saved batch 21 to Excel (template append).
+2026-03-31 14:03:00,172 - INFO - Batch 21 completed. Waiting 30.46s before next batch.
+2026-03-31 14:03:30,634 - INFO - Processing batch 22/23.
+2026-03-31 14:03:30,634 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13008/all-star-summer-showdown
+2026-03-31 14:03:31,486 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11923/mavs-ballpark-downtown-freedom-fest-10u-open
+2026-03-31 14:03:32,265 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12945/midlothian-red-white-baseball-classic
+2026-03-31 14:03:33,018 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12602/pinch-hitter
+2026-03-31 14:03:33,753 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12515/post-fireworks-showdown-4-game-guarantee
+2026-03-31 14:03:34,543 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12765/season-finally-at-the-village-12u
+2026-03-31 14:03:35,226 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13139/south-padre-summer-surf-turf-showdown
+2026-03-31 14:03:36,004 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12411/summer-slam-legacy-park-powered-by-ranch-baseball-11u-13u
+2026-03-31 14:03:36,686 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11924/mavs-ballpark-downtown-freedom-fest-12u-open-wood-bat
+2026-03-31 14:03:37,437 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12412/summer-slam-legacy-park-powered-by-ranch-baseball-10u-14u
+2026-03-31 14:03:38,479 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:03:38,486 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 14:03:38,487 - INFO - [Excel] Wrote rows 213..222 (key col 1)
+2026-03-31 14:03:38,914 - INFO - [Excel] Appended 10 rows. New bottom row: 222.
+2026-03-31 14:03:39,076 - INFO - Saved batch 22 to Excel (template append).
+2026-03-31 14:03:39,076 - INFO - Batch 22 completed. Waiting 30.79s before next batch.
+2026-03-31 14:04:09,870 - INFO - Processing batch 23/23.
+2026-03-31 14:04:09,870 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12603/turn-2
+2026-03-31 14:04:10,568 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12847/beat-the-heat
+2026-03-31 14:04:11,557 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12947/firecracker-bash
+2026-03-31 14:04:12,281 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11925/mavs-ballpark-downtown-freedom-fest-9u-open
+2026-03-31 14:04:13,011 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12422/let-freedom-ring-tournament-of-champions
+2026-03-31 14:04:13,804 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12605/kaufman-showdown-ii
+2026-03-31 14:04:15,371 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13009/the-diamond-finale
+2026-03-31 14:04:16,156 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13140/coastal-bend-2026-season-finale-showdown-last-tournament-of-the-2026-season
+2026-03-31 14:04:16,947 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12606/kaufman-classic-ii
+2026-03-31 14:04:17,631 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/13141/south-padre-2026-season-finale-showdown-last-tournament-of-the-2026-season
+2026-03-31 14:04:18,767 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:04:18,775 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 14:04:18,775 - WARNING - [Normalize] Age group '5U' -> '' for key Age-groups.2
+2026-03-31 14:04:18,776 - WARNING - [Normalize] Age group '4U' -> '' for key Age-groups.1
+2026-03-31 14:04:18,776 - INFO - [Excel] Wrote rows 223..232 (key col 1)
+2026-03-31 14:04:19,209 - INFO - [Excel] Appended 10 rows. New bottom row: 232.
+2026-03-31 14:04:19,406 - INFO - Saved batch 23 to Excel (template append).
+2026-03-31 14:04:19,406 - INFO - Completed location: Texas (NCS)
+2026-03-31 14:04:19,407 - INFO - Processing location: Utah (NCS)
+2026-03-31 14:04:19,407 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-UT
+2026-03-31 14:04:19,720 - INFO - Found 2 new event links on page 1 (total 2).
+2026-03-31 14:04:19,722 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 14:04:19,722 - INFO - Total event links collected: 2
+2026-03-31 14:04:19,722 - INFO - Collected 2 event links using https://playncs.com/baseball/Events?countryState=US-UT for Utah (NCS).
+2026-03-31 14:04:19,739 - INFO - Total unique events to process for Utah (NCS): 2
+2026-03-31 14:04:19,742 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Utah_2026-03-31.xlsx
+2026-03-31 14:04:19,742 - INFO - Excel output file for Utah (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Utah_2026-03-31.xlsx
+2026-03-31 14:04:19,742 - INFO - Processing batch 1/1.
+2026-03-31 14:04:19,742 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12770/may-showdown
+2026-03-31 14:04:20,948 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/12774/pioneer-day-bash
+2026-03-31 14:04:22,146 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:04:22,152 - INFO - [Excel] Wrote rows 3..4 (key col 1)
+2026-03-31 14:04:22,544 - INFO - [Excel] Appended 2 rows. New bottom row: 4.
+2026-03-31 14:04:22,567 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 14:04:22,568 - INFO - Completed location: Utah (NCS)
+2026-03-31 14:04:22,568 - INFO - Processing location: Vermont (NCS)
+2026-03-31 14:04:22,568 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-VT
+2026-03-31 14:04:37,843 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 14:04:37,843 - INFO - Total event links collected: 0
+2026-03-31 14:04:37,843 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-VT for Vermont (NCS).
+2026-03-31 14:04:37,854 - INFO - Total unique events to process for Vermont (NCS): 0
+2026-03-31 14:04:37,855 - INFO - No unprocessed events for Vermont (NCS). Skipping Excel creation.
+2026-03-31 14:04:37,855 - INFO - Processing location: Virginia (NCS)
+2026-03-31 14:04:37,855 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-VA
+2026-03-31 14:04:53,089 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 14:04:53,089 - INFO - Total event links collected: 0
+2026-03-31 14:04:53,089 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-VA for Virginia (NCS).
+2026-03-31 14:04:53,099 - INFO - Total unique events to process for Virginia (NCS): 0
+2026-03-31 14:04:53,099 - INFO - No unprocessed events for Virginia (NCS). Skipping Excel creation.
+2026-03-31 14:04:53,099 - INFO - Processing location: Washington (NCS)
+2026-03-31 14:04:53,099 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-WA
+2026-03-31 14:04:53,324 - INFO - Found 1 new event links on page 1 (total 1).
+2026-03-31 14:04:53,326 - INFO - Next button missing or disabled. End of pagination.
+2026-03-31 14:04:53,326 - INFO - Total event links collected: 1
+2026-03-31 14:04:53,326 - INFO - Collected 1 event links using https://playncs.com/baseball/Events?countryState=US-WA for Washington (NCS).
+2026-03-31 14:04:53,339 - INFO - Total unique events to process for Washington (NCS): 1
+2026-03-31 14:04:53,341 - INFO - [Excel] Copied template to Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Washington_2026-03-31.xlsx
+2026-03-31 14:04:53,341 - INFO - Excel output file for Washington (NCS) will be: Tests\2026-03-31\132515_NCSScraper\Sheets\2026-03-31\NCS\Washington_2026-03-31.xlsx
+2026-03-31 14:04:53,341 - INFO - Processing batch 1/1.
+2026-03-31 14:04:53,341 - INFO - Extracting event details from: https://playncs.com/baseball/Events/Details/11615/kennewick-inaugural-summer-championships-4gg
+2026-03-31 14:04:54,517 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 14:04:54,523 - INFO - [Excel] Wrote rows 3..3 (key col 1)
+2026-03-31 14:04:54,940 - INFO - [Excel] Appended 1 rows. New bottom row: 3.
+2026-03-31 14:04:54,953 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 14:04:54,954 - INFO - Completed location: Washington (NCS)
+2026-03-31 14:04:54,954 - INFO - Processing location: West Virginia (NCS)
+2026-03-31 14:04:54,954 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-WV
+2026-03-31 14:05:10,241 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 14:05:10,242 - INFO - Total event links collected: 0
+2026-03-31 14:05:10,242 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-WV for West Virginia (NCS).
+2026-03-31 14:05:10,254 - INFO - Total unique events to process for West Virginia (NCS): 0
+2026-03-31 14:05:10,254 - INFO - No unprocessed events for West Virginia (NCS). Skipping Excel creation.
+2026-03-31 14:05:10,254 - INFO - Processing location: Wisconsin (NCS)
+2026-03-31 14:05:10,254 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-WI
+2026-03-31 14:05:25,502 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 14:05:25,502 - INFO - Total event links collected: 0
+2026-03-31 14:05:25,502 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-WI for Wisconsin (NCS).
+2026-03-31 14:05:25,514 - INFO - Total unique events to process for Wisconsin (NCS): 0
+2026-03-31 14:05:25,514 - INFO - No unprocessed events for Wisconsin (NCS). Skipping Excel creation.
+2026-03-31 14:05:25,514 - INFO - Processing location: Wyoming (NCS)
+2026-03-31 14:05:25,514 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-WY
+2026-03-31 14:05:40,736 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 14:05:40,736 - INFO - Total event links collected: 0
+2026-03-31 14:05:40,736 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-WY for Wyoming (NCS).
+2026-03-31 14:05:40,747 - INFO - Total unique events to process for Wyoming (NCS): 0
+2026-03-31 14:05:40,747 - INFO - No unprocessed events for Wyoming (NCS). Skipping Excel creation.
+2026-03-31 14:05:43,289 - INFO - Effective scraper: PGScraper
+2026-03-31 14:05:43,289 - INFO - Selected location: ALL
+2026-03-31 14:05:43,290 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\140543_PGScraper

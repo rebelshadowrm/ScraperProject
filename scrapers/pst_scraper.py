@@ -3,7 +3,7 @@ import time
 import requests
 from urllib.parse import urlparse, parse_qs
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict
 from us import states  # pip install us
 from common.config import OUTPUT_COLUMNS, VALID_LEVELS  # Assumes these are defined in your project
@@ -26,6 +26,10 @@ class PSTScraper(BaseScraper):
     it falls back to extracting event links from the DOM using Selenium.
     """
     SCRAPER_NAME = "PST"
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = False
+    LOCATIONS_SOURCE = "config"
+    GEOCODE_TIMEOUT_SECONDS = 5
     API_BASE_URL = "https://registrations.premiersportstournaments.com/store/events"
     EVENT_BASE_URL = "https://registrations.premiersportstournaments.com/store/event"
     SCHEDULE_BASE_URL = "https://registrations.premiersportstournaments.com/store/event/schedule/search"
@@ -46,6 +50,18 @@ class PSTScraper(BaseScraper):
             "Origin": "https://registrations.premiersportstournaments.com"
         })
 
+    def _build_future_only_payload(self, page: int) -> Dict[str, str | int]:
+        tomorrow_dt = datetime.now() + timedelta(days=1)
+        tomorrow = f"{tomorrow_dt.month}/{tomorrow_dt.day}/{tomorrow_dt.year}"
+        return {
+            "StartDateString": tomorrow,
+            "EndDateString": "",
+            "Gender": "-1",
+            "SearchToken": "",
+            "Page": page,
+            "sportType": "",
+        }
+
     # -------------------------------------------------------------------------
     # Reverse Geocoding Helper
     # -------------------------------------------------------------------------
@@ -55,7 +71,12 @@ class PSTScraper(BaseScraper):
         Returns a dict with keys: 'venue_name', 'street', 'city', 'state', 'postal_code'.
         """
         # Use the pre-initialized reverse geocoding function.
-        location = self.reverse_func((lat, lon), language="en")
+        try:
+            location = self.reverse_func((lat, lon), language="en", timeout=self.GEOCODE_TIMEOUT_SECONDS)
+        except Exception as e:
+            logger.warning("Reverse geocode failed for (%s, %s): %s", lat, lon, e)
+            return {}
+
         if not location:
             return {}
 
@@ -173,7 +194,7 @@ class PSTScraper(BaseScraper):
         current_page = 1
         while True:
             api_url = f"{self.API_BASE_URL}?storeorganizationid={store_org_id}"
-            payload = {"Page": current_page, "sportType": "Baseball"}
+            payload = self._build_future_only_payload(current_page)
             try:
                 response = self.session.post(api_url, json=payload)
                 response.raise_for_status()

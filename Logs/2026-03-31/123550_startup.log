@@ -1,0 +1,5 @@
+2026-03-31 12:35:50,948 - INFO - Logger initialized.
+2026-03-31 12:35:59,958 - INFO - Selected scraper: NCSScraper
+2026-03-31 12:36:01,786 - INFO - Effective scraper: NCSScraper
+2026-03-31 12:36:01,787 - INFO - Selected location: Wyoming (NCS)
+2026-03-31 12:36:01,791 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\123601_NCSScraper

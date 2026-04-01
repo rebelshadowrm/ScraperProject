@@ -1,0 +1,360 @@
+2026-03-31 16:41:42,863 - INFO - Logger initialized.
+2026-03-31 16:41:42,863 - INFO - Run log created for TopGunScraper.
+2026-03-31 16:41:52,243 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-03-31 16:41:52,243 - INFO - Processing location: Alabama (TopGun)
+2026-03-31 16:41:53,889 - INFO - [TopGun] Collected 0 tournaments for state=AL sport=1
+2026-03-31 16:41:53,891 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=AL&sport=1 for Alabama (TopGun).
+2026-03-31 16:41:53,891 - INFO - Filtering loaded events into output: Alabama (TopGun)
+2026-03-31 16:41:53,892 - INFO - Total unique events to process for Alabama (TopGun): 0
+2026-03-31 16:41:53,892 - INFO - No unprocessed events for Alabama (TopGun). Skipping Excel creation.
+2026-03-31 16:41:53,892 - INFO - Processing location: Arkansas (TopGun)
+2026-03-31 16:41:55,632 - INFO - [TopGun] Collected 0 tournaments for state=AR sport=1
+2026-03-31 16:41:55,634 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=AR&sport=1 for Arkansas (TopGun).
+2026-03-31 16:41:55,634 - INFO - Filtering loaded events into output: Arkansas (TopGun)
+2026-03-31 16:41:55,635 - INFO - Total unique events to process for Arkansas (TopGun): 0
+2026-03-31 16:41:55,635 - INFO - No unprocessed events for Arkansas (TopGun). Skipping Excel creation.
+2026-03-31 16:41:55,635 - INFO - Processing location: Florida (TopGun)
+2026-03-31 16:41:57,067 - INFO - [TopGun] Collected 0 tournaments for state=FL sport=1
+2026-03-31 16:41:57,070 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=FL&sport=1 for Florida (TopGun).
+2026-03-31 16:41:57,070 - INFO - Filtering loaded events into output: Florida (TopGun)
+2026-03-31 16:41:57,071 - INFO - Total unique events to process for Florida (TopGun): 0
+2026-03-31 16:41:57,071 - INFO - No unprocessed events for Florida (TopGun). Skipping Excel creation.
+2026-03-31 16:41:57,071 - INFO - Processing location: Georgia (TopGun)
+2026-03-31 16:41:58,548 - INFO - [TopGun] Collected 5 tournaments for state=GA sport=1
+2026-03-31 16:41:58,551 - INFO - Collected 5 event links using https://topgunstats.com/tournaments?state=GA&sport=1 for Georgia (TopGun).
+2026-03-31 16:41:58,551 - INFO - Filtering loaded events into output: Georgia (TopGun)
+2026-03-31 16:41:58,552 - INFO - Total unique events to process for Georgia (TopGun): 5
+2026-03-31 16:41:58,554 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Georgia_2026-03-31.xlsx
+2026-03-31 16:41:58,554 - INFO - Excel output file for Georgia (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Georgia_2026-03-31.xlsx
+2026-03-31 16:41:58,554 - INFO - Processing batch 1/1.
+2026-03-31 16:41:58,882 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:41:58,889 - INFO - [Excel] Wrote rows 3..7 (key col 1)
+2026-03-31 16:41:59,330 - INFO - [Excel] Appended 5 rows. New bottom row: 7.
+2026-03-31 16:41:59,340 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:41:59,341 - INFO - Completed location: Georgia (TopGun)
+2026-03-31 16:41:59,341 - INFO - Processing location: Indiana (TopGun)
+2026-03-31 16:42:00,886 - INFO - [TopGun] Collected 0 tournaments for state=IN sport=1
+2026-03-31 16:42:00,888 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=IN&sport=1 for Indiana (TopGun).
+2026-03-31 16:42:00,889 - INFO - Filtering loaded events into output: Indiana (TopGun)
+2026-03-31 16:42:00,889 - INFO - Total unique events to process for Indiana (TopGun): 0
+2026-03-31 16:42:00,889 - INFO - No unprocessed events for Indiana (TopGun). Skipping Excel creation.
+2026-03-31 16:42:00,890 - INFO - Processing location: Kentucky (TopGun)
+2026-03-31 16:42:02,263 - INFO - [TopGun] Collected 0 tournaments for state=KY sport=1
+2026-03-31 16:42:02,266 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=KY&sport=1 for Kentucky (TopGun).
+2026-03-31 16:42:02,266 - INFO - Filtering loaded events into output: Kentucky (TopGun)
+2026-03-31 16:42:02,267 - INFO - Total unique events to process for Kentucky (TopGun): 0
+2026-03-31 16:42:02,267 - INFO - No unprocessed events for Kentucky (TopGun). Skipping Excel creation.
+2026-03-31 16:42:02,267 - INFO - Processing location: Louisiana (TopGun)
+2026-03-31 16:42:04,112 - INFO - [TopGun] Collected 0 tournaments for state=LA sport=1
+2026-03-31 16:42:04,114 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=LA&sport=1 for Louisiana (TopGun).
+2026-03-31 16:42:04,114 - INFO - Filtering loaded events into output: Louisiana (TopGun)
+2026-03-31 16:42:04,115 - INFO - Total unique events to process for Louisiana (TopGun): 0
+2026-03-31 16:42:04,115 - INFO - No unprocessed events for Louisiana (TopGun). Skipping Excel creation.
+2026-03-31 16:42:04,115 - INFO - Processing location: North Carolina (TopGun)
+2026-03-31 16:42:05,576 - INFO - [TopGun] Collected 243 tournaments for state=NC sport=1
+2026-03-31 16:42:05,578 - INFO - Collected 243 event links using https://topgunstats.com/tournaments?state=NC&sport=1 for North Carolina (TopGun).
+2026-03-31 16:42:05,578 - INFO - Filtering loaded events into output: North Carolina (TopGun)
+2026-03-31 16:42:05,688 - INFO - Total unique events to process for North Carolina (TopGun): 243
+2026-03-31 16:42:05,690 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\North_Carolina_2026-03-31.xlsx
+2026-03-31 16:42:05,691 - INFO - Excel output file for North Carolina (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\North_Carolina_2026-03-31.xlsx
+2026-03-31 16:42:05,691 - INFO - Processing batch 1/25.
+2026-03-31 16:42:10,286 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:10,295 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 16:42:10,752 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 16:42:10,823 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:42:10,824 - INFO - Batch 1 completed. No wait (API/fast scraper).
+2026-03-31 16:42:10,824 - INFO - Processing batch 2/25.
+2026-03-31 16:42:11,222 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:11,230 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-03-31 16:42:11,659 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-03-31 16:42:11,730 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 16:42:11,730 - INFO - Batch 2 completed. No wait (API/fast scraper).
+2026-03-31 16:42:11,730 - INFO - Processing batch 3/25.
+2026-03-31 16:42:12,216 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:12,225 - INFO - [Excel] Wrote rows 23..32 (key col 1)
+2026-03-31 16:42:12,673 - INFO - [Excel] Appended 10 rows. New bottom row: 32.
+2026-03-31 16:42:12,744 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 16:42:12,744 - INFO - Batch 3 completed. No wait (API/fast scraper).
+2026-03-31 16:42:12,744 - INFO - Processing batch 4/25.
+2026-03-31 16:42:13,148 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:13,156 - INFO - [Excel] Wrote rows 33..42 (key col 1)
+2026-03-31 16:42:13,600 - INFO - [Excel] Appended 10 rows. New bottom row: 42.
+2026-03-31 16:42:13,678 - INFO - Saved batch 4 to Excel (template append).
+2026-03-31 16:42:13,679 - INFO - Batch 4 completed. No wait (API/fast scraper).
+2026-03-31 16:42:13,679 - INFO - Processing batch 5/25.
+2026-03-31 16:42:14,170 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:14,177 - INFO - [Excel] Wrote rows 43..52 (key col 1)
+2026-03-31 16:42:14,612 - INFO - [Excel] Appended 10 rows. New bottom row: 52.
+2026-03-31 16:42:14,684 - INFO - Saved batch 5 to Excel (template append).
+2026-03-31 16:42:14,684 - INFO - Batch 5 completed. No wait (API/fast scraper).
+2026-03-31 16:42:14,685 - INFO - Processing batch 6/25.
+2026-03-31 16:42:15,084 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:15,093 - INFO - [Excel] Wrote rows 53..62 (key col 1)
+2026-03-31 16:42:15,529 - INFO - [Excel] Appended 10 rows. New bottom row: 62.
+2026-03-31 16:42:15,601 - INFO - Saved batch 6 to Excel (template append).
+2026-03-31 16:42:15,602 - INFO - Batch 6 completed. No wait (API/fast scraper).
+2026-03-31 16:42:15,602 - INFO - Processing batch 7/25.
+2026-03-31 16:42:16,001 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:16,009 - INFO - [Excel] Wrote rows 63..72 (key col 1)
+2026-03-31 16:42:16,456 - INFO - [Excel] Appended 10 rows. New bottom row: 72.
+2026-03-31 16:42:16,529 - INFO - Saved batch 7 to Excel (template append).
+2026-03-31 16:42:16,529 - INFO - Batch 7 completed. No wait (API/fast scraper).
+2026-03-31 16:42:16,529 - INFO - Processing batch 8/25.
+2026-03-31 16:42:17,056 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:17,064 - INFO - [Excel] Wrote rows 73..82 (key col 1)
+2026-03-31 16:42:17,503 - INFO - [Excel] Appended 10 rows. New bottom row: 82.
+2026-03-31 16:42:17,571 - INFO - Saved batch 8 to Excel (template append).
+2026-03-31 16:42:17,571 - INFO - Batch 8 completed. No wait (API/fast scraper).
+2026-03-31 16:42:17,571 - INFO - Processing batch 9/25.
+2026-03-31 16:42:17,980 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:17,990 - INFO - [Excel] Wrote rows 83..92 (key col 1)
+2026-03-31 16:42:18,438 - INFO - [Excel] Appended 10 rows. New bottom row: 92.
+2026-03-31 16:42:18,516 - INFO - Saved batch 9 to Excel (template append).
+2026-03-31 16:42:18,516 - INFO - Batch 9 completed. No wait (API/fast scraper).
+2026-03-31 16:42:18,516 - INFO - Processing batch 10/25.
+2026-03-31 16:42:19,065 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:19,073 - INFO - [Excel] Wrote rows 93..102 (key col 1)
+2026-03-31 16:42:19,537 - INFO - [Excel] Appended 10 rows. New bottom row: 102.
+2026-03-31 16:42:19,611 - INFO - Saved batch 10 to Excel (template append).
+2026-03-31 16:42:19,611 - INFO - Batch 10 completed. No wait (API/fast scraper).
+2026-03-31 16:42:19,611 - INFO - Processing batch 11/25.
+2026-03-31 16:42:20,033 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:20,042 - INFO - [Excel] Wrote rows 103..112 (key col 1)
+2026-03-31 16:42:20,498 - INFO - [Excel] Appended 10 rows. New bottom row: 112.
+2026-03-31 16:42:20,576 - INFO - Saved batch 11 to Excel (template append).
+2026-03-31 16:42:20,577 - INFO - Batch 11 completed. No wait (API/fast scraper).
+2026-03-31 16:42:20,577 - INFO - Processing batch 12/25.
+2026-03-31 16:42:21,006 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:21,014 - INFO - [Excel] Wrote rows 113..122 (key col 1)
+2026-03-31 16:42:21,470 - INFO - [Excel] Appended 10 rows. New bottom row: 122.
+2026-03-31 16:42:21,543 - INFO - Saved batch 12 to Excel (template append).
+2026-03-31 16:42:21,543 - INFO - Batch 12 completed. No wait (API/fast scraper).
+2026-03-31 16:42:21,543 - INFO - Processing batch 13/25.
+2026-03-31 16:42:22,104 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:22,111 - INFO - [Excel] Wrote rows 123..132 (key col 1)
+2026-03-31 16:42:22,580 - INFO - [Excel] Appended 10 rows. New bottom row: 132.
+2026-03-31 16:42:22,657 - INFO - Saved batch 13 to Excel (template append).
+2026-03-31 16:42:22,657 - INFO - Batch 13 completed. No wait (API/fast scraper).
+2026-03-31 16:42:22,657 - INFO - Processing batch 14/25.
+2026-03-31 16:42:23,084 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:23,093 - INFO - [Excel] Wrote rows 133..142 (key col 1)
+2026-03-31 16:42:23,568 - INFO - [Excel] Appended 10 rows. New bottom row: 142.
+2026-03-31 16:42:23,643 - INFO - Saved batch 14 to Excel (template append).
+2026-03-31 16:42:23,643 - INFO - Batch 14 completed. No wait (API/fast scraper).
+2026-03-31 16:42:23,644 - INFO - Processing batch 15/25.
+2026-03-31 16:42:24,181 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:24,191 - INFO - [Excel] Wrote rows 143..152 (key col 1)
+2026-03-31 16:42:24,666 - INFO - [Excel] Appended 10 rows. New bottom row: 152.
+2026-03-31 16:42:24,736 - INFO - Saved batch 15 to Excel (template append).
+2026-03-31 16:42:24,737 - INFO - Batch 15 completed. No wait (API/fast scraper).
+2026-03-31 16:42:24,737 - INFO - Processing batch 16/25.
+2026-03-31 16:42:25,195 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:25,204 - INFO - [Excel] Wrote rows 153..162 (key col 1)
+2026-03-31 16:42:25,704 - INFO - [Excel] Appended 10 rows. New bottom row: 162.
+2026-03-31 16:42:25,778 - INFO - Saved batch 16 to Excel (template append).
+2026-03-31 16:42:25,778 - INFO - Batch 16 completed. No wait (API/fast scraper).
+2026-03-31 16:42:25,778 - INFO - Processing batch 17/25.
+2026-03-31 16:42:26,329 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:26,337 - INFO - [Excel] Wrote rows 163..172 (key col 1)
+2026-03-31 16:42:26,832 - INFO - [Excel] Appended 10 rows. New bottom row: 172.
+2026-03-31 16:42:26,906 - INFO - Saved batch 17 to Excel (template append).
+2026-03-31 16:42:26,907 - INFO - Batch 17 completed. No wait (API/fast scraper).
+2026-03-31 16:42:26,907 - INFO - Processing batch 18/25.
+2026-03-31 16:42:27,345 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:27,354 - INFO - [Excel] Wrote rows 173..182 (key col 1)
+2026-03-31 16:42:27,832 - INFO - [Excel] Appended 10 rows. New bottom row: 182.
+2026-03-31 16:42:27,915 - INFO - Saved batch 18 to Excel (template append).
+2026-03-31 16:42:27,915 - INFO - Batch 18 completed. No wait (API/fast scraper).
+2026-03-31 16:42:27,916 - INFO - Processing batch 19/25.
+2026-03-31 16:42:28,359 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:28,368 - INFO - [Excel] Wrote rows 183..192 (key col 1)
+2026-03-31 16:42:28,857 - INFO - [Excel] Appended 10 rows. New bottom row: 192.
+2026-03-31 16:42:28,933 - INFO - Saved batch 19 to Excel (template append).
+2026-03-31 16:42:28,934 - INFO - Batch 19 completed. No wait (API/fast scraper).
+2026-03-31 16:42:28,934 - INFO - Processing batch 20/25.
+2026-03-31 16:42:29,522 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:29,531 - INFO - [Excel] Wrote rows 193..202 (key col 1)
+2026-03-31 16:42:30,035 - INFO - [Excel] Appended 10 rows. New bottom row: 202.
+2026-03-31 16:42:30,106 - INFO - Saved batch 20 to Excel (template append).
+2026-03-31 16:42:30,107 - INFO - Batch 20 completed. No wait (API/fast scraper).
+2026-03-31 16:42:30,107 - INFO - Processing batch 21/25.
+2026-03-31 16:42:30,565 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:30,575 - INFO - [Excel] Wrote rows 203..212 (key col 1)
+2026-03-31 16:42:31,067 - INFO - [Excel] Appended 10 rows. New bottom row: 212.
+2026-03-31 16:42:31,147 - INFO - Saved batch 21 to Excel (template append).
+2026-03-31 16:42:31,147 - INFO - Batch 21 completed. No wait (API/fast scraper).
+2026-03-31 16:42:31,147 - INFO - Processing batch 22/25.
+2026-03-31 16:42:31,730 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:31,738 - INFO - [Excel] Wrote rows 213..222 (key col 1)
+2026-03-31 16:42:32,229 - INFO - [Excel] Appended 10 rows. New bottom row: 222.
+2026-03-31 16:42:32,300 - INFO - Saved batch 22 to Excel (template append).
+2026-03-31 16:42:32,301 - INFO - Batch 22 completed. No wait (API/fast scraper).
+2026-03-31 16:42:32,301 - INFO - Processing batch 23/25.
+2026-03-31 16:42:32,756 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:32,765 - INFO - [Excel] Wrote rows 223..232 (key col 1)
+2026-03-31 16:42:33,231 - INFO - [Excel] Appended 10 rows. New bottom row: 232.
+2026-03-31 16:42:33,300 - INFO - Saved batch 23 to Excel (template append).
+2026-03-31 16:42:33,300 - INFO - Batch 23 completed. No wait (API/fast scraper).
+2026-03-31 16:42:33,300 - INFO - Processing batch 24/25.
+2026-03-31 16:42:33,873 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:33,883 - INFO - [Excel] Wrote rows 233..242 (key col 1)
+2026-03-31 16:42:34,368 - INFO - [Excel] Appended 10 rows. New bottom row: 242.
+2026-03-31 16:42:34,449 - INFO - Saved batch 24 to Excel (template append).
+2026-03-31 16:42:34,450 - INFO - Batch 24 completed. No wait (API/fast scraper).
+2026-03-31 16:42:34,450 - INFO - Processing batch 25/25.
+2026-03-31 16:42:34,859 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:34,867 - INFO - [Excel] Wrote rows 243..245 (key col 1)
+2026-03-31 16:42:35,349 - INFO - [Excel] Appended 3 rows. New bottom row: 245.
+2026-03-31 16:42:35,373 - INFO - Saved batch 25 to Excel (template append).
+2026-03-31 16:42:35,373 - INFO - Completed location: North Carolina (TopGun)
+2026-03-31 16:42:35,373 - INFO - Processing location: Ohio (TopGun)
+2026-03-31 16:42:37,181 - INFO - [TopGun] Collected 0 tournaments for state=OH sport=1
+2026-03-31 16:42:37,183 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=OH&sport=1 for Ohio (TopGun).
+2026-03-31 16:42:37,184 - INFO - Filtering loaded events into output: Ohio (TopGun)
+2026-03-31 16:42:37,191 - INFO - Total unique events to process for Ohio (TopGun): 0
+2026-03-31 16:42:37,191 - INFO - No unprocessed events for Ohio (TopGun). Skipping Excel creation.
+2026-03-31 16:42:37,191 - INFO - Processing location: Pennsylvania (TopGun)
+2026-03-31 16:42:38,731 - INFO - [TopGun] Collected 3 tournaments for state=PA sport=1
+2026-03-31 16:42:38,733 - INFO - Collected 3 event links using https://topgunstats.com/tournaments?state=PA&sport=1 for Pennsylvania (TopGun).
+2026-03-31 16:42:38,733 - INFO - Filtering loaded events into output: Pennsylvania (TopGun)
+2026-03-31 16:42:38,742 - INFO - Total unique events to process for Pennsylvania (TopGun): 3
+2026-03-31 16:42:38,750 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Pennsylvania_2026-03-31.xlsx
+2026-03-31 16:42:38,750 - INFO - Excel output file for Pennsylvania (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Pennsylvania_2026-03-31.xlsx
+2026-03-31 16:42:38,750 - INFO - Processing batch 1/1.
+2026-03-31 16:42:39,187 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:39,193 - INFO - [Excel] Wrote rows 3..5 (key col 1)
+2026-03-31 16:42:39,662 - INFO - [Excel] Appended 3 rows. New bottom row: 5.
+2026-03-31 16:42:39,684 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:42:39,684 - INFO - Completed location: Pennsylvania (TopGun)
+2026-03-31 16:42:39,684 - INFO - Processing location: South Carolina (TopGun)
+2026-03-31 16:42:41,376 - INFO - [TopGun] Collected 119 tournaments for state=SC sport=1
+2026-03-31 16:42:41,378 - INFO - Collected 119 event links using https://topgunstats.com/tournaments?state=SC&sport=1 for South Carolina (TopGun).
+2026-03-31 16:42:41,379 - INFO - Filtering loaded events into output: South Carolina (TopGun)
+2026-03-31 16:42:41,514 - INFO - Total unique events to process for South Carolina (TopGun): 119
+2026-03-31 16:42:41,515 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\South_Carolina_2026-03-31.xlsx
+2026-03-31 16:42:41,516 - INFO - Excel output file for South Carolina (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\South_Carolina_2026-03-31.xlsx
+2026-03-31 16:42:41,516 - INFO - Processing batch 1/12.
+2026-03-31 16:42:41,941 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:41,951 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 16:42:42,402 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 16:42:42,513 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:42:42,513 - INFO - Batch 1 completed. No wait (API/fast scraper).
+2026-03-31 16:42:42,513 - INFO - Processing batch 2/12.
+2026-03-31 16:42:43,049 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:43,057 - INFO - [Excel] Wrote rows 13..22 (key col 1)
+2026-03-31 16:42:43,502 - INFO - [Excel] Appended 10 rows. New bottom row: 22.
+2026-03-31 16:42:43,606 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 16:42:43,606 - INFO - Batch 2 completed. No wait (API/fast scraper).
+2026-03-31 16:42:43,606 - INFO - Processing batch 3/12.
+2026-03-31 16:42:44,045 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:44,053 - INFO - [Excel] Wrote rows 23..32 (key col 1)
+2026-03-31 16:42:44,496 - INFO - [Excel] Appended 10 rows. New bottom row: 32.
+2026-03-31 16:42:44,600 - INFO - Saved batch 3 to Excel (template append).
+2026-03-31 16:42:44,600 - INFO - Batch 3 completed. No wait (API/fast scraper).
+2026-03-31 16:42:44,600 - INFO - Processing batch 4/12.
+2026-03-31 16:42:45,096 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:45,102 - INFO - [Excel] Wrote rows 33..42 (key col 1)
+2026-03-31 16:42:45,525 - INFO - [Excel] Appended 10 rows. New bottom row: 42.
+2026-03-31 16:42:45,627 - INFO - Saved batch 4 to Excel (template append).
+2026-03-31 16:42:45,627 - INFO - Batch 4 completed. No wait (API/fast scraper).
+2026-03-31 16:42:45,627 - INFO - Processing batch 5/12.
+2026-03-31 16:42:46,082 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:46,090 - INFO - [Excel] Wrote rows 43..52 (key col 1)
+2026-03-31 16:42:46,521 - INFO - [Excel] Appended 10 rows. New bottom row: 52.
+2026-03-31 16:42:46,627 - INFO - Saved batch 5 to Excel (template append).
+2026-03-31 16:42:46,627 - INFO - Batch 5 completed. No wait (API/fast scraper).
+2026-03-31 16:42:46,627 - INFO - Processing batch 6/12.
+2026-03-31 16:42:47,051 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:47,060 - INFO - [Excel] Wrote rows 53..62 (key col 1)
+2026-03-31 16:42:47,497 - INFO - [Excel] Appended 10 rows. New bottom row: 62.
+2026-03-31 16:42:47,605 - INFO - Saved batch 6 to Excel (template append).
+2026-03-31 16:42:47,605 - INFO - Batch 6 completed. No wait (API/fast scraper).
+2026-03-31 16:42:47,605 - INFO - Processing batch 7/12.
+2026-03-31 16:42:48,166 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:48,174 - INFO - [Excel] Wrote rows 63..72 (key col 1)
+2026-03-31 16:42:48,622 - INFO - [Excel] Appended 10 rows. New bottom row: 72.
+2026-03-31 16:42:48,734 - INFO - Saved batch 7 to Excel (template append).
+2026-03-31 16:42:48,734 - INFO - Batch 7 completed. No wait (API/fast scraper).
+2026-03-31 16:42:48,734 - INFO - Processing batch 8/12.
+2026-03-31 16:42:49,191 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:49,200 - INFO - [Excel] Wrote rows 73..82 (key col 1)
+2026-03-31 16:42:49,701 - INFO - [Excel] Appended 10 rows. New bottom row: 82.
+2026-03-31 16:42:49,809 - INFO - Saved batch 8 to Excel (template append).
+2026-03-31 16:42:49,810 - INFO - Batch 8 completed. No wait (API/fast scraper).
+2026-03-31 16:42:49,810 - INFO - Processing batch 9/12.
+2026-03-31 16:42:50,353 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:50,361 - INFO - [Excel] Wrote rows 83..92 (key col 1)
+2026-03-31 16:42:50,813 - INFO - [Excel] Appended 10 rows. New bottom row: 92.
+2026-03-31 16:42:50,919 - INFO - Saved batch 9 to Excel (template append).
+2026-03-31 16:42:50,919 - INFO - Batch 9 completed. No wait (API/fast scraper).
+2026-03-31 16:42:50,919 - INFO - Processing batch 10/12.
+2026-03-31 16:42:51,388 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:51,398 - INFO - [Excel] Wrote rows 93..102 (key col 1)
+2026-03-31 16:42:51,894 - INFO - [Excel] Appended 10 rows. New bottom row: 102.
+2026-03-31 16:42:52,010 - INFO - Saved batch 10 to Excel (template append).
+2026-03-31 16:42:52,010 - INFO - Batch 10 completed. No wait (API/fast scraper).
+2026-03-31 16:42:52,010 - INFO - Processing batch 11/12.
+2026-03-31 16:42:52,471 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:52,479 - INFO - [Excel] Wrote rows 103..112 (key col 1)
+2026-03-31 16:42:52,934 - INFO - [Excel] Appended 10 rows. New bottom row: 112.
+2026-03-31 16:42:53,043 - INFO - Saved batch 11 to Excel (template append).
+2026-03-31 16:42:53,043 - INFO - Batch 11 completed. No wait (API/fast scraper).
+2026-03-31 16:42:53,043 - INFO - Processing batch 12/12.
+2026-03-31 16:42:53,634 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:53,642 - INFO - [Excel] Wrote rows 113..121 (key col 1)
+2026-03-31 16:42:54,099 - INFO - [Excel] Appended 9 rows. New bottom row: 121.
+2026-03-31 16:42:54,191 - INFO - Saved batch 12 to Excel (template append).
+2026-03-31 16:42:54,191 - INFO - Completed location: South Carolina (TopGun)
+2026-03-31 16:42:54,192 - INFO - Processing location: Tennessee (TopGun)
+2026-03-31 16:42:55,909 - INFO - [TopGun] Collected 12 tournaments for state=TN sport=1
+2026-03-31 16:42:55,911 - INFO - Collected 12 event links using https://topgunstats.com/tournaments?state=TN&sport=1 for Tennessee (TopGun).
+2026-03-31 16:42:55,911 - INFO - Filtering loaded events into output: Tennessee (TopGun)
+2026-03-31 16:42:55,936 - INFO - Total unique events to process for Tennessee (TopGun): 12
+2026-03-31 16:42:55,937 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Tennessee_2026-03-31.xlsx
+2026-03-31 16:42:55,938 - INFO - Excel output file for Tennessee (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Tennessee_2026-03-31.xlsx
+2026-03-31 16:42:55,938 - INFO - Processing batch 1/2.
+2026-03-31 16:42:56,359 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:56,368 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 16:42:56,814 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 16:42:56,920 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:42:56,921 - INFO - Batch 1 completed. No wait (API/fast scraper).
+2026-03-31 16:42:56,921 - INFO - Processing batch 2/2.
+2026-03-31 16:42:57,370 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:42:57,377 - INFO - [Excel] Wrote rows 13..14 (key col 1)
+2026-03-31 16:42:57,834 - INFO - [Excel] Appended 2 rows. New bottom row: 14.
+2026-03-31 16:42:57,857 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 16:42:57,857 - INFO - Completed location: Tennessee (TopGun)
+2026-03-31 16:42:57,857 - INFO - Processing location: Texas (TopGun)
+2026-03-31 16:42:59,623 - INFO - [TopGun] Collected 0 tournaments for state=TX sport=1
+2026-03-31 16:42:59,626 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=TX&sport=1 for Texas (TopGun).
+2026-03-31 16:42:59,626 - INFO - Filtering loaded events into output: Texas (TopGun)
+2026-03-31 16:42:59,634 - INFO - Total unique events to process for Texas (TopGun): 0
+2026-03-31 16:42:59,634 - INFO - No unprocessed events for Texas (TopGun). Skipping Excel creation.
+2026-03-31 16:42:59,634 - INFO - Processing location: Virginia (TopGun)
+2026-03-31 16:43:01,251 - INFO - [TopGun] Collected 19 tournaments for state=VA sport=1
+2026-03-31 16:43:01,253 - INFO - Collected 19 event links using https://topgunstats.com/tournaments?state=VA&sport=1 for Virginia (TopGun).
+2026-03-31 16:43:01,253 - INFO - Filtering loaded events into output: Virginia (TopGun)
+2026-03-31 16:43:01,292 - INFO - Total unique events to process for Virginia (TopGun): 19
+2026-03-31 16:43:01,293 - INFO - [Excel] Copied template to Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Virginia_2026-03-31.xlsx
+2026-03-31 16:43:01,293 - INFO - Excel output file for Virginia (TopGun) will be: Tests\2026-03-31\164142_TopGunScraper\Sheets\2026-03-31\TopGun\Virginia_2026-03-31.xlsx
+2026-03-31 16:43:01,293 - INFO - Processing batch 1/2.
+2026-03-31 16:43:01,727 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:43:01,737 - INFO - [Excel] Wrote rows 3..12 (key col 1)
+2026-03-31 16:43:02,175 - INFO - [Excel] Appended 10 rows. New bottom row: 12.
+2026-03-31 16:43:02,292 - INFO - Saved batch 1 to Excel (template append).
+2026-03-31 16:43:02,292 - INFO - Batch 1 completed. No wait (API/fast scraper).
+2026-03-31 16:43:02,292 - INFO - Processing batch 2/2.
+2026-03-31 16:43:02,820 - INFO - [Excel] Resolved 56/56 headers into template columns.
+2026-03-31 16:43:02,828 - INFO - [Excel] Wrote rows 13..21 (key col 1)
+2026-03-31 16:43:03,268 - INFO - [Excel] Appended 9 rows. New bottom row: 21.
+2026-03-31 16:43:03,371 - INFO - Saved batch 2 to Excel (template append).
+2026-03-31 16:43:03,371 - INFO - Completed location: Virginia (TopGun)
+2026-03-31 16:43:03,371 - INFO - Processing location: West Virginia (TopGun)
+2026-03-31 16:43:04,753 - INFO - [TopGun] Collected 0 tournaments for state=WV sport=1
+2026-03-31 16:43:04,756 - INFO - Collected 0 event links using https://topgunstats.com/tournaments?state=WV&sport=1 for West Virginia (TopGun).
+2026-03-31 16:43:04,756 - INFO - Filtering loaded events into output: West Virginia (TopGun)
+2026-03-31 16:43:04,766 - INFO - Total unique events to process for West Virginia (TopGun): 0
+2026-03-31 16:43:04,766 - INFO - No unprocessed events for West Virginia (TopGun). Skipping Excel creation.
+2026-03-31 16:43:07,456 - INFO - Effective scraper: USSSAScraper
+2026-03-31 16:43:07,457 - INFO - Selected location: ALL
+2026-03-31 16:43:07,458 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\164307_USSSAScraper

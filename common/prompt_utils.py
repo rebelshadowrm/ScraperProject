@@ -10,6 +10,10 @@ from typing import Dict, Tuple
 from scrapers.base_scraper import BaseScraper
 import scrapers  # This ensures the scrapers package is imported
 
+
+ALL_SCRAPERS_SENTINEL = "ALL_SCRAPERS"
+VALIDATION_SCRAPERS_SENTINEL = "VALIDATION_SCRAPERS"
+
 def get_scraper_classes():
     """
     Discover and return a list of all classes in the scrapers package
@@ -65,20 +69,28 @@ def prompt_for_scraper():
         sys.exit(1)
 
     print("Which site do you want to scrape?")
+    print("-1) Validation subset (NCS, PerfectGame, USSSA)")
+    print("0) Pull all scrapers")
     for idx, scraper_cls in enumerate(scraper_classes, start=1):
         display_name = getattr(scraper_cls, 'SCRAPER_NAME', scraper_cls.__name__)
         print(f"{idx}) {display_name}")
 
     while True:
-        choice = input(f"Enter choice [1-{len(scraper_classes)}]: ").strip()
+        choice = input(f"Enter choice [-1-{len(scraper_classes)}]: ").strip()
         try:
             choice_int = int(choice)
+            if choice_int == -1:
+                print("Selected: Validation subset")
+                return VALIDATION_SCRAPERS_SENTINEL
+            if choice_int == 0:
+                print("Selected: All scrapers")
+                return ALL_SCRAPERS_SENTINEL
             if 1 <= choice_int <= len(scraper_classes):
                 selected_scraper = scraper_classes[choice_int - 1]()
                 print(f"Selected: {getattr(selected_scraper, 'SCRAPER_NAME', selected_scraper.__class__.__name__)}")
                 return selected_scraper
             else:
-                print(f"Please choose a number between 1 and {len(scraper_classes)}.")
+                print(f"Please choose a number between -1 and {len(scraper_classes)}.")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -202,8 +214,15 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
                 print(f"\nFailed to prepare dump for {scraper_name}: {e}")
                 return "None Found", "", scraper
 
+    supports_all = active_scraper.supports_all_locations() if hasattr(active_scraper, "supports_all_locations") else True
+    supports_specific = (
+        active_scraper.supports_specific_locations()
+        if hasattr(active_scraper, "supports_specific_locations")
+        else True
+    )
+
     # --- Dynamic locations path (TopGun-style) ---
-    if getattr(active_scraper, "DYNAMIC_LOCATIONS", False) and hasattr(active_scraper, "get_dynamic_locations"):
+    if getattr(active_scraper, "uses_dynamic_locations", None) and active_scraper.uses_dynamic_locations() and hasattr(active_scraper, "get_dynamic_locations"):
         try:
             filtered_locations = active_scraper.get_dynamic_locations()
         except Exception as e:
@@ -220,14 +239,14 @@ def prompt_for_location(all_locations: Dict[str, str], scraper):
         print("\nNo matching locations found for this scraper type!")
         return "None Found", "", active_scraper
 
-    if getattr(active_scraper, "AUTO_ALL_LOCATIONS", False):
+    if not supports_specific and supports_all:
         print(f"\n{scraper_name} will process all available locations.")
         return "ALL", filtered_locations, active_scraper
 
     selected_name, selected_value = _prompt_from_mapping(
         filtered_locations,
         title="Available locations",
-        allow_all=True,
+        allow_all=supports_all,
     )
 
     if selected_name == "ALL":

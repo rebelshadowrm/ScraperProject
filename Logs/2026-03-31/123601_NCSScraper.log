@@ -1,0 +1,10 @@
+2026-03-31 12:36:01,792 - INFO - Logger initialized.
+2026-03-31 12:36:01,792 - INFO - Run log created for NCSScraper.
+2026-03-31 12:36:10,968 - INFO - Selenium WebDriver (Firefox) initialized.
+2026-03-31 12:36:10,968 - INFO - Processing location: Wyoming (NCS)
+2026-03-31 12:36:10,968 - INFO - Scraping page 1: https://playncs.com/baseball/Events?countryState=US-WY
+2026-03-31 12:36:26,939 - WARNING - Timeout while loading page 1. Stopping pagination.
+2026-03-31 12:36:26,939 - INFO - Total event links collected: 0
+2026-03-31 12:36:26,939 - INFO - Collected 0 event links using https://playncs.com/baseball/Events?countryState=US-WY for Wyoming (NCS).
+2026-03-31 12:36:26,940 - INFO - Total unique events to process for Wyoming (NCS): 0
+2026-03-31 12:36:26,940 - INFO - No unprocessed events for Wyoming (NCS). Skipping Excel creation.

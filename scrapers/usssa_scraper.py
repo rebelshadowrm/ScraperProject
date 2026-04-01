@@ -3,6 +3,7 @@
 import logging
 import time
 import re
+from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from typing import List, Dict, Tuple
 from bs4 import BeautifulSoup
@@ -26,6 +27,80 @@ class USSSAScraper(BaseScraper):
     USSSAScraper implements the BaseScraper for USSSA events.
     """
     SCRAPER_NAME = "USSSA"
+    BATCH_DELAY_SECONDS = 0
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "config"
+
+    def _state_from_usssa_host(self, url: str) -> str:
+        try:
+            host = (urlparse(url).hostname or "").lower()
+        except Exception:
+            return ""
+
+        m = re.match(r"^([a-z]{2})baseball\.usssa\.com$", host)
+        if not m:
+            return ""
+
+        state_abbr = m.group(1).upper()
+        state_obj = states.lookup(state_abbr)
+        return state_obj.name if state_obj else ""
+
+    def _parse_venue_address(self, venue_name: str, address_full: str) -> Dict[str, str]:
+        venue_name = (venue_name or "").strip()
+        address_full = (address_full or "").strip()
+        if not address_full:
+            return {
+                "Venue": venue_name,
+                "Address": "",
+                "City": "",
+                "State": "",
+                "Zip Code": "",
+            }
+
+        parts = [p.strip() for p in address_full.split(",") if p.strip()]
+        if parts and venue_name and parts[0].lower() == venue_name.lower():
+            parts = parts[1:]
+
+        if len(parts) >= 4:
+            zip_code = parts[-1]
+            state_abbr = parts[-2]
+            city = parts[-3]
+            address = ", ".join(parts[:-3]).strip()
+            state_obj = states.lookup(state_abbr)
+            state_full = state_obj.name if state_obj else state_abbr
+            return {
+                "Venue": venue_name,
+                "Address": address,
+                "City": city,
+                "State": state_full,
+                "Zip Code": zip_code,
+            }
+
+        return {
+            "Venue": venue_name,
+            "Address": address_full,
+            "City": "",
+            "State": "",
+            "Zip Code": "",
+        }
+
+    def _page_has_no_events(self, soup: BeautifulSoup) -> bool:
+        error_box = soup.select_one("div.events-error")
+        if not error_box:
+            return False
+
+        text = error_box.get_text(" ", strip=True).lower()
+        return "no events found" in text
+
+    def _wait_for_listing_state(self, driver, wait_time: int = 30):
+        return WebDriverWait(driver, wait_time).until(
+            lambda d: (
+                d.find_elements(By.CSS_SELECTOR, 'a[href*="/event/"]')
+                or d.find_elements(By.CSS_SELECTOR, "div.pagination.initial_query_pagenav")
+                or d.find_elements(By.CSS_SELECTOR, "div.events-error")
+            )
+        )
 
     def _get_total_pages(self, driver, base_url: str, wait_time: int = 30) -> int:
         """
@@ -33,13 +108,13 @@ class USSSAScraper(BaseScraper):
         """
         try:
             driver.get(base_url)
-
-            # Wait for the pagination to load
-            WebDriverWait(driver, wait_time).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "pagination"))
-            )
+            self._wait_for_listing_state(driver, wait_time)
 
             soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+            if self._page_has_no_events(soup):
+                logger.info("USSSA listing has no events for this location.")
+                return 0
 
             pagination = soup.find('div', class_='pagination initial_query_pagenav')
             if pagination:
@@ -53,9 +128,12 @@ class USSSAScraper(BaseScraper):
                     return max(page_numbers)
 
             return 1  # Default to 1 if no pages found
+        except TimeoutException:
+            logger.warning("Timed out while determining USSSA pagination. Defaulting to 0 pages.")
+            return 0
         except Exception as e:
             logger.error(f"Error determining total pages: {e}")
-            return 1
+            return 0
 
     def collect_event_links(
         self,
@@ -74,23 +152,28 @@ class USSSAScraper(BaseScraper):
         total_pages = self._get_total_pages(driver, base_url, wait_time)
         logger.info(f"Total pages found: {total_pages}")
 
+        if total_pages == 0:
+            logger.info("No USSSA events found for %s.", base_url)
+            return event_links
+
         for page_num in range(1, total_pages + 1):
             url = f"{base_url}?paged={page_num}" if page_num > 1 else base_url
             logger.info(f"Scraping page {page_num}: {url}")
 
             try:
                 driver.get(url)
-
-                # Wait for some event link elements
-                WebDriverWait(driver, wait_time).until(
-                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'a[href*="/event/"]'))
-                )
+                self._wait_for_listing_state(driver, wait_time)
 
                 soup = BeautifulSoup(driver.page_source, 'html.parser')
+                if self._page_has_no_events(soup):
+                    logger.info("No USSSA events found on page %d for %s.", page_num, base_url)
+                    break
                 anchors = soup.find_all('a', href=True)
 
                 for anchor in anchors:
                     href = anchor['href']
+                    if "registration.usssa.com/event/" in href:
+                        continue
                     if '/event/' in href and href not in event_links:
                         event_links.append(href)
                         logger.debug(f"Found event link: {href}")
@@ -255,17 +338,27 @@ class USSSAScraper(BaseScraper):
                 date_element_tag = soup.find(class_='_value')
                 date_element = date_element_tag.get_text(strip=True) if date_element_tag else ""
                 if '-' in date_element:
-                    start_date, end_date = date_element.split(' - ', 1)
+                    parts = re.split(r"\s*-\s*", date_element, maxsplit=1)
+                    if len(parts) == 2:
+                        start_date = parts[0].strip()
+                        end_date = parts[1].strip() or start_date
+                    else:
+                        start_date = end_date = date_element.replace("-", "").strip()
+
                     # Append the year if it isn't present in the substring
                     year_match = re.search(r'\d{4}', date_element)
-                    if year_match:
-                        year = year_match.group()
-                        if year not in start_date:
-                            start_date = f"{start_date.strip()} {year}"
-                        if year not in end_date:
-                            end_date = f"{end_date.strip()} {year}"
+                    year = year_match.group() if year_match else str(datetime.now().year)
+                    if year not in start_date:
+                        start_date = f"{start_date.strip()} {year}"
+                    if year not in end_date:
+                        end_date = f"{end_date.strip()} {year}"
                 else:
-                    start_date = end_date = date_element
+                    date_value = date_element.strip()
+                    year_match = re.search(r'\d{4}', date_value)
+                    year = year_match.group() if year_match else str(datetime.now().year)
+                    if date_value and year not in date_value:
+                        date_value = f"{date_value} {year}"
+                    start_date = end_date = date_value
 
                 # Extract venue details
                 venues = []
@@ -278,32 +371,22 @@ class USSSAScraper(BaseScraper):
                             if len(cells) >= 2:
                                 venue_name = cells[0].get_text(strip=True)
                                 address_full = cells[1].get_text(strip=True)
-                                parts = [p.strip() for p in address_full.split(',')]
-                                if len(parts) == 4:
-                                    address, city, state_abbr, zip_code = parts
-                                    state_full = states.lookup(state_abbr).name if states.lookup(state_abbr) else state_abbr
-                                else:
-                                    # Fallback if the format doesn't match
-                                    address, city, state_full, zip_code = address_full, "N/A", "N/A", "N/A"
-                                venues.append({
-                                    'Venue': venue_name,
-                                    'Address': address,
-                                    'City': city,
-                                    'State': state_full,
-                                    'Zip Code': zip_code
-                                })
+                                venues.append(self._parse_venue_address(venue_name, address_full))
                     else:
                         logger.warning(f"No venue table found for {url}")
                 except Exception as e:
                     logger.error(f"Error extracting venue details for {url}: {e}")
 
+                state_from_host = self._state_from_usssa_host(url)
                 first_venue = venues[0] if venues else {
                     'Venue': 'N/A',
                     'Address': 'N/A',
                     'City': 'N/A',
-                    'State': 'N/A',
+                    'State': state_from_host or 'N/A',
                     'Zip Code': 'N/A'
                 }
+                if (not first_venue.get('State') or first_venue.get('State') == 'N/A') and state_from_host:
+                    first_venue['State'] = state_from_host
 
                 # Extract contact info
                 contact_name = "N/A"

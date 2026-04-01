@@ -31,6 +31,20 @@ class NCSScraper(BaseScraper):
       - Contacts (/Contacts/...)
     """
     SCRAPER_NAME = "NCS"
+    BATCH_DELAY_SECONDS = 0
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "config"
+
+    def _page_has_no_events(self, html: str) -> bool:
+        text = BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True).lower()
+        phrases = (
+            "no events found",
+            "no events",
+            "no results found",
+            "no results",
+        )
+        return any(phrase in text for phrase in phrases)
 
     def collect_event_links(
         self,
@@ -57,16 +71,23 @@ class NCSScraper(BaseScraper):
             try:
                 driver.get(current_url)
                 WebDriverWait(driver, wait_time).until(
-                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".media-body .h4 a"))
+                    lambda d: d.find_elements(By.CSS_SELECTOR, ".media-body .h4 a")
+                    or self._page_has_no_events(d.page_source)
                 )
             except TimeoutException:
-                logger.warning(f"Timeout while loading page {page_number}. Stopping pagination.")
+                if self._page_has_no_events(driver.page_source):
+                    logger.info(f"No NCS events found on page {page_number}. Stopping pagination.")
+                else:
+                    logger.warning(f"Timeout while loading page {page_number}. Stopping pagination.")
                 break
             except WebDriverException as e:
                 logger.error(f"WebDriverException on page {page_number}: {e}")
                 break
 
             soup = BeautifulSoup(driver.page_source, "html.parser")
+            if self._page_has_no_events(driver.page_source):
+                logger.info(f"No NCS events found on page {page_number}. Stopping pagination.")
+                break
             anchors = soup.select(".media-body .h4 a")
             new_count = 0
 

@@ -249,8 +249,10 @@ class Play365BaseScraper(BaseScraper):
 
     SCRAPER_NAME = "Play365Base"
     REQUIRES_DRIVER = False
+    LOCATIONS_SOURCE = "dynamic"
     DYNAMIC_LOCATIONS = True
-    AUTO_ALL_LOCATIONS = True
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
     BATCH_DELAY_SECONDS = 0
 
     DOMAIN = ""

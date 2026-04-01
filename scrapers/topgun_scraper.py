@@ -132,6 +132,9 @@ def _normalize_age_group_token(raw: str) -> str:
 class TopGunScraper(BaseScraper):
     SCRAPER_NAME = "TopGun"
     BATCH_DELAY_SECONDS = 0
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "dynamic"
 
     FILTER_DATA_URL = "https://topgunstats.com/api/queries/tournaments/tournament-filter-data"
     TOURNAMENT_DATA_URL = "https://topgunstats.com/api/queries/tournaments/tournament-data"

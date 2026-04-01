@@ -10,6 +10,22 @@ class BaseScraper(abc.ABC):
     SCRAPER_NAME = "Base"
     REQUIRES_DRIVER = True
     BATCH_DELAY_SECONDS = 30
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "config"
+    DYNAMIC_LOCATIONS = False
+
+    def supports_all_locations(self) -> bool:
+        return bool(getattr(self, "SUPPORTS_ALL_LOCATIONS", True))
+
+    def supports_specific_locations(self) -> bool:
+        return bool(getattr(self, "SUPPORTS_SPECIFIC_LOCATIONS", True))
+
+    def uses_dynamic_locations(self) -> bool:
+        return bool(
+            getattr(self, "LOCATIONS_SOURCE", "config") == "dynamic"
+            or getattr(self, "DYNAMIC_LOCATIONS", False)
+        )
 
     @abc.abstractmethod
     def collect_event_links(self, driver: Firefox, base_url: str, **kwargs) -> List[str]:

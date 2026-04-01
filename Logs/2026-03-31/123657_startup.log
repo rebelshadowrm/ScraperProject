@@ -1,0 +1,4 @@
+2026-03-31 12:36:57,299 - INFO - Logger initialized.
+2026-03-31 12:37:05,889 - INFO - Selected scraper: TopGunScraper
+2026-03-31 12:37:06,342 - INFO - [TopGun] Filter-data loaded. States=15, Types=151, BannedTypes(umpire)=0
+2026-03-31 12:40:37,282 - INFO - Shutdown signal received. Preparing to exit gracefully...

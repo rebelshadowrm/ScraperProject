@@ -365,6 +365,9 @@ def _extract_date_raw_from_details_soup(details_soup: BeautifulSoup) -> str:
 
 class GrandSlamScraper(BaseScraper):
     SCRAPER_NAME = "GrandSlam"
+    SUPPORTS_ALL_LOCATIONS = True
+    SUPPORTS_SPECIFIC_LOCATIONS = True
+    LOCATIONS_SOURCE = "config"
     BATCH_DELAY_SECONDS = 0  # requests-based; no need to wait
 
     def __init__(self):

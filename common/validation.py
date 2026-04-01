@@ -1,7 +1,7 @@
 # common/validation.py
 
 import re
-from datetime import datetime
+from datetime import date, datetime
 from typing import Dict, Tuple
 from urllib.parse import urlparse
 
@@ -203,6 +203,35 @@ def validate_date_format(date_str: str) -> bool:
         except ValueError:
             continue
     return False
+
+
+def parse_event_date(date_value) -> date | None:
+    raw = _normalize_optional_str(date_value)
+    if not raw:
+        return None
+
+    date_formats = [
+        "%m/%d/%Y",
+        "%B %d, %Y",
+        "%b %d, %Y",
+        "%b %d %Y",
+        "%Y-%m-%d",
+    ]
+    for fmt in date_formats:
+        try:
+            return datetime.strptime(raw, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def is_future_event(data: Dict, *, today: date | None = None) -> bool:
+    start_date = parse_event_date(data.get("Start-date"))
+    if start_date is None:
+        return False
+
+    current_date = today or date.today()
+    return start_date > current_date
 
 
 def validate_phone_number(phone: str) -> bool:

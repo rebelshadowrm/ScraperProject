@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Callable, Optional
 from selenium.common.exceptions import WebDriverException
 
 from common.logging_utils import log_progress
-from common.validation import validate_event_data
+from common.validation import is_future_event, validate_event_data
 from common.excel_utils import create_workbook_from_template, append_rows_to_template, get_output_filename
 
 from common.json_utils import (
@@ -79,7 +79,7 @@ def process_events_in_batches(
     Process event detail pages in batches; restart driver once if disconnected.
     Returns (driver, total_appended).
     """
-    data_batch: List[Dict[str, Any]] = []
+    pending_rows: List[Dict[str, Any]] = []
     total_urls = len(urls_to_process)
     total_appended = 0
 
@@ -109,7 +109,11 @@ def process_events_in_batches(
             while attempts < 2:
                 attempts += 1
                 try:
-                    event_data = scraper.extract_event_details(url, driver=driver)
+                    event_data = scraper.extract_event_details(
+                        url,
+                        driver=driver,
+                        selected_location=selected_location,
+                    )
                     if not event_data:
                         msg = "Extraction failed"
                         logger.warning("%s for URL: %s.", msg, url)
@@ -146,19 +150,33 @@ def process_events_in_batches(
                         break
 
                     # success
-                    data_batch.append(event_data)
-
                     record_attempt(events_data, key=key, status="success", error="")
-                    mark_processed(events_data, key=key)
                     save_events(events_data, json_file)
 
-                    # Mark failure resolved (optional) + remove from active failed list
-                    mark_failure_resolved(failed_data, name=key, url=url)
-                    failed_data["failed_events"] = [
-                        fev for fev in failed_data["failed_events"]
-                        if not (fev.get("name") == key and fev.get("url") == url)
-                    ]
-                    save_failed_events(failed_data, failed_events_file)
+                    if not is_future_event(event_data):
+                        logger.info(
+                            "Skipping non-future event for %s: start date %s.",
+                            url,
+                            event_data.get("Start-date", ""),
+                        )
+                        mark_processed(events_data, key=key)
+                        save_events(events_data, json_file)
+
+                        mark_failure_resolved(failed_data, name=key, url=url)
+                        failed_data["failed_events"] = [
+                            fev for fev in failed_data["failed_events"]
+                            if not (fev.get("name") == key and fev.get("url") == url)
+                        ]
+                        save_failed_events(failed_data, failed_events_file)
+                        break
+
+                    pending_rows.append(
+                        {
+                            "key": key,
+                            "url": url,
+                            "event_data": event_data,
+                        }
+                    )
 
                     break
 
@@ -214,16 +232,31 @@ def process_events_in_batches(
                     break
 
         # Write this batch to Excel
-        if data_batch:
+        if pending_rows:
             try:
                 append_rows_to_template(
                     output_file=output_file,
-                    rows=data_batch,
+                    rows=[item["event_data"] for item in pending_rows],
                     column_order=columns,
                 )
-                total_appended += len(data_batch)
+                total_appended += len(pending_rows)
+
+                for item in pending_rows:
+                    key = item["key"]
+                    url = item["url"]
+
+                    mark_processed(events_data, key=key)
+                    save_events(events_data, json_file)
+
+                    mark_failure_resolved(failed_data, name=key, url=url)
+                    failed_data["failed_events"] = [
+                        fev for fev in failed_data["failed_events"]
+                        if not (fev.get("name") == key and fev.get("url") == url)
+                    ]
+                    save_failed_events(failed_data, failed_events_file)
+
                 logger.info("Saved batch %d to Excel (template append).", (i // batch_size) + 1)
-                data_batch.clear()
+                pending_rows.clear()
             except Exception as e:
                 logger.error("Error saving batch to Excel: %s", e)
 

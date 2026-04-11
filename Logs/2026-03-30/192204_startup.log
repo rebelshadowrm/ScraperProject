@@ -1,5 +1,0 @@
-2026-03-30 19:22:04,722 - INFO - Logger initialized.
-2026-03-30 19:22:13,199 - INFO - Selected scraper: Play365BaseScraper
-2026-03-30 19:22:15,716 - INFO - Effective scraper: Play365BaseScraper
-2026-03-30 19:22:15,716 - INFO - Selected location: ALL_PLAY365_SCRAPERS
-2026-03-30 19:22:15,717 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-30\192215_Play365Batch

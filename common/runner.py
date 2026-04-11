@@ -4,6 +4,7 @@ import os
 import time
 import random
 import logging
+from datetime import datetime
 from typing import List, Dict, Any, Callable, Optional
 
 from selenium.common.exceptions import WebDriverException
@@ -22,6 +23,11 @@ from common.json_utils import (
     mark_processed,
     add_or_update_failure,
     mark_failure_resolved,
+)
+from common.scheduler_history import (
+    load_scheduler_history,
+    save_scheduler_history,
+    record_location_run,
 )
 
 from common.driver_manager import (
@@ -77,11 +83,18 @@ def process_events_in_batches(
 ):
     """
     Process event detail pages in batches; restart driver once if disconnected.
-    Returns (driver, total_appended).
+    Returns (driver, total_appended, metrics).
     """
     pending_rows: List[Dict[str, Any]] = []
     total_urls = len(urls_to_process)
     total_appended = 0
+    metrics = {
+        "validation_failures": 0,
+        "extraction_failures": 0,
+        "non_future_skipped": 0,
+        "batches_attempted": 0,
+        "batches_written": 0,
+    }
 
     for i in range(0, total_urls, batch_size):
         if shutdown_check():
@@ -89,6 +102,7 @@ def process_events_in_batches(
             break
 
         batch = urls_to_process[i:i + batch_size]
+        metrics["batches_attempted"] += 1
         log_progress(
             logger,
             "Processing batch %d/%d.",
@@ -117,6 +131,7 @@ def process_events_in_batches(
                     if not event_data:
                         msg = "Extraction failed"
                         logger.warning("%s for URL: %s.", msg, url)
+                        metrics["extraction_failures"] += 1
 
                         record_attempt(events_data, key=key, status="failed", error=msg)
                         save_events(events_data, json_file)
@@ -135,6 +150,7 @@ def process_events_in_batches(
                     if not ok:
                         msg = f"Validation failed: {reason}"
                         logger.warning("%s — URL: %s", msg, url)
+                        metrics["validation_failures"] += 1
 
                         record_attempt(events_data, key=key, status="failed", error=msg)
                         save_events(events_data, json_file)
@@ -159,6 +175,7 @@ def process_events_in_batches(
                             url,
                             event_data.get("Start-date", ""),
                         )
+                        metrics["non_future_skipped"] += 1
                         mark_processed(events_data, key=key)
                         save_events(events_data, json_file)
 
@@ -182,6 +199,7 @@ def process_events_in_batches(
 
                 except WebDriverException as e:
                     # record attempt failure (even if we retry, it's still useful telemetry)
+                    metrics["extraction_failures"] += 1
                     record_attempt(events_data, key=key, status="failed", error=str(e))
                     save_events(events_data, json_file)
 
@@ -207,6 +225,7 @@ def process_events_in_batches(
                     break
 
                 except Exception as e:
+                    metrics["extraction_failures"] += 1
                     record_attempt(events_data, key=key, status="failed", error=str(e))
                     save_events(events_data, json_file)
 
@@ -256,6 +275,7 @@ def process_events_in_batches(
                     save_failed_events(failed_data, failed_events_file)
 
                 logger.info("Saved batch %d to Excel (template append).", (i // batch_size) + 1)
+                metrics["batches_written"] += 1
                 pending_rows.clear()
             except Exception as e:
                 logger.error("Error saving batch to Excel: %s", e)
@@ -272,7 +292,7 @@ def process_events_in_batches(
                 logger.info("Batch %d completed. No wait (API/fast scraper).", (i // batch_size) + 1)
 
 
-    return driver, total_appended
+    return driver, total_appended, metrics
 
 
 def process_location(
@@ -291,6 +311,8 @@ def process_location(
     firefox_binary: Optional[str] = None,
     output_base_folder: str = "Sheets",
     collect_kwargs: Optional[Dict[str, Any]] = None,
+    scheduler_history_file: str = "scheduler_history.json",
+    run_mode: str = "live",
 ):
     """
     Process a single location:
@@ -300,6 +322,8 @@ def process_location(
       4) ensure output template exists
       5) batch scrape + append to Excel
     """
+    location_started_at = datetime.now()
+
     if _should_log_source_init(scraper):
         log_progress(logger, "Initializing event source for %s...", getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__))
     else:
@@ -385,6 +409,24 @@ def process_location(
 
     if len(unique_events_to_process) == 0:
         logger.info("No unprocessed events for %s. Skipping Excel creation.", location_name)
+        history_data = load_scheduler_history(scheduler_history_file)
+        record_location_run(
+            history_data,
+            scraper=scraper.__class__.__name__,
+            location=location_name,
+            run_mode=run_mode,
+            runtime_seconds=(datetime.now() - location_started_at).total_seconds(),
+            links_collected=len(new_links),
+            candidates_processed=0,
+            rows_written=0,
+            stale_skipped=stale_carryover_count,
+            validation_failures=0,
+            extraction_failures=0,
+            non_future_skipped=0,
+            batches_attempted=0,
+            batches_written=0,
+        )
+        save_scheduler_history(history_data, scheduler_history_file)
         return driver
 
     # 4) Ensure output Excel file exists
@@ -393,7 +435,7 @@ def process_location(
     logger.info("Excel output file for %s will be: %s", location_name, output_file)
 
     # 5) Process in batches (returns possibly restarted driver)
-    driver, total_appended = process_events_in_batches(
+    driver, total_appended, batch_metrics = process_events_in_batches(
         scraper=scraper,
         driver=driver,
         urls_to_process=unique_events_to_process,
@@ -416,6 +458,25 @@ def process_location(
             logger.info("[Excel] Deleted empty staged sheet (no successful rows): %s", output_file)
         except Exception as e:
             logger.warning("[Excel] Failed to delete empty staged sheet %s: %s", output_file, e)
+
+    history_data = load_scheduler_history(scheduler_history_file)
+    record_location_run(
+        history_data,
+        scraper=scraper.__class__.__name__,
+        location=location_name,
+        run_mode=run_mode,
+        runtime_seconds=(datetime.now() - location_started_at).total_seconds(),
+        links_collected=len(new_links),
+        candidates_processed=len(unique_events_to_process),
+        rows_written=total_appended,
+        stale_skipped=stale_carryover_count,
+        validation_failures=batch_metrics["validation_failures"],
+        extraction_failures=batch_metrics["extraction_failures"],
+        non_future_skipped=batch_metrics["non_future_skipped"],
+        batches_attempted=batch_metrics["batches_attempted"],
+        batches_written=batch_metrics["batches_written"],
+    )
+    save_scheduler_history(history_data, scheduler_history_file)
 
     log_progress(logger, "Completed location: %s", location_name)
     return driver

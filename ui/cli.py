@@ -22,6 +22,7 @@ from common.logging_utils import (
 from common.json_utils import load_events, load_failed_events
 from common.config import OUTPUT_COLUMNS
 from common.data_control import rollback_events
+from common.scheduler_history import load_scheduler_history, save_scheduler_history
 
 from common.prompt_utils import (
     ALL_SCRAPERS_SENTINEL,
@@ -51,6 +52,7 @@ logger = setup_logger(log_file=build_run_log_path("startup", logs_root="Logs"), 
 
 JSON_FILE = "events.json"
 FAILED_EVENTS_FILE = "failed_events.json"
+SCHEDULER_HISTORY_FILE = "scheduler_history.json"
 LOCATIONS_FILE = "locations.json"
 
 
@@ -151,6 +153,8 @@ def _run_play365_batch(
     json_file: str,
     failed_events_file: str,
     output_base_folder: str,
+    scheduler_history_file: str,
+    run_mode: str,
 ):
     firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
     manual_failures: list[tuple[str, str]] = []
@@ -191,6 +195,8 @@ def _run_play365_batch(
                     firefox_binary=firefox_path,
                     output_base_folder=output_base_folder,
                     collect_kwargs={"allow_manual_fallback": False},
+                    scheduler_history_file=scheduler_history_file,
+                    run_mode=run_mode,
                 )
             safe_quit_driver(driver)
         except Play365ManualFallbackRequired:
@@ -262,6 +268,8 @@ def _run_play365_batch(
                         "skip_direct_api": True,
                         "prompt_for_manual_fallback": False,
                     },
+                    scheduler_history_file=scheduler_history_file,
+                    run_mode=run_mode,
                 )
         finally:
             safe_quit_driver(driver)
@@ -301,12 +309,14 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
 
     json_file = JSON_FILE
     failed_events_file = FAILED_EVENTS_FILE
+    scheduler_history_file = SCHEDULER_HISTORY_FILE
     output_base_folder = "Sheets"
     run_label = scraper.__class__.__name__
 
     if test_mode:
         batch_name = "Play365Batch" if selected_location == "ALL_PLAY365_SCRAPERS" else scraper.__class__.__name__
         json_file, failed_events_file, output_base_folder = _build_test_run_paths(batch_name)
+        scheduler_history_file = os.path.join(os.path.dirname(json_file), "scheduler_history.json")
         run_label = batch_name
         log_progress(logger, "Test mode enabled. Writing outputs under: %s", os.path.dirname(json_file))
     elif selected_location == "ALL_PLAY365_SCRAPERS":
@@ -317,6 +327,8 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
 
     events_data = load_events(json_file)
     failed_data = load_failed_events(failed_events_file)
+    if not os.path.exists(scheduler_history_file):
+        save_scheduler_history(load_scheduler_history(scheduler_history_file), scheduler_history_file)
 
     driver = None
     firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
@@ -331,6 +343,8 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                 json_file=json_file,
                 failed_events_file=failed_events_file,
                 output_base_folder=output_base_folder,
+                scheduler_history_file=scheduler_history_file,
+                run_mode="test" if test_mode else "live",
             )
             return
 
@@ -367,6 +381,8 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                     firefox_binary=firefox_path,
                     output_base_folder=output_base_folder,
                     collect_kwargs=collect_kwargs,
+                    scheduler_history_file=scheduler_history_file,
+                    run_mode="test" if test_mode else "live",
                 )
         else:
             collect_kwargs = {}
@@ -387,6 +403,8 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                 firefox_binary=firefox_path,
                 output_base_folder=output_base_folder,
                 collect_kwargs=collect_kwargs,
+                scheduler_history_file=scheduler_history_file,
+                run_mode="test" if test_mode else "live",
             )
 
     except Exception as e:

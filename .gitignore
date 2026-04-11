@@ -1,0 +1,24 @@
+# Python cache / virtualenv
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local browser / driver downloads
+_selenium_downloads/
+
+# Generated run artifacts
+Tests/
+Logs/
+Sheets/
+*.zip
+scraping.log
+
+# Local runtime state
+events.json
+failed_events.json
+scheduler_history.json
+geckodriver.exe
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

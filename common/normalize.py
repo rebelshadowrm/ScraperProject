@@ -231,6 +231,34 @@ def normalize_yes_no_na(value: Any) -> str:
     return _YESNO_CANON_MAP.get(u, "NA")
 
 
+def normalize_gate_fees(value: Any) -> str:
+    """
+    Gate-fees is a Yes/No/NA dropdown in the export.
+
+    Rules:
+    - blank/missing -> NA
+    - explicit "no gate fee" style text -> No
+    - any concrete fee text or gate-fee mention -> Yes
+    - already-normalized Yes/No/NA stays as-is
+    """
+    raw = clean_text(value)
+    if raw == "":
+        return "NA"
+
+    canon = normalize_yes_no_na(raw)
+    if canon in {"Yes", "No", "NA"} and raw.upper() in set(_YESNO_ALIASES) | set(_YESNO_CANON_MAP):
+        return canon
+
+    upper = raw.upper()
+    if "NO GATE FEE" in upper or "NO GATE FEES" in upper:
+        return "No"
+
+    if "GATE FEE" in upper or "GATE FEES" in upper or re.search(r"\$\s*\d", raw):
+        return "Yes"
+
+    return "NA"
+
+
 def normalize_date_mmddyyyy(value: Any) -> str:
     raw = clean_text(value)
     if not raw:
@@ -314,6 +342,9 @@ def normalize_row(row: Dict[str, Any]) -> Dict[str, Any]:
 
     if "Are-there-multiple_locations" in out:
         out["Are-there-multiple_locations"] = normalize_yes_no_na(out.get("Are-there-multiple_locations"))
+
+    if "Gate-fees" in out:
+        out["Gate-fees"] = normalize_gate_fees(out.get("Gate-fees"))
 
     # Repeating age/fee columns
     for i in range(1, 14):

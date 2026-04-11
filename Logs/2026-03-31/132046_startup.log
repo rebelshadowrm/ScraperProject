@@ -1,5 +1,0 @@
-2026-03-31 13:20:46,535 - INFO - Logger initialized.
-2026-03-31 13:20:52,475 - INFO - Selected scraper: ALL_SCRAPERS
-2026-03-31 13:20:52,481 - INFO - Effective scraper: GrandSlamScraper
-2026-03-31 13:20:52,481 - INFO - Selected location: ALL
-2026-03-31 13:20:52,483 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\132052_GrandSlamScraper

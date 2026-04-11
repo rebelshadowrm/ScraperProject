@@ -1,5 +1,0 @@
-2026-03-31 12:34:58,249 - INFO - Logger initialized.
-2026-03-31 12:35:10,509 - INFO - Selected scraper: GrandSlamScraper
-2026-03-31 12:35:12,747 - INFO - Effective scraper: GrandSlamScraper
-2026-03-31 12:35:12,747 - INFO - Selected location: Wyoming (GrandSlam)
-2026-03-31 12:35:12,748 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\123512_GrandSlamScraper

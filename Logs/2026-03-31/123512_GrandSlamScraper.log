@@ -1,9 +1,0 @@
-2026-03-31 12:35:12,748 - INFO - Logger initialized.
-2026-03-31 12:35:12,749 - INFO - Run log created for GrandSlamScraper.
-2026-03-31 12:35:21,929 - INFO - Selenium WebDriver (Firefox) initialized.
-2026-03-31 12:35:21,929 - INFO - Processing location: Wyoming (GrandSlam)
-2026-03-31 12:35:21,929 - WARNING - [GrandSlam] Loaded v5.0 (details-page dates + badges ages/divisions + divisions fees + state fallback + case-insensitive urls)
-2026-03-31 12:35:22,340 - INFO - [GrandSlam] Collected 0 events for state=WY
-2026-03-31 12:35:22,340 - INFO - Collected 0 event links using https://www.grandslamtournaments.com/baseball/Events?state=WY for Wyoming (GrandSlam).
-2026-03-31 12:35:22,341 - INFO - Total unique events to process for Wyoming (GrandSlam): 0
-2026-03-31 12:35:22,341 - INFO - No unprocessed events for Wyoming (GrandSlam). Skipping Excel creation.

@@ -1,5 +1,0 @@
-2026-03-31 12:42:37,820 - INFO - Logger initialized.
-2026-03-31 12:42:44,503 - INFO - Selected scraper: PSTScraper
-2026-03-31 12:42:44,504 - INFO - Effective scraper: PSTScraper
-2026-03-31 12:42:44,504 - INFO - Selected location: ALL
-2026-03-31 12:42:44,505 - INFO - Test mode enabled. Writing outputs under: Tests\2026-03-31\124244_PSTScraper

@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 from us import states
 
 from common.config import OUTPUT_COLUMNS
+from common.collection import CollectedLinks
+from common.http import create_get_session
 from scrapers.base_scraper import BaseScraper
 
 TRIPLE_CROWN_FEED_BASE = "https://components.triplecrownsports.com/Components/GetFilteredEventSchedule/?sportID=1&state="
@@ -516,7 +518,7 @@ class TripleCrownScraper(BaseScraper):
     LOCATIONS_SOURCE = "config"
 
     def __init__(self):
-        self.session = requests.Session()
+        self.session = create_get_session()
         self.session.headers.update(
             {
                 "User-Agent": (
@@ -532,12 +534,24 @@ class TripleCrownScraper(BaseScraper):
     def collect_event_links(self, driver, base_url: str, **kwargs) -> List[str]:
         soup = _soup(self.session, base_url)
         today = date.today()
-        urls: List[str] = []
+        urls = CollectedLinks(pages=1)
         self.listing_meta = {}
 
         selected_state_abbr = parse_qs(urlparse(base_url).query).get("state", [""])[0].strip().upper()
 
-        for row in soup.select("div.event-row"):
+        event_rows = soup.select("div.event-row")
+        component = soup.select_one("#filtered-event-schedule-container")
+        verified_empty = bool(
+            component and component.select_one("#filtered-event-search-form")
+            and any(
+                " ".join(node.get_text(" ", strip=True).lower().split())
+                == "no results found matching your search."
+                for node in component.select("#filtered-event-table-container .filtered-events-no-results")
+            )
+        )
+        if not event_rows and not verified_empty and "no events found" not in soup.get_text(" ", strip=True).lower():
+            urls.complete, urls.error = False, "TripleCrown has no recognized event rows or explicit empty state"
+        for row in event_rows:
             link = row.select_one("a.event-name[href]")
             if not link:
                 continue
@@ -552,7 +566,10 @@ class TripleCrownScraper(BaseScraper):
                 continue
 
             start_dt, end_dt = _parse_tc_row_dates(row)
-            if not start_dt or start_dt <= today:
+            if not start_dt:
+                urls.complete, urls.error = False, "TripleCrown listing contains an unparseable event date"
+                continue
+            if start_dt <= today:
                 continue
 
             detail_block = row.select_one("div.event-details")
@@ -578,7 +595,7 @@ class TripleCrownScraper(BaseScraper):
 
         return urls
 
-    def _apply_common_requireds(self, row: Dict[str, str]) -> Dict[str, str]:
+    def _apply_common_requireds(self, row: Dict[str, str], *, source_eligibility: str = "") -> Dict[str, str]:
         tournament_key = _normalize_text_key(row.get("Tournament-name", ""))
         contact_key = _normalize_text_key(row.get("Contact-name", ""))
         if contact_key and tournament_key:
@@ -588,13 +605,44 @@ class TripleCrownScraper(BaseScraper):
                 row["Contact-name"] = ""
 
         has_age = any(row.get(f"Age-groups.{idx}", "").strip() for idx in range(1, 14))
-        if not has_age:
+        if not has_age and not source_eligibility:
             raise ValueError("Missing required age group data")
         if not row.get("Email", "").strip():
             raise ValueError("Missing required email")
         if not row.get("State-FullName", "").strip():
             raise ValueError("Missing required state")
         return row
+
+    def _preserve_nonnumeric_eligibility(self, row: Dict[str, str], text: str) -> str:
+        """Keep explicitly labelled eligibility without inventing numeric U divisions."""
+        if any(row.get(f"Age-groups.{idx}", "").strip() for idx in range(1, 14)):
+            return ""
+        normalized = " ".join(text.split())
+        patterns = (
+            r"Player Eligibility:\s*\d{4}\s*[-\u2013]\s*\d{4}\s+Grads(?:\s*\(Uncommitted\))?",
+            r"HS GRAD YEARS:\s*\d{4}(?:\s+\d{4})+",
+            r"Divisions:\s*(?:Upperclass\s*&\s*Underclass|Underclass\s*&\s*Upperclass)\b",
+        )
+        eligibility = next((match.group(0) for pattern in patterns
+                            if (match := re.search(pattern, normalized, re.I))), "")
+        if not eligibility:
+            return ""
+        notes = [row.get("More-information-and-additional-tournament-locations", ""), eligibility]
+        for pattern in (
+            r"(?:Price|Cost):\s*\$[\d,]+(?:\.\d{2})?",
+            r"Invite Only:\s*Top\s+\d+\s+players\b",
+            r"SOLD OUT\s+Waitlist ONLY\b",
+        ):
+            match = re.search(pattern, normalized, re.I)
+            if match:
+                notes.append(match.group(0))
+        row["More-information-and-additional-tournament-locations"] = " | ".join(note for note in notes if note)
+        if eligibility.lower().startswith("player eligibility:") or (
+            eligibility.lower().startswith("hs grad years:")
+            and re.search(r"\b(?:camp|clinic)\b", row.get("Tournament-name", ""), re.I)
+        ):
+            row["Tournament-type"] = "Individual"
+        return eligibility
 
     def _extract_first_contact(self, soup: BeautifulSoup) -> Tuple[str, str, str]:
         emails = _extract_emails(soup)
@@ -961,7 +1009,12 @@ class TripleCrownScraper(BaseScraper):
 
         self._fill_comp_levels(row, full_text)
         row = self._merge_exposure_fallback(row, soup)
-        return self._apply_common_requireds(row)
+        eligibility = self._preserve_nonnumeric_eligibility(row, full_text)
+        if eligibility and page_start and (page_start, page_end) != (row["Start-date"], row["End-date"]):
+            row["More-information-and-additional-tournament-locations"] += (
+                f" | Detail page dates: {page_start} - {page_end}; listing dates retained"
+            )
+        return self._apply_common_requireds(row, source_eligibility=eligibility)
 
     def _extract_weebly_facilities(self, event_url: str, soup: BeautifulSoup) -> Tuple[Optional[Dict[str, str]], List[str]]:
         facilities_link = None
@@ -1159,7 +1212,11 @@ class TripleCrownScraper(BaseScraper):
             row[f"Age-groups.{idx}"] = age
             row[f"Entry-fee.{idx}"] = fee
 
-        return self._apply_common_requireds(row)
+        eligibility = self._preserve_nonnumeric_eligibility(row, full_text)
+        if eligibility and not row["Email"]:
+            published_emails = _extract_emails(soup)
+            row["Email"] = published_emails[0] if published_emails else ""
+        return self._apply_common_requireds(row, source_eligibility=eligibility)
 
     def extract_event_details(self, url: str, driver, **kwargs) -> Dict:
         soup = _soup(self.session, url)

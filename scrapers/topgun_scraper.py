@@ -5,9 +5,10 @@ import json
 import logging
 import requests
 import re
+import hashlib
 from datetime import datetime, date
 from typing import List, Dict, Optional
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, urldefrag
 from us import states
 
 from scrapers.base_scraper import BaseScraper
@@ -132,6 +133,7 @@ def _normalize_age_group_token(raw: str) -> str:
 class TopGunScraper(BaseScraper):
     SCRAPER_NAME = "TopGun"
     BATCH_DELAY_SECONDS = 0
+    REQUIRES_DRIVER = False
     SUPPORTS_ALL_LOCATIONS = True
     SUPPORTS_SPECIFIC_LOCATIONS = True
     LOCATIONS_SOURCE = "dynamic"
@@ -142,6 +144,8 @@ class TopGunScraper(BaseScraper):
     DYNAMIC_LOCATIONS = True
 
     def __init__(self):
+        from common.http import create_get_session
+        self.session = create_get_session()
         self.api_key = "secret"
 
         # Cache: synthetic_url -> tournament_obj
@@ -149,6 +153,7 @@ class TopGunScraper(BaseScraper):
 
         # Lookup caches
         self._filter_loaded = False
+        self._tournaments_cache = None
         self._state_to_location_ids: Dict[str, List[int]] = {}
         self._type_id_to_name: Dict[int, str] = {}
         self._banned_type_ids: set[int] = set()
@@ -156,7 +161,7 @@ class TopGunScraper(BaseScraper):
     def _get(self, url: str, params: Optional[Dict] = None) -> Dict:
         params = dict(params or {})
         params["api_key"] = self.api_key
-        r = requests.get(url, params=params, headers={"Accept": "application/json"})
+        r = self.session.get(url, params=params, headers={"Accept": "application/json"}, timeout=(10, 30))
         r.raise_for_status()
         return r.json()
 
@@ -165,9 +170,13 @@ class TopGunScraper(BaseScraper):
             return
 
         data = self._get(self.FILTER_DATA_URL)
+        if not isinstance(data, dict) or not any(k in data for k in ("locations", "Locations")):
+            raise ValueError("TopGun filter response has no recognized locations list")
 
         locs = data.get("locations") or data.get("Locations") or []
         types = data.get("types") or data.get("TournamentTypes") or []
+        if not isinstance(locs, list) or not isinstance(types, list):
+            raise ValueError("TopGun filter locations and types must be lists")
 
         # Build type_id -> name + banned_type_ids (contains "umpire")
         type_map: Dict[int, str] = {}
@@ -201,22 +210,6 @@ class TopGunScraper(BaseScraper):
             state_map.setdefault(st, []).append(loc_id)
 
         self._state_to_location_ids = state_map
-
-        # Build type_id -> name + banned_type_ids (contains "umpire")
-        type_map: Dict[int, str] = {}
-        banned = set()
-        for t in types:
-            tid = t.get("TournamentTypeID") or t.get("tournamentTypeID") or t.get("id")
-            name = (t.get("Name") or t.get("name") or "").strip()
-            if tid is None:
-                continue
-            try:
-                tid_i = int(tid)
-            except Exception:
-                continue
-            type_map[tid_i] = name
-            if "umpire" in name.lower():
-                banned.add(tid_i)
 
         self._type_id_to_name = type_map
         self._banned_type_ids = banned
@@ -290,20 +283,24 @@ class TopGunScraper(BaseScraper):
             logger.warning("[TopGun] No LocationIDs found for state=%s. Returning no events.", state)
             return []
 
-        all_tournaments = self._get(self.TOURNAMENT_DATA_URL)
+        all_tournaments = self._tournaments_cache
+        if all_tournaments is None:
+            all_tournaments = self._get(self.TOURNAMENT_DATA_URL)
         # The API might return a list directly or wrap in a property
         if isinstance(all_tournaments, dict):
-            tournaments = (
-                all_tournaments.get("Tournaments")
-                or all_tournaments.get("tournaments")
-                or all_tournaments.get("data")
-                or []
-            )
+            key = next((k for k in ("Tournaments", "tournaments", "data") if k in all_tournaments), None)
+            if key is None:
+                raise ValueError("TopGun tournament response has no recognized list field")
+            tournaments = all_tournaments[key]
         else:
             tournaments = all_tournaments
+        if not isinstance(tournaments, list):
+            raise ValueError("TopGun tournament response must contain a list")
+        self._tournaments_cache = tournaments
 
         today = date.today()
-        out_urls: List[str] = []
+        from common.collection import CollectedLinks
+        out_urls = CollectedLinks(pages=1)
         self.tournaments_by_url.clear()
 
         for t in tournaments:
@@ -352,11 +349,19 @@ class TopGunScraper(BaseScraper):
                 )
 
                 synthetic_url = _normalize_url(synthetic_url)
+                # TournamentID verified in the provider's tournament-data response.
+                tournament_id = t.get("TournamentID")
+                if tournament_id is None:
+                    fingerprint = [t.get(k) for k in ("TournamentName", "SportID", "LocationID",
+                                                      "TournamentTypeID", "StartDate", "EndDate")]
+                    tournament_id = "fallback-" + hashlib.sha256(json.dumps(fingerprint).encode()).hexdigest()[:24]
+                    logger.warning("[TopGun] Missing TournamentID; using a date/name-based fallback identity")
+                synthetic_url += f"#tournament={tournament_id}"
                 self.tournaments_by_url[synthetic_url] = t
                 out_urls.append(synthetic_url)
 
-            except Exception:
-                # don't let one bad entry kill the run
+            except Exception as exc:
+                out_urls.complete, out_urls.error = False, f"TopGun malformed tournament record: {exc}"
                 continue
 
         logger.info("[TopGun] Collected %d tournaments for state=%s sport=%d", len(out_urls), state, sport_id)
@@ -468,7 +473,7 @@ class TopGunScraper(BaseScraper):
         event["Email"] = (t.get("Email") or "").strip()
 
         # Redirect URL (synthetic filter URL)
-        event["Website-url"] = url
+        event["Website-url"] = urldefrag(url)[0]
 
         # More info: notes + additional locations list if any
         notes = (t.get("Notes") or "").strip()
@@ -484,3 +489,6 @@ class TopGunScraper(BaseScraper):
     def get_event_key(self, url: str) -> str:
         # Your runner uses the returned URL as the JSON key anyway; keep it stable
         return url
+
+    def get_event_identity(self, url: str) -> str:
+        return urlparse(url).fragment or url

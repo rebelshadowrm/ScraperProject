@@ -9,6 +9,7 @@ import us
 from bs4 import BeautifulSoup
 
 from common.config import OUTPUT_COLUMNS
+from common.http import create_get_session
 from scrapers.base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
@@ -31,8 +32,8 @@ MONTHS = {
 }
 
 
-def _http_get(url: str, timeout: int = 30) -> str:
-    resp = requests.get(
+def _http_get(url: str, timeout: int = 30, session=None) -> str:
+    resp = (session or requests).get(
         url,
         headers={
             "User-Agent": "Mozilla/5.0",
@@ -44,8 +45,8 @@ def _http_get(url: str, timeout: int = 30) -> str:
     return resp.text
 
 
-def _soup(url: str) -> BeautifulSoup:
-    return BeautifulSoup(_http_get(url), "html.parser")
+def _soup(url: str, session=None) -> BeautifulSoup:
+    return BeautifulSoup(_http_get(url, session=session), "html.parser")
 
 
 def _mmddyyyy(d: date) -> str:
@@ -66,11 +67,19 @@ def _state_full_name(abbr_or_name: str) -> str:
 
 
 def _parse_date_range(raw: str, year: int) -> Tuple[Optional[date], Optional[date]]:
+    from common.date_utils import explicit_year_range
+    explicit = explicit_year_range(raw)
+    if explicit:
+        return explicit
     s = " ".join((raw or "").split()).strip()
     if not s:
         return None, None
 
     s = s.replace("\u2013", "-").replace("\u2014", "-")
+    explicit_year = re.search(r",?\s+(\d{4})$", s)
+    if explicit_year:
+        year = int(explicit_year.group(1))
+        s = s[:explicit_year.start()].strip()
 
     m = re.match(r"^([A-Za-z]+)\s+(\d{1,2})\s*-\s*([A-Za-z]+)\s+(\d{1,2})$", s)
     if m:
@@ -249,6 +258,7 @@ class Game7BaseballScraper(BaseScraper):
     LOCATIONS_SOURCE = "config"
 
     def __init__(self):
+        self.session = create_get_session()
         self.listing_meta: Dict[str, Dict[str, Any]] = {}
 
     def _page_has_no_events(self, soup: BeautifulSoup) -> bool:
@@ -259,15 +269,30 @@ class Game7BaseballScraper(BaseScraper):
         return soup.select("div.media-list.media-list-events > div.media")
 
     def collect_event_links(self, driver, base_url: str, **kwargs) -> List[str]:
+        from common.collection import CollectedLinks
+        import time
+        deadline = time.monotonic() + 600
         state_abbr = _state_abbr_from_base_url(base_url)
         page = 1
-        out: List[str] = []
+        out = CollectedLinks()
         seen = set()
+        seen_pages = set()
+        seen_content = set()
         self.listing_meta = {}
 
         while True:
+            if page in seen_pages or len(seen_pages) >= 200 or time.monotonic() > deadline:
+                out.complete = False
+                out.error = "Game7 repeated page or 200-page budget exceeded"
+                break
+            seen_pages.add(page)
+            out.pages = len(seen_pages)
             url = base_url if page == 1 else f"{base_url}&page={page}" if "?" in base_url else f"{base_url}?page={page}"
-            soup = _soup(url)
+            try:
+                soup = _soup(url, self.session)
+            except Exception as exc:
+                out.complete, out.error = False, f"Game7 listing request failed: {exc}"
+                break
 
             if self._page_has_no_events(soup):
                 logger.info("[Game7Baseball] No events found for state=%s page=%s", state_abbr, page)
@@ -275,8 +300,15 @@ class Game7BaseballScraper(BaseScraper):
 
             items = self._listing_items(soup)
             if not items:
-                logger.info("[Game7Baseball] No event cards found for state=%s page=%s", state_abbr, page)
+                out.complete, out.error = False, "Game7 listing has no recognized cards or explicit empty state"
                 break
+
+            fingerprint = tuple(sorted(a.get("href", "") for item in items
+                                       for a in item.select("div.h4 a[href*='/baseball/Events/Details/']")))
+            if not fingerprint or fingerprint in seen_content:
+                out.complete, out.error = False, "Game7 missing event links or repeated listing content"
+                break
+            seen_content.add(fingerprint)
 
             new_links = 0
             for media in items:
@@ -596,16 +628,16 @@ class Game7BaseballScraper(BaseScraper):
         selected_state_abbr = (self.listing_meta.get(url, {}).get("state") or "").strip().upper()
         details_url, divisions_url, locations_url = self._detail_urls(url)
 
-        details = self._parse_details_page(_soup(details_url), selected_state_abbr)
+        details = self._parse_details_page(_soup(details_url, self.session), selected_state_abbr)
         contacts = {"Contact-name": "", "Phone-number": "", "Email": ""}
         contacts_url = _contacts_url(details_url)
         if contacts_url:
             try:
-                contacts = self._parse_contacts_page(_soup(contacts_url))
+                contacts = self._parse_contacts_page(_soup(contacts_url, self.session))
             except Exception:
                 contacts = {"Contact-name": "", "Phone-number": "", "Email": ""}
-        divisions = self._parse_divisions_page(_soup(divisions_url))
-        locations = self._parse_locations_page(_soup(locations_url), selected_state_abbr)
+        divisions = self._parse_divisions_page(_soup(divisions_url, self.session))
+        locations = self._parse_locations_page(_soup(locations_url, self.session), selected_state_abbr)
         listing = self.listing_meta.get(url, {})
 
         row = {col: "" for col in OUTPUT_COLUMNS}

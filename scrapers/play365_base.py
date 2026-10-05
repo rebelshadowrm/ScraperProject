@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import time
+import hashlib
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import parse_qs
 
@@ -260,11 +261,11 @@ class Play365BaseScraper(BaseScraper):
     DUMP_FILENAME = "play365_dump.json"
     SCRIPT_FILENAME = "export_play365.js"
     FORCE_SPORT_ID: Optional[int] = 1
-    EXPORT_HTTP_METHOD = "GET"
+    EXPORT_HTTP_METHOD = "POST"
     EXPORT_SUPPORTS_STATE_FILTER = True
     EXPORT_LAYOUT_DEFAULT = "medium"
     EXPORT_EXTRA_PARAMS: Dict[str, str] = {}
-    EXPORT_TOKEN_PARAM: Optional[str] = None
+    EXPORT_TOKEN_PARAM: Optional[str] = "_token"
     PREPARE_DUMP_IN_PROMPT = False
     SUPPORTS_SELENIUM_EXPORT = False
     DIRECT_API_ENABLED = True
@@ -278,6 +279,8 @@ class Play365BaseScraper(BaseScraper):
         self._loaded_dump_path: Optional[str] = None
         self._loaded_dump_mtime: Optional[float] = None
         self._all_events_cache: List[Dict[str, Any]] = []
+        self._events_by_state: Dict[str, List[Dict[str, Any]]] = {}
+        self._events_loaded = False
         self._event_source_label: str = ""
         self._last_collection_source: str = ""
 
@@ -338,17 +341,19 @@ class Play365BaseScraper(BaseScraper):
         return path
 
     def _try_recover_downloaded_dump(self, expected_dump_path: str) -> bool:
-        if os.path.exists(expected_dump_path):
+        if self._dump_is_fresh(expected_dump_path):
             return True
 
         downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
         candidate = os.path.join(downloads_dir, os.path.basename(expected_dump_path))
-        if not os.path.exists(candidate):
+        if not self._dump_is_fresh(candidate):
             return False
 
         try:
             os.makedirs(os.path.dirname(expected_dump_path), exist_ok=True)
-            shutil.move(candidate, expected_dump_path)
+            from common.storage import atomic_output
+            with atomic_output(expected_dump_path) as staged:
+                shutil.copyfile(candidate, staged)
             logger.info("[%s] Recovered dump from Downloads: %s", self.SCRAPER_NAME, candidate)
             return True
         except Exception as e:
@@ -358,6 +363,42 @@ class Play365BaseScraper(BaseScraper):
     # -------------------------------------------------------------------------
     # Browser export script generation
     # -------------------------------------------------------------------------
+
+    def _export_safety_helpers(self) -> str:
+        return r"""
+const sourceDeadline = Date.now() + 600000;
+function checkBudget(page) {
+  if (page > 200 || Date.now() >= sourceDeadline) throw new Error("Source page/time budget exceeded");
+}
+function eventRecords(data) {
+  if (Array.isArray(data)) {
+    if (data.some(item => !item || typeof item !== "object" || Array.isArray(item)))
+      throw new Error("Events must be record objects");
+    return data;
+  }
+  if (data && typeof data === "object") {
+    for (const key of ["eventlist", "events", "data", "payload"]) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) return eventRecords(data[key]);
+    }
+  }
+  throw new Error("No recognized events list; cannot verify completeness");
+}
+function pageFingerprint(records) {
+  return JSON.stringify(records.map(item => String(item.url_key || item.event_id || item.id || JSON.stringify(item))).sort());
+}
+async function fetchPage(url, options) {
+  checkBudget(1);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), Math.min(30000, sourceDeadline - Date.now()));
+  try {
+    const response = await fetch(url, {...options, signal: controller.signal});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return JSON.parse(await response.text());
+  } finally {
+    clearTimeout(timer);
+  }
+}
+"""
 
     def _build_export_script(self) -> str:
         states_json = json.dumps([abbr for abbr, _ in ALL_50_STATES])
@@ -378,6 +419,7 @@ class Play365BaseScraper(BaseScraper):
   const EXTRA_PARAMS = {extra_params_json};
   const TOKEN_PARAM = {token_param};
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  {self._export_safety_helpers()}
 
   function findAjaxSeed() {{
     try {{
@@ -497,7 +539,7 @@ class Play365BaseScraper(BaseScraper):
       params.set("sport_id", String(FORCE_SPORT_ID));
     }}
 
-    if (TOKEN_PARAM && !params.get(TOKEN_PARAM)) {{
+    if (TOKEN_PARAM) {{
       const token = findToken();
       if (token) {{
         params.set(TOKEN_PARAM, token);
@@ -507,12 +549,14 @@ class Play365BaseScraper(BaseScraper):
     const allPages = [];
     let page = 1;
     let retries = 0;
+    const seenPages = new Set();
 
     while (true) {{
+      checkBudget(page);
       params.set("page", String(page));
       const url = `${{seed.ajaxUrl}}?${{params.toString()}}`;
 
-      let resp;
+      let data;
       try {{
         const fetchOptions = {{
           method: HTTP_METHOD,
@@ -529,61 +573,26 @@ class Play365BaseScraper(BaseScraper):
           requestUrl = seed.ajaxUrl;
         }}
 
-        resp = await fetch(requestUrl, fetchOptions);
+        data = await fetchPage(requestUrl, fetchOptions);
       }} catch (e) {{
         console.log(`[${{state}}] Network error on page ${{page}}:`, e);
         retries++;
-        if (retries > MAX_RETRIES) break;
+        if (retries > MAX_RETRIES) throw e;
         await sleep(3000);
         continue;
       }}
 
-      if (resp.status === 403) {{
-        console.log(`[${{state}}] 403 on page ${{page}}. Solve any challenge in this tab, then wait...`);
-        retries++;
-        if (retries > MAX_RETRIES) break;
-        await sleep(5000);
-        continue;
-      }}
-
       retries = 0;
-
-      const text = await resp.text();
-      let data;
-      try {{
-        data = JSON.parse(text);
-      }} catch (e) {{
-        console.log(`[${{state}}] Non-JSON on page ${{page}}. Stopping.`);
-        break;
-      }}
-
-      let eventCount = 0;
-      if (Array.isArray(data)) {{
-        eventCount = data.length;
-      }} else if (Array.isArray(data?.events)) {{
-        eventCount = data.events.length;
-      }} else if (Array.isArray(data?.data)) {{
-        eventCount = data.data.length;
-      }} else if (Array.isArray(data?.eventlist)) {{
-        eventCount = data.eventlist.length;
-      }} else if (Array.isArray(data?.payload)) {{
-        eventCount = data.payload.length;
-      }} else if (Array.isArray(data?.payload?.events)) {{
-        eventCount = data.payload.events.length;
-      }} else if (Array.isArray(data?.payload?.data)) {{
-        eventCount = data.payload.data.length;
-      }} else if (Array.isArray(data?.payload?.eventlist)) {{
-        eventCount = data.payload.eventlist.length;
-      }} else if (typeof data?.html === "string") {{
-        eventCount = (data.html.match(/data-event-id=/g) || []).length;
-      }} else if (typeof data?.payload?.html === "string") {{
-        eventCount = (data.payload.html.match(/data-event-id=/g) || []).length;
-      }}
+      const records = eventRecords(data);
+      const eventCount = records.length;
 
       if (eventCount === 0) {{
         console.log(`[${{state}}] No more events at page ${{page}}. Stopping.`);
         break;
       }}
+      const fingerprint = pageFingerprint(records);
+      if (seenPages.has(fingerprint)) throw new Error("Repeated nonempty events page");
+      seenPages.add(fingerprint);
 
       console.log(`[${{state}}] Saved page ${{page}} (${{eventCount}} events)`);
 
@@ -609,7 +618,8 @@ class Play365BaseScraper(BaseScraper):
     forced_sport_id: FORCE_SPORT_ID,
     states: STATES,
     seed_params: seed.params || {{}},
-    pages: []
+    pages: [],
+    completion: {{complete: false, completed_states: []}}
   }};
 
   const exportStates = SUPPORTS_STATE_FILTER ? STATES : [""];
@@ -619,10 +629,12 @@ class Play365BaseScraper(BaseScraper):
     console.log(`Starting export for ${{stateLabel}}...`);
     const pages = await fetchState(state);
     dump.pages.push(...pages);
+    dump.completion.completed_states.push(state);
     console.log(`Done with ${{stateLabel}}. Added ${{pages.length}} page(s).`);
     await sleep(1000);
   }}
 
+  dump.completion.complete = true;
   const out = JSON.stringify(dump, null, 2);
   const blob = new Blob([out], {{ type: "application/json" }});
   const a = document.createElement("a");
@@ -668,6 +680,7 @@ const LAYOUT_DEFAULT = {layout_default};
 const EXTRA_PARAMS = {extra_params_json};
 const TOKEN_PARAM = {token_param};
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+{self._export_safety_helpers()}
 
 function findAjaxSeed() {{
   try {{
@@ -733,17 +746,7 @@ function collectHiddenParams() {{
 }}
 
 function countEvents(data) {{
-  if (Array.isArray(data)) return data.length;
-  if (Array.isArray(data?.events)) return data.events.length;
-  if (Array.isArray(data?.data)) return data.data.length;
-  if (Array.isArray(data?.eventlist)) return data.eventlist.length;
-  if (Array.isArray(data?.payload)) return data.payload.length;
-  if (Array.isArray(data?.payload?.events)) return data.payload.events.length;
-  if (Array.isArray(data?.payload?.data)) return data.payload.data.length;
-  if (Array.isArray(data?.payload?.eventlist)) return data.payload.eventlist.length;
-  if (typeof data?.html === "string") return (data.html.match(/data-event-id=/g) || []).length;
-  if (typeof data?.payload?.html === "string") return (data.payload.html.match(/data-event-id=/g) || []).length;
-  return 0;
+  return eventRecords(data).length;
 }}
 
 (async () => {{
@@ -756,7 +759,8 @@ function countEvents(data) {{
       forced_sport_id: FORCE_SPORT_ID,
       states: STATES,
       seed_params: seed.params || {{}},
-      pages: []
+      pages: [],
+      completion: {{complete: false, completed_states: []}}
     }};
 
     const exportStates = SUPPORTS_STATE_FILTER ? STATES : [""];
@@ -780,14 +784,16 @@ function countEvents(data) {{
 
       if (FORCE_SPORT_ID !== null) params.set("sport_id", String(FORCE_SPORT_ID));
 
-      if (TOKEN_PARAM && !params.get(TOKEN_PARAM)) {{
+      if (TOKEN_PARAM) {{
         const token = findToken();
         if (token) params.set(TOKEN_PARAM, token);
       }}
 
       let page = 1;
       let retries = 0;
+      const seenPages = new Set();
       while (true) {{
+        checkBudget(page);
         params.set("page", String(page));
         const url = `${{seed.ajaxUrl}}?${{params.toString()}}`;
 
@@ -807,11 +813,12 @@ function countEvents(data) {{
             requestUrl = seed.ajaxUrl;
           }}
 
-          const resp = await fetch(requestUrl, fetchOptions);
-          if (resp.status === 403) throw new Error(`403 on page ${{page}}`);
-          const data = JSON.parse(await resp.text());
+          const data = await fetchPage(requestUrl, fetchOptions);
           const eventCount = countEvents(data);
           if (!eventCount) break;
+          const fingerprint = pageFingerprint(eventRecords(data));
+          if (seenPages.has(fingerprint)) throw new Error("Repeated nonempty events page");
+          seenPages.add(fingerprint);
 
           dump.pages.push({{
             state: SUPPORTS_STATE_FILTER ? state : "",
@@ -830,8 +837,10 @@ function countEvents(data) {{
           await sleep(1000);
         }}
       }}
+      dump.completion.completed_states.push(state);
     }}
 
+    dump.completion.complete = true;
     callback({{ ok: true, dump }});
   }} catch (err) {{
     callback({{ ok: false, error: String(err && err.message ? err.message : err) }});
@@ -859,9 +868,13 @@ function countEvents(data) {{
             )
             return False
 
-        os.makedirs(os.path.dirname(dump_path), exist_ok=True)
-        with open(dump_path, "w", encoding="utf-8") as f:
-            json.dump(result["dump"], f, indent=2)
+        try:
+            self._validate_complete_dump(result["dump"])
+        except ValueError as exc:
+            logger.warning("[%s] Incomplete Selenium dump: %s", self.SCRAPER_NAME, exc)
+            return False
+        from common.storage import save_json_atomic
+        save_json_atomic(result["dump"], dump_path)
 
         log_progress(logger, "[%s] Dump generated via Selenium: %s", self.SCRAPER_NAME, dump_path)
         return True
@@ -881,7 +894,9 @@ function countEvents(data) {{
         with open(dump_path, "r", encoding="utf-8") as f:
             blob = json.load(f)
 
-        self._all_events_cache = list(_walk_event_objects(blob))
+        self._validate_complete_dump(blob)
+        self._index_event_source(blob)
+        self._events_loaded = True
         self._loaded_dump_path = dump_path
         self._loaded_dump_mtime = mtime
         self._event_source_label = f"dump cache ({dump_path})"
@@ -894,7 +909,8 @@ function countEvents(data) {{
         )
 
     def _load_events_from_blob(self, blob: Any, source_label: str) -> None:
-        self._all_events_cache = list(_walk_event_objects(blob))
+        self._index_event_source(blob)
+        self._events_loaded = True
         self._loaded_dump_path = None
         self._loaded_dump_mtime = None
         self._event_source_label = source_label
@@ -904,6 +920,56 @@ function countEvents(data) {{
             len(self._all_events_cache),
             source_label,
         )
+
+    @staticmethod
+    def _event_records(payload):
+        from common.collection import validated_records
+        if isinstance(payload, dict):
+            key = next((key for key in ("eventlist", "events", "data", "payload") if key in payload), None)
+            if key is None:
+                raise ValueError("Play365 response has no recognized events list")
+            return Play365BaseScraper._event_records(payload[key])
+        return validated_records(payload, source="Play365")
+
+    def _validate_complete_dump(self, blob):
+        if not isinstance(blob, dict):
+            raise ValueError("Play365 dump must be an object")
+        completion = blob.get("completion")
+        if not isinstance(completion, dict) or completion.get("complete") is not True:
+            raise ValueError("Play365 dump has no verified completion metadata; regenerate with the current exporter")
+        expected = [abbr for abbr, _ in ALL_50_STATES] if self.EXPORT_SUPPORTS_STATE_FILTER else [""]
+        completed = completion.get("completed_states")
+        if not isinstance(completed, list) or any(not isinstance(s, str) for s in completed) or sorted(completed) != sorted(expected):
+            raise ValueError("Play365 dump does not cover the expected export states")
+        domain = blob.get("domain")
+        if not isinstance(domain, str) or domain.rstrip("/") != self.DOMAIN.rstrip("/"):
+            raise ValueError("Play365 dump belongs to a different provider domain")
+        if not isinstance(blob.get("seed_params"), dict) or not isinstance(blob.get("pages"), list):
+            raise ValueError("Play365 dump requires seed_params and pages")
+        pages_by_state = {state: [] for state in expected}
+        for page in blob["pages"]:
+            if not isinstance(page, dict) or not isinstance(page.get("state"), str) or page["state"] not in pages_by_state:
+                raise ValueError("Play365 dump has an unexpected page state")
+            number = page.get("page")
+            if type(number) is not int or not 1 <= number <= 200:
+                raise ValueError("Play365 dump has an invalid page number")
+            self._event_records(page.get("payload"))
+            pages_by_state[page["state"]].append(number)
+        for numbers in pages_by_state.values():
+            if numbers != list(range(1, len(numbers) + 1)):
+                raise ValueError("Play365 dump has missing, repeated, or unordered pages")
+
+    def _index_event_source(self, blob: Any) -> None:
+        self._all_events_cache = list(_walk_event_objects(blob))
+        by_state = {}
+        for event in self._all_events_cache:
+            state = clean_text(_first_non_empty(event.get("state"))).upper()
+            if not state:
+                venues = event.get("venues") or []
+                if venues:
+                    state = clean_text(_first_non_empty(venues[0].get("state"))).upper()
+            by_state.setdefault(state, []).append(event)
+        self._events_by_state = by_state
 
     def _extract_hidden_inputs(self, html: str) -> Dict[str, str]:
         out: Dict[str, str] = {}
@@ -958,20 +1024,34 @@ function countEvents(data) {{
         export_states = [abbr for abbr, _ in ALL_50_STATES] if self.EXPORT_SUPPORTS_STATE_FILTER else [""]
         hidden_params: Dict[str, str] = {}
         made_request = False
+        deadline = time.monotonic() + 600
 
         try:
             try:
                 bootstrap = session.get(self.DOMAIN, headers=self.DIRECT_API_HEADERS, timeout=30)
-                if bootstrap.ok:
-                    hidden_params = self._extract_hidden_inputs(bootstrap.text)
+                bootstrap.raise_for_status()
+                hidden_params = self._extract_hidden_inputs(bootstrap.text)
             except Exception as e:
                 logger.info("[%s] Bootstrap request for direct API seed did not succeed: %s", self.SCRAPER_NAME, e)
+
+            # Public cached pages can contain another session's stale token.
+            # Match the frontend's refresh step and retain its session cookies.
+            refreshed = session.get(f"{self.DOMAIN.rstrip('/')}/refresh-csrf",
+                                    headers=self.DIRECT_API_HEADERS, timeout=(10, 30))
+            refreshed.raise_for_status()
+            token = refreshed.json().get("csrf_token")
+            if not isinstance(token, str) or not token.strip():
+                raise ValueError("Play365 CSRF refresh returned no token")
+            hidden_params["_token"] = token
 
             log_progress(logger, "[%s] Attempting direct API pull.", self.SCRAPER_NAME)
 
             for state in export_states:
                 page = 1
+                seen_pages = set()
                 while True:
+                    if page > 200 or time.monotonic() > deadline:
+                        raise RuntimeError("Play365 source pagination/time budget exceeded")
                     params = self._build_direct_api_params(page=page, state=state)
                     for key, value in hidden_params.items():
                         if key not in params:
@@ -986,14 +1066,14 @@ function countEvents(data) {{
                     resp.raise_for_status()
                     data = resp.json()
 
-                    eventlist = []
-                    if isinstance(data, dict):
-                        eventlist = data.get("eventlist") or data.get("events") or data.get("data") or []
-                    elif isinstance(data, list):
-                        eventlist = data
+                    eventlist = self._event_records(data)
 
                     if not eventlist:
                         break
+                    fingerprint = hashlib.sha256(json.dumps(eventlist, sort_keys=True).encode()).hexdigest()
+                    if fingerprint in seen_pages:
+                        raise RuntimeError("Play365 API repeated a nonempty events page")
+                    seen_pages.add(fingerprint)
 
                     pages.append(
                         {
@@ -1026,6 +1106,8 @@ function countEvents(data) {{
         except Exception as e:
             logger.warning("[%s] Direct API pull failed: %s", self.SCRAPER_NAME, e)
             return False
+        finally:
+            session.close()
 
     def _prompt_manual_fallback(self) -> bool:
         print(
@@ -1050,7 +1132,7 @@ function countEvents(data) {{
         *,
         prompt_for_manual_fallback: bool = True,
     ) -> str:
-        if os.path.exists(dump_path):
+        if self._dump_is_fresh(dump_path):
             return dump_path
 
         if self._try_export_dump_with_selenium(driver, dump_path):
@@ -1081,7 +1163,9 @@ function countEvents(data) {{
                     "Press Enter after the dump file is ready..."
                 )
 
-                if os.path.exists(active_dump_path) or self._try_recover_downloaded_dump(active_dump_path):
+                if self._dump_is_fresh(active_dump_path) or (
+                    self._try_recover_downloaded_dump(active_dump_path) and self._dump_is_fresh(active_dump_path)
+                ):
                     break
 
                 print(
@@ -1098,11 +1182,34 @@ function countEvents(data) {{
         except EOFError:
             pass
 
-        if not os.path.exists(active_dump_path) and not self._try_recover_downloaded_dump(active_dump_path):
+        if not self._dump_is_fresh(active_dump_path) and not (
+            self._try_recover_downloaded_dump(active_dump_path) and self._dump_is_fresh(active_dump_path)
+        ):
             raise FileNotFoundError(
                 f"{self.SCRAPER_NAME} dump still not found after prompt: {active_dump_path}"
             )
         return active_dump_path
+
+    def _dump_is_fresh(self, path):
+        if not os.path.isfile(path):
+            return False
+        age_limit = getattr(self, "MAX_DUMP_AGE_SECONDS", 24 * 60 * 60)
+        if time.time() - os.path.getmtime(path) > age_limit:
+            logger.warning("[%s] Ignoring a manual dump older than %.1f hours", self.SCRAPER_NAME, age_limit / 3600)
+            return False
+        try:
+            from datetime import datetime, timezone
+            with open(path, encoding="utf-8") as handle:
+                blob = json.load(handle)
+            generated = blob.get("generated_at") if isinstance(blob, dict) else None
+            if generated:
+                stamp = datetime.fromisoformat(str(generated).replace("Z", "+00:00"))
+                stamp = stamp.replace(tzinfo=timezone.utc) if stamp.tzinfo is None else stamp
+                if (datetime.now(timezone.utc) - stamp).total_seconds() > age_limit:
+                    return False
+            return True
+        except (ValueError, OSError, TypeError):
+            return False
 
     # -------------------------------------------------------------------------
     # BaseScraper interface
@@ -1119,11 +1226,20 @@ function countEvents(data) {{
         if not target_state:
             raise ValueError(f"{self.SCRAPER_NAME} base_url is missing ?state=XX")
 
-        if not self._all_events_cache:
+        if not self._events_loaded:
             api_loaded = False
             if not skip_direct_api:
                 api_loaded = self._try_load_events_from_api()
+                if api_loaded:
+                    self._events_loaded = True
 
+            if not api_loaded:
+                if self._dump_is_fresh(dump_path):
+                    try:
+                        self._load_dump_if_needed(dump_path)
+                        api_loaded = True
+                    except (ValueError, TypeError, OSError) as exc:
+                        logger.warning("[%s] Fresh dump is unusable: %s", self.SCRAPER_NAME, type(exc).__name__)
             if not api_loaded:
                 if not allow_manual_fallback:
                     raise Play365ManualFallbackRequired(self.SCRAPER_NAME)
@@ -1138,7 +1254,7 @@ function countEvents(data) {{
         self._last_collection_source = self._event_source_label or "cache"
         self.events_by_url.clear()
 
-        for event in self._all_events_cache:
+        for event in self._events_by_state.get(target_state, []):
             sport_id = event.get("sport_id")
             if self.FORCE_SPORT_ID is not None and sport_id not in (self.FORCE_SPORT_ID, str(self.FORCE_SPORT_ID), None):
                 continue
@@ -1344,7 +1460,9 @@ function countEvents(data) {{
 
 
 class Play365GetScraper(Play365BaseScraper):
-    EXPORT_HTTP_METHOD = "GET"
+    # Keep the import/class names (and ledger identities) while matching the
+    # providers' current POST-only acquisition protocol.
+    EXPORT_HTTP_METHOD = "POST"
 
 
 class Play365GetAllScraper(Play365GetScraper):

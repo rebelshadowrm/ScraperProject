@@ -15,6 +15,15 @@ class BaseScraper(abc.ABC):
     LOCATIONS_SOURCE = "config"
     DYNAMIC_LOCATIONS = False
 
+    def close(self):
+        """Release instance-owned transports after a provider run."""
+        closed = set()
+        for name in ("session", "_http"):
+            transport = getattr(self, name, None)
+            if transport is not None and id(transport) not in closed:
+                closed.add(id(transport))
+                transport.close()
+
     def supports_all_locations(self) -> bool:
         return bool(getattr(self, "SUPPORTS_ALL_LOCATIONS", True))
 

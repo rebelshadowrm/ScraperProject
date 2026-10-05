@@ -3,12 +3,16 @@
 import logging
 import time
 import re
-from datetime import datetime
-from urllib.parse import urlparse, parse_qs
+import json
+from datetime import datetime, timedelta
+from html import unescape
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from typing import List, Dict, Tuple
 from bs4 import BeautifulSoup
 from us import states  # Ensure you have 'us' library installed: pip install us
 from common.config import OUTPUT_COLUMNS, VALID_LEVELS
+from common.collection import CollectedLinks
+from common.validation import parse_event_date
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -31,6 +35,37 @@ class USSSAScraper(BaseScraper):
     SUPPORTS_ALL_LOCATIONS = True
     SUPPORTS_SPECIFIC_LOCATIONS = True
     LOCATIONS_SOURCE = "config"
+
+    def _repair_dates_from_event_schema(self, soup, name, start, end):
+        """Use published ISO dates only when the visible range fails validation."""
+        parsed_start, parsed_end = parse_event_date(start), parse_event_date(end)
+        if parsed_start and parsed_end and parsed_start <= parsed_end:
+            return start, end
+        for script in soup.select('script[type="application/ld+json"]'):
+            try:
+                payload = json.loads(script.get_text())
+            except (ValueError, TypeError):
+                continue
+            nodes = payload if isinstance(payload, list) else [payload]
+            if isinstance(payload, dict) and isinstance(payload.get("@graph"), list):
+                nodes += payload["@graph"]
+            for node in nodes:
+                if not isinstance(node, dict):
+                    continue
+                types = node.get("@type", [])
+                types = [types] if isinstance(types, str) else types
+                if not isinstance(types, list) or "Event" not in types:
+                    continue
+                if unescape(str(node.get("name", ""))).strip().casefold() != name.strip().casefold():
+                    continue
+                try:
+                    explicit_start = datetime.strptime(node["startDate"], "%Y-%m-%d").date()
+                    explicit_end = datetime.strptime(node["endDate"], "%Y-%m-%d").date()
+                except (KeyError, ValueError, TypeError):
+                    continue
+                if explicit_end >= explicit_start:
+                    return explicit_start.strftime("%m/%d/%Y"), explicit_end.strftime("%m/%d/%Y")
+        return start, end
 
     def _state_from_usssa_host(self, url: str) -> str:
         try:
@@ -102,15 +137,80 @@ class USSSAScraper(BaseScraper):
             )
         )
 
+    def _national_api(self, driver, action, params=None):
+        response = driver.execute_async_script("""
+            const action = arguments[0], params = arguments[1], done = arguments[2];
+            const abort = new AbortController();
+            const timeout = setTimeout(() => abort.abort(), 20000);
+            const options = {signal: abort.signal};
+            if (params !== null) {
+                options.method = 'POST';
+                options.headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+                options.body = new URLSearchParams({...params, token: window.apiAccessToken || ''});
+            }
+            fetch('/api/?action=' + encodeURIComponent(action), options)
+                .then(async r => ({ok: r.ok, status: r.status, data: await r.json()}))
+                .then(done).catch(() => done({ok: false, error: 'National source request failed'}))
+                .finally(() => clearTimeout(timeout));
+        """, action, params)
+        if not isinstance(response, dict) or not response.get("ok"):
+            raise ValueError("National USSSA source request failed")
+        return response.get("data")
+
+    def _verify_redirected_empty(self, driver, base_url):
+        """Verify an unavailable state site against every published national season."""
+        state_name = self._state_from_usssa_host(base_url)
+        if not state_name:
+            raise ValueError("Unrecognized USSSA state redirect")
+        driver.get("https://www.usssa.com/baseball/eventSearch/")
+        if (urlparse(driver.current_url).hostname or "").lower() != "www.usssa.com":
+            raise ValueError("National USSSA search redirected unexpectedly")
+        deadline = time.monotonic() + 60
+        seasons = self._national_api(driver, "getEventSearchSeasons")
+        fields = self._national_api(driver, "getBasicEventSearchFieldsV11", {"sportID": "11"})
+        baseball_seasons = seasons.get("11") if isinstance(seasons, dict) else None
+        states_data = fields.get("states") if isinstance(fields, dict) else None
+        if not isinstance(baseball_seasons, list) or not 0 < len(baseball_seasons) <= 100 or not isinstance(states_data, list):
+            raise ValueError("Invalid national USSSA season/state metadata")
+        matches = [s for s in states_data if isinstance(s, dict) and s.get("name") == state_name]
+        if len(matches) != 1 or not str(matches[0].get("value", "")).isdigit():
+            raise ValueError("National USSSA state filter unavailable")
+        season_ids = []
+        for season in baseball_seasons:
+            if not isinstance(season, dict) or not str(season.get("value", "")).isdigit():
+                raise ValueError("Invalid national USSSA season identifier")
+            season_ids.append(str(season["value"]))
+        if len(set(season_ids)) != len(season_ids):
+            raise ValueError("Repeated national USSSA season identifier")
+        start = (datetime.now() + timedelta(days=1)).strftime("%m/%d/%Y")
+        for season_id in season_ids:
+            if time.monotonic() >= deadline:
+                raise ValueError("National USSSA verification budget exceeded")
+            payload = self._national_api(driver, "eventSearchSimpleV11", {
+                "sportID": "11", "seasonID": season_id, "regionID": str(matches[0]["value"]),
+                "stateID": "", "startDate": start, "endDate": "", "classID": "", "statureID": "",
+                "age": "", "zip": "", "mile": "", "director": "", "parkID": "",
+            })
+            if not isinstance(payload, dict) or not isinstance(payload.get("results"), list):
+                raise ValueError("Invalid national USSSA event response")
+            if payload["results"]:
+                raise ValueError("National USSSA source contains events; state detail discovery unavailable")
+        logger.info("Verified no future USSSA events for %s across %d published seasons.", state_name, len(season_ids))
+        return 0
+
     def _get_total_pages(self, driver, base_url: str, wait_time: int = 30) -> int:
         """
         Determine the total number of pages from the pagination section on the USSSA site.
         """
         try:
             driver.get(base_url)
+            landed_url = getattr(driver, "current_url", "")
+            if isinstance(landed_url, str) and (urlparse(landed_url).hostname or "").lower() in {"tournamentgear.com", "www.tournamentgear.com"}:
+                return self._verify_redirected_empty(driver, base_url)
             self._wait_for_listing_state(driver, wait_time)
 
             soup = BeautifulSoup(driver.page_source, 'html.parser')
+            self._first_listing_soup = soup
 
             if self._page_has_no_events(soup):
                 logger.info("USSSA listing has no events for this location.")
@@ -129,11 +229,10 @@ class USSSAScraper(BaseScraper):
 
             return 1  # Default to 1 if no pages found
         except TimeoutException:
-            logger.warning("Timed out while determining USSSA pagination. Defaulting to 0 pages.")
-            return 0
+            raise
         except Exception as e:
             logger.error(f"Error determining total pages: {e}")
-            return 0
+            raise
 
     def collect_event_links(
         self,
@@ -146,10 +245,17 @@ class USSSAScraper(BaseScraper):
         """
         Collect event links from the specified USSSA base URL across multiple pages.
         """
-        event_links = []
+        event_links = CollectedLinks()
+        deadline = time.monotonic() + 600
 
         # Dynamically determine total pages
+        self._first_listing_soup = None
         total_pages = self._get_total_pages(driver, base_url, wait_time)
+        seen_links, seen_pages = set(), set()
+        if total_pages > 200:
+            event_links.complete = False
+            event_links.error = "USSSA pagination exceeds 200-page budget"
+            total_pages = 200
         logger.info(f"Total pages found: {total_pages}")
 
         if total_pages == 0:
@@ -157,34 +263,59 @@ class USSSAScraper(BaseScraper):
             return event_links
 
         for page_num in range(1, total_pages + 1):
-            url = f"{base_url}?paged={page_num}" if page_num > 1 else base_url
+            if time.monotonic() > deadline:
+                event_links.complete = False
+                event_links.error = "USSSA listing time budget exceeded"
+                break
+            event_links.pages = page_num
+            parsed = urlparse(base_url)
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            if page_num > 1:
+                query["paged"] = [str(page_num)]
+            url = urlunparse(parsed._replace(query=urlencode(query, doseq=True))) if page_num > 1 else base_url
             logger.info(f"Scraping page {page_num}: {url}")
 
             try:
-                driver.get(url)
-                self._wait_for_listing_state(driver, wait_time)
-
-                soup = BeautifulSoup(driver.page_source, 'html.parser')
+                if page_num == 1 and self._first_listing_soup is not None:
+                    soup = self._first_listing_soup
+                else:
+                    driver.get(url)
+                    self._wait_for_listing_state(driver, wait_time)
+                    soup = BeautifulSoup(driver.page_source, 'html.parser')
                 if self._page_has_no_events(soup):
                     logger.info("No USSSA events found on page %d for %s.", page_num, base_url)
                     break
                 anchors = soup.find_all('a', href=True)
+                fingerprint = tuple(sorted({a['href'] for a in anchors if '/event/' in a['href']
+                                            and 'registration.usssa.com/event/' not in a['href']}))
+                if not fingerprint or fingerprint in seen_pages:
+                    event_links.complete, event_links.error = False, "USSSA missing links or repeated event page"
+                    break
+                seen_pages.add(fingerprint)
 
                 for anchor in anchors:
                     href = anchor['href']
                     if "registration.usssa.com/event/" in href:
                         continue
-                    if '/event/' in href and href not in event_links:
+                    if '/event/' in href and href not in seen_links:
+                        seen_links.add(href)
                         event_links.append(href)
                         logger.debug(f"Found event link: {href}")
 
             except TimeoutException:
                 logger.warning(f"Timeout while loading page {page_num}. Continuing to next page.")
+                event_links.complete = False
+                event_links.error = f"USSSA listing timeout on page {page_num}"
             except WebDriverException as e:
                 logger.error(f"WebDriverException while loading page {page_num}: {e}")
-                break
+                raise
             except Exception as e:
+                from common.driver_manager import is_driver_connection_error
+                if is_driver_connection_error(e):
+                    raise
                 logger.error(f"Error scraping page {page_num}: {e}")
+                event_links.complete = False
+                event_links.error = str(e)
             finally:
                 time.sleep(pause)
 
@@ -277,6 +408,9 @@ class USSSAScraper(BaseScraper):
                         if gg_value.isdigit():
                             guaranteed_games = gg_value
                 except Exception as e:
+                    from common.driver_manager import is_driver_connection_error
+                    if is_driver_connection_error(e):
+                        raise
                     logger.error(f"Error processing row {row_index}: {e}")
         except TimeoutException:
             # Possible fallback layout
@@ -359,6 +493,10 @@ class USSSAScraper(BaseScraper):
                     if date_value and year not in date_value:
                         date_value = f"{date_value} {year}"
                     start_date = end_date = date_value
+
+                start_date, end_date = self._repair_dates_from_event_schema(
+                    soup, tournament_name, start_date, end_date
+                )
 
                 # Extract venue details
                 venues = []
@@ -466,10 +604,16 @@ class USSSAScraper(BaseScraper):
                 continue
             except WebDriverException as e:
                 logger.error(f"WebDriverException at {url}: {e}")
+                from common.driver_manager import is_driver_connection_error
+                if is_driver_connection_error(e):
+                    raise
                 retries += 1
                 time.sleep(5)
                 continue
             except Exception as e:
+                from common.driver_manager import is_driver_connection_error
+                if is_driver_connection_error(e):
+                    raise
                 logger.error(f"Unexpected error extracting details at {url}: {e}")
                 return None
 

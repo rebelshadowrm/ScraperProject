@@ -152,6 +152,8 @@ def validate_event_data(data: Dict) -> Tuple[bool, str | None]:
         if not validate_date_format(date_value):
             return False, f"{date_field} '{date_value}' has an invalid format."
         data[date_field] = date_value
+    if parse_event_date(data["End-date"]) < parse_event_date(data["Start-date"]):
+        return False, "End-date must be on or after Start-date."
 
     # State (ensure this key matches your pipeline exactly)
     state_fullname = _normalize_optional_str(data.get("State-FullName"))

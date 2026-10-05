@@ -1,0 +1,16 @@
+---
+name: scraper-pull-resilience
+description: Improve ScraperProject all-provider coverage, bounded requests, pagination, and unattended fallback. Use when a provider failure stalls or truncates a full pull.
+---
+
+Trace `ui/cli.py` provider discovery and location loops, `common/runner.py`, and the affected scraper. Play365 is a dispatcher for eight configured variants; the validation subset does not cover all providers.
+
+API raw row totals do not establish distinct-event coverage: overlapping page boundaries can repeat some IDs while omitting others. Perfect Game accepts at most 100 records per page. Require distinct group IDs to reach the stable reported total; bounded reconciliation may merge newly observed groups across repeated passes, while changed totals/identities, whole-page repeats, or an unresolved gap remain partial. Preserve original type/state filters and unbounded future dates. Verify all states before certifying a full snapshot. Recheck known valid future Perfect Game sources in snapshot mode when the catalogue omits them; use fresh extracted fields, never cached payloads as an acceptance substitute. Expired, deleted, or out-of-scope entries must stay excluded, and failed source rechecks must fail coverage. When comparing catalogue identities with existing exports, resolve preserved ledger export aliases before declaring a workbook gap.
+
+Distinguish a validated empty collection from incomplete pagination, malformed responses, and a blocked provider. Preserve collected links and completion metadata together. Let driver disconnects reach the restart layer. A WebDriver out-of-memory exception also requires the existing single fresh-driver retry; ordinary source text containing that phrase is not a browser failure. Verify successful retry and failed-restart accounting without suppressing coverage failures. Bound network calls and page iteration, detect repeated pages, and account for abandoned locations/providers explicitly.
+
+Catch failures at independent provider/location boundaries while preserving pending export recovery. Manual fallback for an unattended sweep should be queued rather than holding later providers at an input prompt. Keep interactive single-provider workflows available.
+
+Verify with isolated mocked HTTP/browser responses: failure in dynamic discovery, failure in a middle location, failed middle listing page, repeated pagination, and an empty complete source. Assert later independent work executes and status distinguishes partial/failed/empty. Import CLI under mocked logging initialization and signal registration to avoid its import-time cleanup of real logs.
+
+A state-site redirect to a general provider landing page is not proof of zero events. Verify an official state-filtered source, its actual filter semantics, all published seasons, typed results, and an unset end date before accepting empty coverage. Compare a populated state to expose incorrect filters, then verify the project acquisition path. Unexpected redirects, missing metadata, nonempty unsupported layouts, and failed requests remain partial. For Perfect Game, redirects can happen after initial navigation or during pagination; retain already collected links and require the supplemental API to complete.

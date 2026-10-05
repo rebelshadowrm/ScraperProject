@@ -12,6 +12,7 @@ import us
 
 from scrapers.base_scraper import BaseScraper
 from common.config import OUTPUT_COLUMNS
+from common.http import create_get_session
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,8 @@ MONTHS = {
 }
 
 
-def _http_get(url: str, timeout: int = 30) -> str:
-    r = requests.get(
+def _http_get(url: str, timeout: int = 30, session=None) -> str:
+    r = (session or requests).get(
         url,
         headers={
             "User-Agent": "Mozilla/5.0",
@@ -49,8 +50,8 @@ def _http_get(url: str, timeout: int = 30) -> str:
     return r.text
 
 
-def _soup(url: str) -> BeautifulSoup:
-    return BeautifulSoup(_http_get(url), "html.parser")
+def _soup(url: str, session=None) -> BeautifulSoup:
+    return BeautifulSoup(_http_get(url, session=session), "html.parser")
 
 
 def _mmddyyyy(d: date) -> str:
@@ -93,11 +94,19 @@ def _parse_date_range(raw: str, year: int) -> Tuple[Optional[date], Optional[dat
       "May 9"
       "Jul 20-26"
     """
+    from common.date_utils import explicit_year_range
+    explicit = explicit_year_range(raw)
+    if explicit:
+        return explicit
     s = " ".join((raw or "").split()).strip()
     if not s:
         return None, None
 
     s = s.replace("\u2013", "-").replace("\u2014", "-")
+    explicit_year = re.search(r",?\s+(\d{4})$", s)
+    if explicit_year:
+        year = int(explicit_year.group(1))
+        s = s[:explicit_year.start()].strip()
 
     # "Feb 28 - Mar 1"
     m = re.match(r"^([A-Za-z]+)\s+(\d{1,2})\s*-\s*([A-Za-z]+)\s+(\d{1,2})$", s)
@@ -355,26 +364,30 @@ def _extract_date_raw_from_details_soup(details_soup: BeautifulSoup) -> str:
         t = h3.get_text(" ", strip=True)
         if not t:
             continue
-        if "," in t:
-            # exclude "Panama City Beach, FL" lines
-            continue
-        if re.search(r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b", t, flags=re.IGNORECASE) and re.search(r"\d", t):
+        # Date commas introduce explicit years; cities are excluded by their
+        # lack of a leading month/day rather than by punctuation.
+        if re.match(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[A-Za-z]*\s+\d{1,2}\b", t, flags=re.IGNORECASE):
             return t
     return ""
 
 
 class GrandSlamScraper(BaseScraper):
     SCRAPER_NAME = "GrandSlam"
+    REQUIRES_DRIVER = False
     SUPPORTS_ALL_LOCATIONS = True
     SUPPORTS_SPECIFIC_LOCATIONS = True
     LOCATIONS_SOURCE = "config"
     BATCH_DELAY_SECONDS = 0  # requests-based; no need to wait
 
     def __init__(self):
+        self.session = create_get_session()
         # details_url -> metadata extracted from listing card
         self.listing_meta: Dict[str, Dict[str, Any]] = {}
 
     def collect_event_links(self, driver, base_url: str, **kwargs) -> List[str]:
+        from common.collection import CollectedLinks
+        import time
+        deadline = time.monotonic() + 600
         logger.warning("[GrandSlam] Loaded %s", GS_SCRAPER_VERSION)
 
         state = _parse_state_from_carrier(base_url)
@@ -382,16 +395,25 @@ class GrandSlamScraper(BaseScraper):
             raise ValueError("GrandSlam base_url must include ?state=XX")
 
         page = 1
-        out: List[str] = []
+        out = CollectedLinks()
         seen = set()
 
         while True:
+            if page > 200 or time.monotonic() > deadline:
+                out.complete = False
+                out.error = "GrandSlam 200-page budget exceeded"
+                break
+            out.pages = page
             if page == 1:
                 url = f"{BASE}/baseball/Events?state={state}"
             else:
                 url = f"{BASE}/baseball/Events?page={page}&state={state}"
 
-            soup = _soup(url)
+            try:
+                soup = _soup(url, self.session)
+            except Exception as exc:
+                out.complete, out.error = False, f"GrandSlam listing request failed: {exc}"
+                break
 
             anchors = soup.find_all("a", href=True)
             page_links: List[Tuple[Any, str]] = []
@@ -438,6 +460,15 @@ class GrandSlamScraper(BaseScraper):
                 self.listing_meta[full] = meta
 
             if new_links == 0:
+                explicit_empty = "no events found" in soup.get_text(" ", strip=True).lower()
+                container = soup.select_one("div.media-list.media-list-events")
+                verified_empty_feed = (soup.select_one("form#formEventSearch") is not None
+                                       and container is not None and not container.find(recursive=False)
+                                       and any(re.search(r"\bvar\s+events\s*=\s*\[\s*\]\s*;", script.get_text())
+                                               for script in soup.find_all("script")))
+                explicit_empty = explicit_empty or verified_empty_feed
+                if not explicit_empty and (not page_links or not _is_next_disabled(soup)):
+                    out.complete, out.error = False, "GrandSlam unrecognized empty page or repeated active page"
                 break
             if _is_next_disabled(soup):
                 break
@@ -453,7 +484,7 @@ class GrandSlamScraper(BaseScraper):
 
         details_url, locations_url, contacts_url, divisions_url = _derive_gs_related_urls(url)
 
-        details_html = _http_get(details_url)
+        details_html = _http_get(details_url, session=self.session)
         details_soup = BeautifulSoup(details_html, "html.parser")
         details_text = details_soup.get_text("\n")
 
@@ -491,20 +522,20 @@ class GrandSlamScraper(BaseScraper):
 
         locs: List[Dict[str, str]] = []
         try:
-            locs = _extract_locations_from_locations_page(_http_get(locations_url))
+            locs = _extract_locations_from_locations_page(_http_get(locations_url, session=self.session))
         except Exception as e:
             logger.warning("[GrandSlam] Locations parse failed for %s: %s", locations_url, e)
             locs = []
 
         contact = {"Contact-name": "", "Email": "", "Phone-number": ""}
         try:
-            contact = _extract_contact_from_contacts_page(_http_get(contacts_url))
+            contact = _extract_contact_from_contacts_page(_http_get(contacts_url, session=self.session))
         except Exception as e:
             logger.warning("[GrandSlam] Contacts parse failed for %s: %s", contacts_url, e)
 
         division_fee_map: Dict[str, str] = {}
         try:
-            division_fee_map = _extract_division_fees_from_divisions_page(_http_get(divisions_url))
+            division_fee_map = _extract_division_fees_from_divisions_page(_http_get(divisions_url, session=self.session))
         except Exception as e:
             logger.warning("[GrandSlam] Divisions parse failed for %s: %s", divisions_url, e)
             division_fee_map = {}

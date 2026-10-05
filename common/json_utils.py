@@ -5,6 +5,7 @@ import os
 import logging
 from typing import Dict, Any, Optional
 from datetime import datetime, timezone
+from common.storage import save_json_atomic
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ def default_event_entry(
     return {
         "url": url,
         "location": location,
+        "locations": [location] if location else [],
 
         # provenance
         "scraper": scraper or "",              # e.g. "PGScraper"
@@ -57,6 +59,9 @@ def default_event_entry(
         "created_at": now,          # first time we ever recorded this event
         "last_seen_at": now,        # last time it appeared during link collection
         "processed_at": "",         # when processed was set True
+        "event_data": None,         # durable payload for replay and snapshots
+        "export_status": "",       # pending, exported, expired
+        "export_file": "",         # replay to the original destination
 
         # attempts + failures (event detail extraction attempts)
         "attempt_count": 0,
@@ -181,10 +186,7 @@ def save_events(data: Dict, json_path: str):
     """
     Save updated events data back to the JSON file.
     """
-    # Make sure we never write malformed schema
-    data = ensure_events_schema(data)
-    with open(json_path, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4)
+    save_json_atomic(data, json_path)
     logger.debug("Events saved to %s", json_path)
 
 def load_failed_events(json_path: str) -> Dict:
@@ -241,8 +243,7 @@ def save_failed_events(data: Dict, json_path: str):
 
     data["failed_events"] = list(unique.values())
 
-    with open(json_path, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4)
+    save_json_atomic(data, json_path)
 
     logger.debug("Failed events saved to %s", json_path)
 
@@ -263,7 +264,7 @@ def add_or_update_event(
     Create event entry if missing, otherwise update last_seen_at and provenance.
     Returns the entry dict.
     """
-    ensure_events_schema(events_data)
+    events_data.setdefault("events", {})
 
     now = _utc_now_iso()
     ev = events_data["events"].get(key)
@@ -279,8 +280,12 @@ def add_or_update_event(
 
     # update "seen" and provenance
     ev["last_seen_at"] = now
+    ev["url"] = url
     if location:
         ev["location"] = location
+        memberships = ev.setdefault("locations", [])
+        if location not in memberships:
+            memberships.append(location)
     if scraper and not ev.get("scraper"):
         ev["scraper"] = scraper
     if discovered_from and not ev.get("discovered_from"):
@@ -298,7 +303,6 @@ def record_attempt(
     Record an attempt to extract event details for this event key.
     status: "success" or "failed"
     """
-    ensure_events_schema(events_data)
     ev = events_data["events"].get(key)
     if not ev:
         return
@@ -309,7 +313,6 @@ def record_attempt(
     ev["last_error"] = error or ""
 
 def mark_processed(events_data: Dict[str, Any], *, key: str):
-    ensure_events_schema(events_data)
     ev = events_data["events"].get(key)
     if not ev:
         return

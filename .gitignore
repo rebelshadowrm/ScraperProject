@@ -12,12 +12,15 @@ Logs/
 Sheets/
 *.zip
 scraping.log
+Play365Utilities/**/*_dump.json
 
 # Local runtime state
 events.json
 failed_events.json
 scheduler_history.json
 geckodriver.exe
+*.bak
+*.lock
 
 # OS / editor noise
 .DS_Store

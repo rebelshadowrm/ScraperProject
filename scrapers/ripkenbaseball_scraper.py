@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 from us import states
 
 from common.config import OUTPUT_COLUMNS
+from common.collection import validated_records
+from common.http import create_get_session
 from scrapers.base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
@@ -185,7 +187,7 @@ class RipkenBaseballScraper(BaseScraper):
     }
 
     def __init__(self):
-        self.session = requests.Session()
+        self.session = create_get_session()
         self.session.headers.update(
             {
                 "Accept": "application/json, text/plain, */*",
@@ -206,7 +208,9 @@ class RipkenBaseballScraper(BaseScraper):
         response = self.session.get(self.WIDGET_CONFIG_URL, params={"id": self.WIDGET_ID}, timeout=30)
         response.raise_for_status()
         data = response.json()
-        sites_info = data.get("sitesInfo", [])
+        if not isinstance(data, dict) or not isinstance(data.get("sitesInfo"), list):
+            raise ValueError("Ripken widget response has no valid sitesInfo list")
+        sites_info = data["sitesInfo"]
         self._sites_cache = [site for site in sites_info if site.get("siteId") and site.get("apiKey")]
         return self._sites_cache
 
@@ -310,21 +314,23 @@ class RipkenBaseballScraper(BaseScraper):
             if not non_waitlist:
                 continue
 
-            leaf_programs = [
-                program for program in non_waitlist
-                if self._is_leaf_program(program, grouped_programs)
-            ]
+            # Group facts are shared by every leaf; preserve inclusion of waitlist
+            # children in the age-presence decision used by the original selector.
+            age_child_ids = {int(program.get("programId") or 0) for program in programs
+                             if _extract_age_groups(program.get("name", ""))}
+            leaf_programs = [program for program in non_waitlist
+                             if not age_child_ids
+                             or (len(age_child_ids) == 1 and int(program.get("programId") or 0) in age_child_ids)
+                             or _extract_age_groups(program.get("name", ""))]
             chosen_programs = leaf_programs or non_waitlist
+            group_names = [(candidate.get("name") or "").strip() for candidate in programs
+                           if (candidate.get("name") or "").strip()]
 
             for program in chosen_programs:
                 program_copy = dict(program)
                 program_copy["_parent_tournament_name"] = parent_title
                 program_copy["_display_name"] = self._build_display_name(program_copy, parent_title)
-                program_copy["_group_names"] = [
-                    (candidate.get("name") or "").strip()
-                    for candidate in programs
-                    if (candidate.get("name") or "").strip()
-                ]
+                program_copy["_group_names"] = list(group_names)
                 selected_programs.append(program_copy)
 
         return selected_programs
@@ -336,13 +342,12 @@ class RipkenBaseballScraper(BaseScraper):
         site_name = site_info["siteName"]
 
         if not site_id or not api_key:
-            logger.error("RipkenBaseball missing siteId/apiKey in base URL: %s", base_url)
-            return []
+            raise ValueError("RipkenBaseball requires siteId and apiKey")
 
         url = self.PROGRAMS_BASE_URL.format(site_id=site_id)
         response = self.session.get(url, params={"x-api-key": api_key}, timeout=30)
         response.raise_for_status()
-        programs = response.json() or []
+        programs = validated_records(response.json(), source="Ripken programs")
 
         grouped_programs: Dict[int, List[Dict]] = {}
         for program in programs:

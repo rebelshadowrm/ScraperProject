@@ -12,6 +12,10 @@ from shutil import copyfile
 
 from common.config import TEMPLATE_PATH, TEMPLATE_SHEET
 from common.normalize import normalize_row  # <-- NEW
+from common.storage import atomic_output
+from functools import lru_cache
+from copy import copy
+from openpyxl.worksheet.cell_range import CellRange
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +62,30 @@ def _should_write_as_text(key: str) -> bool:
 def create_workbook_from_template(output_file: str) -> None:
     """Copy the XLSX template to the output path (preserves formatting/validations/tables)."""
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    copyfile(TEMPLATE_PATH, output_file)
+    with atomic_output(output_file, backup=False) as staged:
+        copyfile(TEMPLATE_PATH, staged)
     logger.info(f"[Excel] Copied template to {output_file}")
+
+
+def validate_template(column_order):
+    """Fail before network/extraction work if the import contract is incompatible."""
+    stat = os.stat(TEMPLATE_PATH)
+    _validate_template(os.path.abspath(TEMPLATE_PATH), stat.st_mtime_ns, stat.st_size, tuple(column_order))
+
+
+@lru_cache(maxsize=4)
+def _validate_template(path, modified, size, column_order):
+    wb = load_workbook(path)
+    try:
+        if TEMPLATE_SHEET not in wb.sheetnames:
+            raise ValueError(f"Template is missing required sheet {TEMPLATE_SHEET!r}")
+        _, headers, hits = _find_header_row(wb[TEMPLATE_SHEET], list(column_order))
+        maps = _build_template_header_maps(headers)
+        missing = [key for key in column_order if not _resolve_template_col(key, *maps)]
+        if not hits or missing:
+            raise ValueError(f"Template is missing required headers: {missing}")
+    finally:
+        wb.close()
 
 def _find_header_row(ws, expected_cols: List[str], search_rows: int = 10) -> Tuple[int, List[str], int]:
     """
@@ -145,7 +171,7 @@ def _get_table_bounds(ws):
     """
     if not ws._tables:
         return None
-    tbl = ws._tables[0]
+    tbl = next(iter(ws.tables.values()))
     start_cell, end_cell = tbl.ref.split(":")
     start_col = "".join(filter(str.isalpha, start_cell))
     end_col = "".join(filter(str.isalpha, end_cell))
@@ -218,6 +244,7 @@ def append_rows_to_template(
     output_file: str,
     rows: List[Dict],
     column_order: List[str],
+    event_keys: List[str] | None = None,
 ) -> None:
     """
     Append dict rows (keys = OUTPUT_COLUMNS) into the template sheet.
@@ -234,7 +261,16 @@ def append_rows_to_template(
         logger.info("[Excel] No rows to append for %s", output_file)
         return
 
+    if event_keys is not None and (len(event_keys) != len(rows) or any(not k for k in event_keys)):
+        raise ValueError("Each exported row requires a nonempty event identity.")
     wb = load_workbook(output_file, data_only=False)
+    try:
+        _write_rows(wb, output_file, rows, column_order, event_keys)
+    finally:
+        wb.close()
+
+
+def _write_rows(wb, output_file, rows, column_order, event_keys):
     if TEMPLATE_SHEET not in wb.sheetnames:
         ws = wb[wb.sheetnames[0]]
         logger.warning(
@@ -243,10 +279,11 @@ def append_rows_to_template(
         )
     else:
         ws = wb[TEMPLATE_SHEET]
+    template_bottom = ws.max_row
 
     # 1) Header row + maps
-    header_row_idx, headers, _ = _find_header_row(ws, column_order, search_rows=10)
-    if not header_row_idx:
+    header_row_idx, headers, hits = _find_header_row(ws, column_order, search_rows=10)
+    if not header_row_idx or hits == 0:
         raise ValueError("Could not locate a header row that matches template columns.")
     headers = [h if isinstance(h, str) else "" for h in headers]
     exact, by_name, exact_norm, by_name_norm = _build_template_header_maps(headers)
@@ -257,10 +294,47 @@ def append_rows_to_template(
         if _resolve_template_col(name, exact, by_name, exact_norm, by_name_norm)
     )
     logger.info("[Excel] Resolved %d/%d headers into template columns.", resolved, len(column_order))
+    if resolved != len(column_order):
+        raise ValueError(f"Template resolves only {resolved}/{len(column_order)} required columns.")
 
     # 2) First truly empty row under header
     key_col = _first_resolved_column_index(column_order, exact, by_name, exact_norm, by_name_norm)
-    next_row = _find_first_empty_row(ws, header_row_idx, key_col)
+    occupied_rows = [r for r in range(header_row_idx + 1, ws.max_row + 1)
+                     if any(ws.cell(r, c).value not in (None, "") for c in range(1, ws.max_column + 1))]
+    next_row = max(occupied_rows, default=header_row_idx) + 1
+    column_map = {key: _resolve_template_col(key, exact, by_name, exact_norm, by_name_norm)
+                  for key in column_order}
+    url_col = column_map.get("Website-url")
+    index = None
+    indexed = {}
+    index_rows = {}
+    indexed_data_rows = set()
+    if event_keys is not None:
+        index = wb["_ScraperExportIndex"] if "_ScraperExportIndex" in wb.sheetnames else wb.create_sheet("_ScraperExportIndex")
+        index.sheet_state = "hidden"
+        if index.cell(1, 1).value is None:
+            for c, value in enumerate(("Event identity", "Import row", "Website URL", "Tournament name"), 1):
+                index.cell(1, c).value = value
+        for index_row in range(2, index.max_row + 1):
+            identity, data_row, previous_url = [index.cell(index_row, c).value for c in range(1, 4)]
+            if not identity:
+                continue
+            if not isinstance(data_row, int) or data_row <= header_row_idx:
+                raise ValueError("Invalid export index row; restore a valid workbook before replay.")
+            if url_col and ws.cell(data_row, url_col).value != previous_url:
+                raise ValueError("Export index disagrees with the import sheet; review edited/sorted rows before replay.")
+            previous_name = index.cell(index_row, 4).value
+            if previous_name is not None and ws.cell(data_row, key_col).value != previous_name:
+                raise ValueError("Export index disagrees with tournament names; review edited/sorted rows before replay.")
+            indexed[str(identity)] = data_row
+            index_rows[str(identity)] = index_row
+            indexed_data_rows.add(data_row)
+    legacy_urls = {}
+    if url_col:
+        for data_row in occupied_rows:
+            value = ws.cell(data_row, url_col).value
+            if value and data_row not in indexed_data_rows:
+                legacy_urls.setdefault(str(value), data_row)
 
     # 3) Table bounds (for expansion)
     tbl_bounds = _get_table_bounds(ws)
@@ -271,18 +345,28 @@ def append_rows_to_template(
 
     # 4) Normalize + write values only
     rptr = next_row
-    for row in rows:
+    written_rows = []
+    for row_number, row in enumerate(rows):
         normed = normalize_row(row)
         _preflight_log_dropdown_issues(row, normed)
+        identity = event_keys[row_number] if event_keys is not None else None
+        target_row = indexed.get(identity) if identity else None
+        if target_row is None and identity:
+            target_row = legacy_urls.pop(str(normed.get("Website-url", "")), None)
+        if target_row is None:
+            target_row = rptr
+            rptr += 1
 
         for key in column_order:
-            col_idx = _resolve_template_col(key, exact, by_name, exact_norm, by_name_norm)
+            col_idx = column_map[key]
             if not col_idx:
                 continue
 
             value = normed.get(key, "")
 
-            cell = ws.cell(rptr, col_idx)
+            cell = ws.cell(target_row, col_idx)
+            if target_row > template_bottom:
+                cell._style = copy(ws.cell(header_row_idx + 1, col_idx)._style)
 
             # Force TEXT for dropdown-constrained fields (prevents 3.0, type coercion issues)
             if _should_write_as_text(key):
@@ -292,30 +376,47 @@ def append_rows_to_template(
             else:
                 cell.value = value if value is not None else ""
 
-        rptr += 1
+        written_rows.append(target_row)
+        if identity:
+            indexed[identity] = target_row
+            index_row = index_rows.get(identity)
+            if index_row is None:
+                index_row = index.max_row + 1
+                index_rows[identity] = index_row
+            for c, value in enumerate((identity, target_row, normed.get("Website-url", ""), normed.get(column_order[0], "")), 1):
+                index.cell(index_row, c).value = value
 
-    last_written_row = rptr - 1
+    last_written_row = max(written_rows)
+    if last_written_row > template_bottom:
+        for validation in ws.data_validations.dataValidation:
+            for original in list(validation.ranges.ranges):
+                if original.min_row == header_row_idx + 1 and original.max_row >= template_bottom:
+                    expanded = CellRange(str(original))
+                    expanded.max_row = last_written_row
+                    validation.ranges.remove(original)
+                    validation.add(expanded)
     logger.info("[Excel] Wrote rows %d..%d (key col %d)", next_row, last_written_row, key_col)
 
     # 5) Expand table if needed (banded rows etc. will extend automatically)
     if tbl_bounds and last_written_row > current_bottom:
-        ws._tables[0].ref = f"{start_col}{header_row_idx}:{end_col}{last_written_row}"
+        next(iter(ws.tables.values())).ref = f"{start_col}{header_row_idx}:{end_col}{last_written_row}"
 
     # 6) Save
-    wb.save(output_file)
+    with atomic_output(output_file) as staged:
+        wb.save(staged)
     logger.info("[Excel] Appended %d rows. New bottom row: %d.", len(rows), last_written_row)
 
 # --------------------------------------------------------------------
 # File naming & consolidation
 # --------------------------------------------------------------------
 
-def get_output_filename(location: str, base_folder: str = "Sheets") -> str:
+def get_output_filename(location: str, base_folder: str = "Sheets", run_date: str | None = None) -> str:
     """
     Generate a location-specific Excel file name with the current date.
     If the location is 'Region (Org)', create Sheets/<date>/<Org>/Region_<date>.xlsx
     """
     from datetime import datetime
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    date_str = run_date or datetime.now().strftime("%Y-%m-%d")
 
     match = re.match(r'^(.*?)\s*\((.*?)\)\s*$', location.strip())
     if match:
@@ -338,6 +439,19 @@ def get_output_filename(location: str, base_folder: str = "Sheets") -> str:
 
     filename = f"{region_clean}_{date_str}.xlsx"
     return os.path.join(org_folder, filename)
+
+
+def write_snapshot(output_file, rows, column_order, event_keys):
+    """Replace a location snapshot from canonical rows, removing stale output rows."""
+    wb = load_workbook(TEMPLATE_PATH, data_only=False)
+    try:
+        if rows:
+            _write_rows(wb, output_file, rows, column_order, event_keys)
+        else:
+            with atomic_output(output_file) as staged:
+                wb.save(staged)
+    finally:
+        wb.close()
 
 def consolidate_org_files(org_folder: str, org: str, date_str: str) -> str:
     """

@@ -1,11 +1,13 @@
 from datetime import datetime
 import logging
+import base64
 import time
 import re
 from urllib.parse import urlparse, parse_qs, urljoin
 from bs4 import BeautifulSoup, Tag
 import requests
 from requests.adapters import HTTPAdapter
+from common.driver_manager import is_driver_connection_error
 from urllib3.util.retry import Retry
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,6 +26,8 @@ class WebDriverDisconnectedError(RuntimeError):
     """Raised when the Selenium session is no longer connected/valid."""
 
 def _is_driver_disconnected_exception(exc: BaseException) -> bool:
+    if is_driver_connection_error(exc):
+        return True
     msg = str(exc) if exc is not None else ""
     msg_l = msg.lower()
     needles = [
@@ -169,6 +173,7 @@ def extract_competition_levels_from_parentheses(text: str) -> List[str]:
 
 class PGScraper(BaseScraper):
     SCRAPER_NAME = "PerfectGame"
+    REFRESH_KNOWN_FUTURE_EVENTS = True
     BATCH_DELAY_SECONDS = 0
     SUPPORTS_ALL_LOCATIONS = True
     SUPPORTS_SPECIFIC_LOCATIONS = True
@@ -202,11 +207,25 @@ class PGScraper(BaseScraper):
         self._http.mount("http://", adapter)
 
     def collect_event_links(self, driver, base_url="https://www.perfectgame.org/Schedule/", wait_time=15, pause=3) -> List[str]:
+        from common.collection import CollectedLinks
+        complete, error = True, ""
+        seen_pages = set()
         groups = {}
+        skipped_groups = set()
         current_page = 1
+        deadline = time.monotonic() + 600
         logger.info(f"Loading base URL: {base_url}")
         driver.get(base_url)
+        # The provider now redirects some retired schedule listings to its new
+        # search application. That application has no rgMasterTable; use its
+        # fully paginated API with the original state/category filters instead.
+        if isinstance(getattr(driver, "current_url", None), str) and urlparse(driver.current_url).hostname == "search.perfectgame.org":
+            logger.info("Legacy schedule redirected to current public search; using future API discovery.")
+            return self._collect_future_api_links(base_url)
         while True:
+            if current_page > 200 or time.monotonic() > deadline:
+                complete, error = False, "PerfectGame page/time budget exceeded"
+                break
             logger.info(f"Processing page {current_page}")
             try:
                 # Wait for the events table to be present
@@ -214,15 +233,29 @@ class PGScraper(BaseScraper):
                     EC.presence_of_element_located((By.CSS_SELECTOR, "table.rgMasterTable"))
                 )
             except TimeoutException:
+                if (parse_qs(urlparse(base_url).query).get("st")
+                        and isinstance(getattr(driver, "current_url", None), str)
+                        and urlparse(driver.current_url).hostname == "search.perfectgame.org"):
+                    logger.info("Legacy schedule redirected while waiting; finishing discovery through the future API.")
+                    break
                 logger.info("Timeout waiting for events table.")
+                complete, error = False, "PerfectGame listing timeout"
                 break
 
             soup = BeautifulSoup(driver.page_source, "html.parser")
             group_headers = soup.find_all("tr", class_="rgGroupHeader")
             logger.info(f"Found {len(group_headers)} group headers on page {current_page}")
             if not group_headers:
-                logger.info("No group headers found, ending pagination.")
+                text = soup.get_text(" ", strip=True).lower()
+                if not any(marker in text for marker in ("no events found", "no records to display")):
+                    complete, error = False, "PerfectGame has no group headers or explicit empty state"
                 break
+
+            fingerprint = tuple(sorted(a["href"] for header in group_headers for a in header.find_all("a", href=True)))
+            if not fingerprint or fingerprint in seen_pages:
+                complete, error = False, "PerfectGame missing group links or repeated listing identities"
+                break
+            seen_pages.add(fingerprint)
 
             for gh in group_headers:
                 a_tag = gh.find("a", href=True)
@@ -232,7 +265,10 @@ class PGScraper(BaseScraper):
                 parsed = urlparse(group_url)
                 qs = parse_qs(parsed.query)
                 gid = qs.get("gid", [None])[0]
-                if gid and gid not in groups:
+                if gid and gid not in groups and gid not in skipped_groups:
+                    if self._group_listing_is_non_future(gh):
+                        skipped_groups.add(gid)
+                        continue
                     groups[gid] = group_url
                     logger.info(f"Found grouped event link: {group_url}")
 
@@ -263,11 +299,128 @@ class PGScraper(BaseScraper):
                 time.sleep(pause)  # Extra pause to allow the page to load fully
                 current_page += 1
             except Exception as e:
+                if is_driver_connection_error(e):
+                    raise
+                if (isinstance(e, TimeoutException) and parse_qs(urlparse(base_url).query).get("st")
+                        and isinstance(getattr(driver, "current_url", None), str)
+                        and urlparse(driver.current_url).hostname == "search.perfectgame.org"):
+                    logger.info("Legacy pagination redirected to current search; retaining collected groups and completing through the future API.")
+                    break
                 logger.error(f"Error during pagination: {e}")
+                complete, error = False, str(e)
                 break
 
         logger.info(f"Collected {len(groups)} unique group entries across {current_page} pages.")
-        return list(groups.values())
+        links = CollectedLinks(groups.values(), complete=complete, error=error, pages=current_page,
+                               non_future_skipped=len(skipped_groups))
+        # Keep legacy discovery, including retired categories, while adding the
+        # current public search's open-ended future coverage for active categories.
+        if parse_qs(urlparse(base_url).query).get("st"):
+            additional = self._collect_future_api_links(base_url)
+            links.extend(url for url in additional if url not in links)
+            links.pages += additional.pages
+            if not additional.complete:
+                links.complete = False
+                links.error = "; ".join(filter(None, (links.error, additional.error)))
+        return links
+
+    @staticmethod
+    def _group_listing_is_non_future(header):
+        starts = []
+        for row in header.next_siblings:
+            if not isinstance(row, Tag):
+                continue
+            if 'rgGroupHeader' in row.get('class', []):
+                break
+            if not row.find('a', href=re.compile(r'/Events/Default\.aspx\?event=', re.I)):
+                continue
+            values = row.find_all('input', id=re.compile(r'hfStartDate$'))
+            if not values:
+                return False
+            for value in values:
+                try:
+                    starts.append(datetime.strptime(value.get('value', '').split()[0], '%m/%d/%Y').date())
+                except (ValueError, IndexError):
+                    return False
+        return bool(starts) and all(start <= datetime.now().date() for start in starts)
+
+    def _collect_future_api_links(self, base_url):
+        from common.collection import CollectedLinks, validated_records
+        from datetime import timedelta
+        result = CollectedLinks()
+        try:
+            query = parse_qs(urlparse(base_url).query)
+            decode = lambda key: base64.b64decode(query[key][0], validate=True).decode("ascii")
+            state = decode("st")
+            if not states.lookup(state):
+                raise ValueError("PerfectGame saved state filter is invalid")
+            # Confirmed from matching live API events and legacy child type IDs.
+            active_types = {3: "PGBA Affiliated", 6: "WWBA Tournament", 7: "BCS Tournament",
+                            12: "Super25", 14: "PG Youth Tournament"}
+            selected = [active_types[value] for value in map(int, decode("ty").split(",")) if value in active_types]
+            if not selected:
+                raise ValueError("PerfectGame saved filter has no supported active tournament categories")
+            params = {"dateFrom": (datetime.now().date() + timedelta(days=1)).isoformat(),
+                      "sort": "dateAsc", "states[0]": state, "sportType": "Baseball", "limit": 100}
+            params.update({f"eventTypes[{index}]": value for index, value in enumerate(selected)})
+            seen, seen_group_ids, page, passes = set(), set(), 1, 1
+            deadline = time.monotonic() + 600
+            source_total, processed_records = None, 0
+            while True:
+                if page > 200 or result.pages >= 200 or time.monotonic() > deadline:
+                    raise ValueError("PerfectGame public API page/time budget exceeded")
+                response = self._http.get("https://tpa2.perfectgame.org/api/search/events",
+                                          params={**params, "page": page}, timeout=(10, 30))
+                response.raise_for_status()
+                payload = response.json()
+                records = validated_records(payload, field="data", source="PerfectGame public search")
+                result.pages += 1
+                total, total_pages = payload.get("totalItems"), payload.get("totalPages")
+                if type(total) is not int or total < 0 or type(total_pages) is not int or total_pages < 0:
+                    raise ValueError("PerfectGame public API returned invalid totals")
+                if source_total is not None and source_total != total:
+                    raise ValueError("PerfectGame public API changed its total during pagination")
+                source_total = total
+                if type(payload.get("currentPage")) is not int or payload["currentPage"] != page:
+                    raise ValueError("PerfectGame public API returned the wrong page")
+                following = payload.get("nextPage")
+                if following is not None and (type(following) is not int or following != page + 1):
+                    raise ValueError("PerfectGame public API returned invalid pagination")
+                ids = tuple(record.get("eventGroupId") for record in records)
+                if any(type(value) is not int or value <= 0 for value in ids):
+                    raise ValueError("PerfectGame public API returned a missing group identity")
+                fingerprint = tuple(sorted(ids))
+                if len(set(ids)) != len(ids) or (ids and fingerprint in seen):
+                    raise ValueError("PerfectGame public API repeated event groups")
+                if not records and following is not None:
+                    raise ValueError("PerfectGame public API returned an empty intermediate page")
+                seen.add(fingerprint)
+                seen_group_ids.update(ids)
+                if len(seen_group_ids) > source_total:
+                    raise ValueError("PerfectGame public API changed group identities during pagination")
+                processed_records += len(records)
+                for gid in ids:
+                    url = f"https://www.perfectgame.org/Schedule/GroupedEvents.aspx?gid={gid}"
+                    if url not in result:
+                        result.append(url)
+                if following is None:
+                    if processed_records != source_total or page != max(1, total_pages):
+                        raise ValueError("PerfectGame public API ended before its advertised coverage")
+                    if len(seen_group_ids) != source_total:
+                        if passes >= 3:
+                            raise ValueError("PerfectGame public API omitted groups after bounded pagination reconciliation")
+                        logger.warning("PerfectGame pagination overlapped; reconciling distinct group coverage (%d/%d).", len(seen_group_ids), source_total)
+                        passes += 1
+                        page, processed_records = 1, 0
+                        seen.clear()
+                        continue
+                    break
+                page = following
+        except Exception as exc:
+            result.complete = False
+            result.error = f"PerfectGame open-ended discovery failed: {exc}"
+            logger.error("%s", result.error)
+        return result
 
     def get_event_key(self, url: str) -> str:
         parsed = urlparse(url)
@@ -320,19 +473,20 @@ class PGScraper(BaseScraper):
         Returns a parsed BeautifulSoup for the URL.
 
         Strategy:
-        - For grouped pages: ALWAYS use requests (server-rendered) to avoid webdriver hangs.
-          If requests fails, raise so the caller can backoff/retry (do NOT fall back to Selenium).
+        - For grouped pages: prefer requests for server-rendered data. On failure,
+          try the existing browser once, with bounded navigation timeouts.
         - For other pages: use Selenium, but detect session-death and raise a dedicated error
           so the outer runner can restart the driver and retry the current URL.
         """
         url = url.rstrip("/.")
+        self._last_soup_used_browser = False
         is_grouped = ("groupedevents.aspx" in url.lower())
 
         if is_grouped:
             soup = self._get_soup_requests(url)
-            if soup is None:
-                raise RuntimeError(f"requests fetch failed for grouped page: {url}")
-            return soup
+            if soup is not None:
+                return soup
+            logger.info("Grouped HTTP fetch failed; trying bounded browser navigation: %s", url)
 
         try:
             if driver is None:
@@ -344,6 +498,7 @@ class PGScraper(BaseScraper):
                 driver.set_script_timeout(30)
 
             driver.get(url)
+            self._last_soup_used_browser = True
             WebDriverWait(driver, wait_time).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
@@ -355,6 +510,7 @@ class PGScraper(BaseScraper):
 
             # Try to salvage whatever loaded
             try:
+                self._last_soup_used_browser = True
                 driver.execute_script("window.stop();")
                 html = driver.page_source
                 if html:
@@ -382,8 +538,17 @@ class PGScraper(BaseScraper):
 
     def _parse_date_range(self, date_str: str, end_str: str) -> Tuple[str, str]:
         logger.debug(f"Parsing date range from '{date_str}' and '{end_str}'")
+        from common.date_utils import explicit_year_range
+        explicit = explicit_year_range(date_str)
+        if explicit:
+            return tuple(value.strftime("%m/%d/%Y") for value in explicit)
         year_match = re.search(r"(\d{4})", end_str)
         year = year_match.group(1) if year_match else str(datetime.now().year)
+        date_str = date_str.replace("\u2013", "-").replace("\u2014", "-")
+        trailing_year = re.search(r",?\s+(\d{4})$", date_str)
+        if trailing_year:
+            year = trailing_year.group(1)
+            date_str = date_str[:trailing_year.start()].strip()
         if "-" in date_str:
             parts = date_str.split("-")
             start_part = parts[0].strip()
@@ -394,6 +559,18 @@ class PGScraper(BaseScraper):
                 end_part = f"{month} {end_part}"
             start_date = f"{start_part} {year}"
             end_date = f"{end_part} {year}"
+            # The hidden endpoint date anchors the end year for winter leagues.
+            # Only use rollover when the source supplies a complete numeric date.
+            endpoint = re.match(r"^(\d{1,2})/(\d{1,2})/(\d{4})(?:\s|$)", end_str)
+            if endpoint:
+                end_anchor = datetime.strptime("/".join(endpoint.groups()), "%m/%d/%Y")
+                parsed_start = datetime.strptime(start_date, "%b %d %Y")
+                parsed_end = datetime.strptime(end_date, "%b %d %Y")
+                if (parsed_end.month, parsed_end.day) != (end_anchor.month, end_anchor.day):
+                    raise ValueError("PerfectGame displayed end date conflicts with hidden endpoint date")
+                start_year = end_anchor.year - int((parsed_start.month, parsed_start.day) > (parsed_end.month, parsed_end.day))
+                start_date = f"{start_part} {start_year}"
+                end_date = f"{end_part} {end_anchor.year}"
             logger.debug(f"Parsed start_date: {start_date}, end_date: {end_date}")
             return (start_date, end_date)
         else:
@@ -528,7 +705,14 @@ class PGScraper(BaseScraper):
                     year = str(datetime.now().year)
 
                 # Dates: the card usually omits the year, so pass the inferred year as end_str
-                start_date, end_date = self._parse_date_range(date_str, year)
+                end_input = card.find("input", id=re.compile(r"repSchedule_hlEndDate_\d+"))
+                if end_input is None and date_el is not None:
+                    # Current cards keep hidden dates beside the card, sharing
+                    # its repeater index rather than nesting them inside it.
+                    endpoint_id = date_el.get("id", "").replace("lblEventDate_", "hlEndDate_")
+                    end_input = soup.find("input", id=endpoint_id)
+                endpoint = end_input.get("value", "") if end_input else ""
+                start_date, end_date = self._parse_date_range(date_str, endpoint or year)
 
                 tournament_name = clean_tournament_name(raw_name) if raw_name else ""
 
@@ -751,9 +935,46 @@ class PGScraper(BaseScraper):
         try:
             detail_soup = self._get_soup(driver, detail_url, wait_time)
         except Exception as e:
-            logger.error(f"Error loading detail page {detail_url}: {e}")
-            return {"contact_name": "", "email": "", "phone": "", "guaranteed_games": ""}
-        
+            if is_driver_connection_error(e):
+                raise
+            logger.warning("Contact detail navigation failed; checking its public HTTP source: %s", detail_url)
+            detail_soup = None
+        recognized = self._is_event_detail_soup(detail_soup)
+        contact = self._parse_contact_soup(detail_soup) if recognized else {
+            "contact_name": "", "email": "", "phone": "", "guaranteed_games": ""
+        }
+        if not recognized or not any(contact[key] for key in ("contact_name", "email", "phone")):
+            fallback = self._get_soup_requests(detail_url, timeout=(10, 30))
+            if self._is_event_detail_soup(fallback):
+                recovered = self._parse_contact_soup(fallback)
+                contact = {key: contact[key] or recovered[key] for key in contact}
+                logger.info("Contact details verified against public HTTP source: %s", detail_url)
+                return contact
+            if not recognized:
+                if driver is not None:
+                    # An isolated navigation timeout can leave an incomplete
+                    # body while HTTP is blocked. Retry this page once, keeping
+                    # the same verification guard and browser time limits.
+                    try:
+                        retry_soup = self._get_soup(driver, detail_url, wait_time)
+                    except Exception as exc:
+                        if is_driver_connection_error(exc):
+                            raise
+                        retry_soup = None
+                    if self._is_event_detail_soup(retry_soup):
+                        logger.info("Contact detail verified after bounded browser retry: %s", detail_url)
+                        return self._parse_contact_soup(retry_soup)
+                raise ValueError(f"Unable to verify PerfectGame contact detail page for event {event_id}")
+        return contact
+
+    @staticmethod
+    def _is_event_detail_soup(soup):
+        if soup is None:
+            return False
+        title = soup.find(id=re.compile(r"EventHeader.*lblEventName|lblEventNameNew$", re.I))
+        return bool(title and title.get_text(" ", strip=True))
+
+    def _parse_contact_soup(self, detail_soup) -> Dict[str, str]:
         contact_div = detail_soup.find("div", id=re.compile(r"pnl(ContactPG|TournyDirector)"))
         
         if contact_div:
@@ -778,7 +999,6 @@ class PGScraper(BaseScraper):
         else:
             gg = ""
         
-        logger.debug(f"Extracted contact info for event {event_id}")
         return {"contact_name": contact_name, "email": email, "phone": phone, "guaranteed_games": gg}
 
     def _parse_locations_page(self, soup: BeautifulSoup) -> Dict[str, any]:
@@ -805,6 +1025,7 @@ class PGScraper(BaseScraper):
         url = url.rstrip('/.')  # remove trailing slash or period
         logger.info(f"Extracting PerfectGame events from URL: {url}")
         selected_state_fallback = self._state_from_selected_location(kwargs.get("selected_location", ""))
+        requested_group = "groupedevents.aspx" in url.lower()
         attempts = 0
         while attempts < max_retries:
             attempts += 1
@@ -812,7 +1033,7 @@ class PGScraper(BaseScraper):
                 soup = self._get_soup(driver, url, kwargs.get("wait_time", 30))
 
                 # Avoid touching driver.current_url for request-fetched grouped pages (or dead sessions)
-                if driver is not None and "groupedevents.aspx" not in url.lower():
+                if driver is not None and ("groupedevents.aspx" not in url.lower() or getattr(self, "_last_soup_used_browser", False)):
                     try:
                         final_url = driver.current_url.rstrip('/.')
                         if final_url != url:
@@ -829,6 +1050,8 @@ class PGScraper(BaseScraper):
                         driver,
                         url,
                         selected_state_fallback=selected_state_fallback,
+                        soup=soup,
+                        group_context=requested_group and "/events/default.aspx" in url.lower(),
                     )
 
                 age_groups = []
@@ -930,18 +1153,25 @@ class PGScraper(BaseScraper):
                 logger.warning(f"WebDriver error at {url}: {e}")
                 time.sleep(3)
             except Exception as e:
+                from common.source_exclusions import SourceEventIncomplete
+                if isinstance(e, SourceEventIncomplete):
+                    raise
+                if isinstance(e, WebDriverDisconnectedError) or is_driver_connection_error(e):
+                    raise
                 logger.exception(f"Unexpected error at {url}: {e}")
                 return {}
         logger.info(f"Failed to extract data for URL: {url} after {max_retries} retries.")
         return {}
 
-    def _parse_single_event_page(self, driver, url: str, selected_state_fallback: str = "") -> dict:
+    def _parse_single_event_page(self, driver, url: str, selected_state_fallback: str = "", soup=None, group_context=False) -> dict:
         url = url.rstrip('/.')
-        soup = self._get_soup(driver, url)
-        final_url = driver.current_url.rstrip('/.')
-        if final_url != url:
-            logger.info(f"Fallback: URL redirected to: {final_url}")
-            url = final_url
+        if soup is None:
+            soup = self._get_soup(driver, url)
+            if driver is not None and "groupedevents.aspx" not in url.lower():
+                final_url = driver.current_url.rstrip('/.')
+                if final_url != url:
+                    logger.info(f"Fallback: URL redirected to: {final_url}")
+                    url = final_url
 
         row = {col: "" for col in OUTPUT_COLUMNS}
 
@@ -957,13 +1187,26 @@ class PGScraper(BaseScraper):
             comp_level = dm.group(2) if dm.group(2) else ""
         row["Age-groups.1"] = age_group
         row["Competition-level.1"] = comp_level
+        if group_context and not comp_level:
+            levels = extract_competition_levels_from_parentheses(raw_tournament_name)
+            for index, level in enumerate(levels[:9], 1):
+                row[f"Competition-level.{index}"] = level
+        if group_context and soup.find(id=re.compile(r"pnlTournaments$")):
+            # Preserve the grouped export contract when the provider now serves
+            # one explicitly recognized team tournament at its child URL.
+            row["Tournament-type"] = "Team"
+            row["Tournament-surface"] = "NA"
 
         date_elem = soup.find(id="ContentTopLevel_ContentPlaceHolder1_lblEventDateNew")
         if not date_elem:
             date_elem = soup.find(id="ContentTopLevel_ContentPlaceHolder1_EventHeader1_lblDatesNew")
         if date_elem:
             date_text = date_elem.get_text(strip=True)
-            start_date, end_date = self._parse_date_range(date_text, date_text)
+            if date_text.strip().upper() in {"DATE TBD", "DATES TBD", "TBD"}:
+                from common.source_exclusions import SourceEventIncomplete
+                raise SourceEventIncomplete("PerfectGame explicitly publishes DATE TBD; a future start cannot be verified")
+            year_source = date_text if re.search(r"\b20\d{2}\b", date_text) else raw_tournament_name
+            start_date, end_date = self._parse_date_range(date_text, year_source)
             row["Start-date"] = start_date
             row["End-date"] = end_date
         else:
@@ -990,6 +1233,8 @@ class PGScraper(BaseScraper):
                     best_loc = loc
             if best_loc:
                 row["Address"] = best_loc.get("Address", "")
+                if group_context:
+                    row["Venue"] = best_loc.get("Venue", "")
                 row["City"] = best_loc.get("City", "")
                 row["State-FullName"] = best_loc.get("State-FullName", "") or selected_state_fallback
                 row["Zip"] = best_loc.get("Zip", "")
@@ -1000,7 +1245,7 @@ class PGScraper(BaseScraper):
                 row["Zip"] = ""
             row["Are-there-multiple_locations"] = "No"
 
-            contact_info = self._parse_contact_info(driver, event_id)
+            contact_info = self._parse_contact_soup(soup)
             row["Email"] = contact_info.get("email", "")
             row["Contact-name"] = contact_info.get("contact_name", "")
             row["Phone-number"] = contact_info.get("phone", "")

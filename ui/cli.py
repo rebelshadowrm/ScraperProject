@@ -5,6 +5,8 @@ import sys
 import json
 import signal
 import logging
+import argparse
+from datetime import date
 from datetime import datetime
 from pathlib import Path
 
@@ -23,6 +25,11 @@ from common.json_utils import load_events, load_failed_events
 from common.config import OUTPUT_COLUMNS
 from common.data_control import rollback_events
 from common.scheduler_history import load_scheduler_history, save_scheduler_history
+from common.storage import ledger_lock
+from common.pull_options import PullOptions
+from common.run_manifest import RunManifest
+from common.excel_utils import validate_template
+from common.identity import pending_locations
 
 from common.prompt_utils import (
     ALL_SCRAPERS_SENTINEL,
@@ -46,9 +53,9 @@ from scrapers.play365_base import Play365ManualFallbackRequired
 
 # -------------------- GLOBALS & CONSTANTS --------------------
 shutdown_flag = False
+_pull_running = False
 
-cleanup_old_logs(logs_root="Logs", keep_runs=50, keep_days=60)
-logger = setup_logger(log_file=build_run_log_path("startup", logs_root="Logs"), log_level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 JSON_FILE = "events.json"
 FAILED_EVENTS_FILE = "failed_events.json"
@@ -59,14 +66,12 @@ LOCATIONS_FILE = "locations.json"
 # -------------------- SIGNAL HANDLER -------------------------
 def _signal_handler(sig, frame):
     global shutdown_flag
+    if shutdown_flag or not _pull_running:
+        shutdown_flag = True
+        raise KeyboardInterrupt
     logger.info("Shutdown signal received. Preparing to exit gracefully...")
     shutdown_flag = True
     flush_logs()
-    raise KeyboardInterrupt
-
-
-signal.signal(signal.SIGINT, _signal_handler)
-signal.signal(signal.SIGTERM, _signal_handler)
 
 
 def _shutdown_check() -> bool:
@@ -155,8 +160,11 @@ def _run_play365_batch(
     output_base_folder: str,
     scheduler_history_file: str,
     run_mode: str,
+    pull_options=None,
+    manifest=None,
+    unattended=False,
 ):
-    firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+    firefox_path = os.environ.get("SCRAPER_FIREFOX_BINARY", "C:/Program Files/Mozilla Firefox/firefox.exe")
     manual_failures: list[tuple[str, str]] = []
 
     for display_name, scraper_ref in play365_targets.items():
@@ -164,11 +172,14 @@ def _run_play365_batch(
             log_progress(logger, "Shutdown detected. Stopping Play365 automatic sweep.")
             break
 
-        scraper = _load_scraper_from_reference(scraper_ref)
-        log_progress(logger, "[Play365] Automatic phase: %s", scraper.SCRAPER_NAME)
-        locations = scraper.get_dynamic_locations()
-
+        scraper = None
+        driver = None
         try:
+            scraper = _load_scraper_from_reference(scraper_ref)
+            log_progress(logger, "[Play365] Automatic phase: %s", scraper.SCRAPER_NAME)
+            locations = scraper.get_dynamic_locations()
+            if manifest:
+                manifest.provider(display_name, "running", locations=locations)
             driver = None
             if getattr(scraper, "REQUIRES_DRIVER", True):
                 driver = initialize_driver(
@@ -180,7 +191,7 @@ def _run_play365_batch(
             for loc_name, loc_url in locations.items():
                 if _shutdown_check():
                     break
-                driver = process_location(
+                driver = _process_location_safe(
                     location_name=loc_name,
                     base_url=loc_url,
                     scraper=scraper,
@@ -197,17 +208,30 @@ def _run_play365_batch(
                     collect_kwargs={"allow_manual_fallback": False},
                     scheduler_history_file=scheduler_history_file,
                     run_mode=run_mode,
+                    pull_options=pull_options,
+                    run_date=manifest.run_date if manifest else None,
+                    manifest=manifest,
+                    provider_label=display_name,
                 )
+            if manifest:
+                manifest.provider(display_name, "interrupted" if _shutdown_check() else "complete", locations=locations)
             safe_quit_driver(driver)
         except Play365ManualFallbackRequired:
             safe_quit_driver(driver)
-            logger.warning("[Play365] Automatic phase failed for %s. Queued for manual fallback.", scraper.SCRAPER_NAME)
+            logger.warning("[Play365] Automatic phase failed for %s. Queued for manual fallback.", display_name)
             manual_failures.append((display_name, scraper_ref))
-        except Exception:
+            if manifest:
+                manifest.provider(display_name, "queued", error="Manual fallback required")
+        except Exception as exc:
             safe_quit_driver(driver)
-            raise
+            logger.exception("Play365 provider failed: %s", display_name)
+            if manifest:
+                manifest.provider(display_name, "failed", error=str(exc))
 
     if not manual_failures or _shutdown_check():
+        return
+    if unattended:
+        logger.warning("Deferred manual Play365 work: %s", ", ".join(name for name, _ in manual_failures))
         return
 
     failed_names = ", ".join(_load_scraper_from_reference(ref).SCRAPER_NAME for _, ref in manual_failures)
@@ -229,7 +253,7 @@ def _run_play365_batch(
         return
 
     workspace_root = _downloads_manual_play365_dir()
-    for _, scraper_ref in manual_failures:
+    for display_name, scraper_ref in manual_failures:
         if _shutdown_check():
             break
 
@@ -248,7 +272,7 @@ def _run_play365_batch(
             for loc_name, loc_url in locations.items():
                 if _shutdown_check():
                     break
-                driver = process_location(
+                driver = _process_location_safe(
                     location_name=loc_name,
                     base_url=loc_url,
                     scraper=scraper,
@@ -270,7 +294,13 @@ def _run_play365_batch(
                     },
                     scheduler_history_file=scheduler_history_file,
                     run_mode=run_mode,
+                    pull_options=pull_options,
+                    run_date=manifest.run_date if manifest else None,
+                    manifest=manifest,
+                    provider_label=display_name,
                 )
+            if manifest:
+                manifest.provider(display_name, "interrupted" if _shutdown_check() else "complete", locations=locations)
         finally:
             safe_quit_driver(driver)
             _cleanup_manual_play365_workspace(workspace_root, scraper=scraper)
@@ -304,7 +334,37 @@ def _resolve_all_locations_for_scraper(all_locations, scraper):
     return "ALL", filtered_locations, scraper
 
 
-def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bool = False):
+def _run_selected_scraper(**kwargs):
+    try:
+        if kwargs.get("test_mode", False):
+            return _run_selected_scraper_unlocked(**kwargs)
+        with ledger_lock(JSON_FILE):
+            return _run_selected_scraper_unlocked(**kwargs)
+    finally:
+        close = getattr(kwargs["scraper"], "close", None)
+        if callable(close):
+            close()
+
+
+def _process_location_safe(*, manifest=None, provider_label=None, **kwargs):
+    scraper = kwargs["scraper"]
+    provider = provider_label or scraper.__class__.__name__
+    try:
+        driver = process_location(**kwargs)
+        if manifest:
+            manifest.location(provider, kwargs["location_name"], getattr(scraper, "_last_location_result", {"status": "complete"}))
+        return driver
+    except Play365ManualFallbackRequired:
+        raise
+    except Exception as exc:
+        logger.exception("Location failed; continuing independent locations: %s", kwargs["location_name"])
+        if manifest:
+            manifest.location(provider, kwargs["location_name"], {"status": "failed", "error": str(exc)})
+        return getattr(scraper, "_active_driver", kwargs["driver"])
+
+
+def _run_selected_scraper_unlocked(*, scraper, selected_location, loc_info, test_mode: bool = False,
+                                  pull_options=None, manifest=None, unattended=False):
     global logger
 
     json_file = JSON_FILE
@@ -321,17 +381,23 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
         log_progress(logger, "Test mode enabled. Writing outputs under: %s", os.path.dirname(json_file))
     elif selected_location == "ALL_PLAY365_SCRAPERS":
         run_label = "Play365Batch"
+    if manifest and pull_options and pull_options.mode == "snapshot":
+        output_base_folder = manifest.output_root
+    validate_template(OUTPUT_COLUMNS)
 
     logger = setup_logger(log_file=build_run_log_path(run_label, logs_root="Logs"), log_level=logging.INFO)
     log_progress(logger, "Run log created for %s.", run_label)
 
     events_data = load_events(json_file)
     failed_data = load_failed_events(failed_events_file)
+    if selected_location == "ALL":
+        for name, source in pending_locations(events_data, scraper).items():
+            loc_info.setdefault(name, source)
     if not os.path.exists(scheduler_history_file):
         save_scheduler_history(load_scheduler_history(scheduler_history_file), scheduler_history_file)
 
     driver = None
-    firefox_path = "C:/Program Files/Mozilla Firefox/firefox.exe"
+    firefox_path = os.environ.get("SCRAPER_FIREFOX_BINARY", "C:/Program Files/Mozilla Firefox/firefox.exe")
     manual_workspace_root = _downloads_manual_play365_dir() if hasattr(scraper, "_manual_dump_path") else None
 
     try:
@@ -345,6 +411,9 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                 output_base_folder=output_base_folder,
                 scheduler_history_file=scheduler_history_file,
                 run_mode="test" if test_mode else "live",
+                pull_options=pull_options,
+                manifest=manifest,
+                unattended=unattended,
             )
             return
 
@@ -366,7 +435,7 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                     log_progress(logger, "Shutdown detected. Stopping before next location.")
                     break
 
-                driver = process_location(
+                driver = _process_location_safe(
                     location_name=loc_name,
                     base_url=loc_url,
                     scraper=scraper,
@@ -383,12 +452,15 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                     collect_kwargs=collect_kwargs,
                     scheduler_history_file=scheduler_history_file,
                     run_mode="test" if test_mode else "live",
+                    pull_options=pull_options,
+                    run_date=manifest.run_date if manifest else None,
+                    manifest=manifest,
                 )
         else:
             collect_kwargs = {}
             if manual_workspace_root:
                 collect_kwargs["manual_workspace_root"] = manual_workspace_root
-            driver = process_location(
+            driver = _process_location_safe(
                 location_name=selected_location,
                 base_url=loc_info,
                 scraper=scraper,
@@ -405,10 +477,16 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
                 collect_kwargs=collect_kwargs,
                 scheduler_history_file=scheduler_history_file,
                 run_mode="test" if test_mode else "live",
+                pull_options=pull_options,
+                run_date=manifest.run_date if manifest else None,
+                manifest=manifest,
             )
 
     except Exception as e:
         logger.error("An error occurred in CLI run: %s", e)
+        if manifest:
+            manifest.provider(scraper.__class__.__name__, "failed", error=str(e))
+        raise
 
     finally:
         safe_quit_driver(driver)
@@ -416,55 +494,164 @@ def _run_selected_scraper(*, scraper, selected_location, loc_info, test_mode: bo
             _cleanup_manual_play365_workspace(manual_workspace_root, scraper=scraper)
             _cleanup_manual_play365_workspace(manual_workspace_root)
         flush_logs()
-        logging.shutdown()
 
 
-def _run_scrape_flow(*, test_mode: bool = False):
-    scraper = prompt_for_scraper()
+def _run_scrape_flow(*, test_mode=False, all_scrapers=False, pull_options=None, interactive_fallback=False):
+    global _pull_running
+    scraper = ALL_SCRAPERS_SENTINEL if all_scrapers else prompt_for_scraper()
     locations = load_locations(LOCATIONS_FILE)
+    batch = scraper in {ALL_SCRAPERS_SENTINEL, VALIDATION_SCRAPERS_SENTINEL}
+    options = pull_options or PullOptions("snapshot" if batch else "incremental")
+    manifest = RunManifest(options, test_mode=test_mode)
+    _pull_running = True
+    log_progress(logger, "Pull mode: %s. Run manifest: %s", options.mode, manifest.path)
+    try:
+        if batch:
+            scraper_classes = get_scraper_classes()
+            if scraper == VALIDATION_SCRAPERS_SENTINEL:
+                wanted = {"NCS", "PerfectGame", "USSSA"}
+                scraper_classes = [cls for cls in scraper_classes if cls.SCRAPER_NAME in wanted]
+            for cls in scraper_classes:
+                manifest.provider(cls.__name__, "planned")
+                if cls.SCRAPER_NAME == "Play365Base":
+                    for label in locations:
+                        if "(Play365Base)" in label:
+                            manifest.provider(label, "planned")
+            for cls in scraper_classes:
+                if _shutdown_check():
+                    break
+                name = cls.__name__
+                try:
+                    active = cls()
+                    discovery_error = ""
+                    try:
+                        selection, info, active = _resolve_all_locations_for_scraper(locations, active)
+                    except Exception as exc:
+                        recovery = {} if test_mode else pending_locations(load_events(JSON_FILE), active)
+                        if not recovery:
+                            raise
+                        logger.exception("Location discovery failed; attempting staged export recovery for %s", name)
+                        discovery_error = str(exc)
+                        selection, info = "ALL", recovery
+                    if selection == "None Found" and not test_mode:
+                        recovery = pending_locations(load_events(JSON_FILE), active)
+                        if recovery:
+                            selection, info = "ALL", recovery
+                    if selection == "None Found":
+                        manifest.provider(name, "skipped", error="No locations resolved")
+                        continue
+                    manifest.provider(name, "running", locations=info)
+                    _run_selected_scraper(scraper=active, selected_location=selection, loc_info=info,
+                                          test_mode=test_mode, pull_options=options, manifest=manifest,
+                                          unattended=not interactive_fallback)
+                    outcomes = [result["status"] for key, result in manifest.data["locations"].items()
+                                if key.startswith(name + "|")]
+                    manifest.provider(name, "interrupted" if _shutdown_check() else
+                                      "partial" if discovery_error or any(s != "complete" for s in outcomes) else "complete",
+                                      locations=info, error=discovery_error)
+                except Exception as exc:
+                    logger.exception("Provider failed; continuing automatic sweep: %s", name)
+                    manifest.provider(name, "failed", error=str(exc))
+        else:
+            name = scraper.__class__.__name__
+            selection, info, scraper = prompt_for_location(locations, scraper)
+            manifest.provider(name, "running", locations=info if isinstance(info, dict) else [selection])
+            if selection == "None Found":
+                manifest.provider(name, "skipped", error="No locations resolved")
+            else:
+                try:
+                    _run_selected_scraper(scraper=scraper, selected_location=selection, loc_info=info,
+                                          test_mode=test_mode, pull_options=options, manifest=manifest)
+                    manifest.provider(name, "complete")
+                except Exception as exc:
+                    manifest.provider(name, "failed", error=str(exc))
+    except Exception as exc:
+        manifest.provider("Run setup", "failed", error=str(exc))
+        raise
+    finally:
+        _pull_running = False
+        manifest.finish(interrupted=_shutdown_check())
+        log_progress(logger, "Pull finished: %s. Manifest: %s", manifest.data["status"], manifest.path)
+    return manifest
 
-    if scraper in {ALL_SCRAPERS_SENTINEL, VALIDATION_SCRAPERS_SENTINEL}:
-        selected_batch = scraper
-        log_progress(logger, "Selected scraper: %s", selected_batch)
-        scraper_classes = get_scraper_classes()
-        if selected_batch == VALIDATION_SCRAPERS_SENTINEL:
-            wanted = {"NCS", "PerfectGame", "USSSA"}
-            scraper_classes = [
-                cls for cls in scraper_classes
-                if getattr(cls, "SCRAPER_NAME", cls.__name__) in wanted
-            ]
 
-        for scraper_cls in scraper_classes:
-            if _shutdown_check():
-                log_progress(logger, "Shutdown detected. Stopping all-scraper batch.")
-                break
-
-            active_scraper = scraper_cls()
-            selected_location, loc_info, active_scraper = _resolve_all_locations_for_scraper(locations, active_scraper)
-            if selected_location == "None Found":
-                logger.warning("Skipping %s because no locations were resolved.", active_scraper.__class__.__name__)
-                continue
-
-            log_progress(logger, "Effective scraper: %s", active_scraper.__class__.__name__)
-            log_progress(logger, "Selected location: %s", selected_location)
-            _run_selected_scraper(
-                scraper=active_scraper,
-                selected_location=selected_location,
-                loc_info=loc_info,
-                test_mode=test_mode,
-            )
-        return
-
-    log_progress(logger, "Selected scraper: %s", scraper.__class__.__name__)
-    selected_location, loc_info, scraper = prompt_for_location(locations, scraper)
-    log_progress(logger, "Effective scraper: %s", scraper.__class__.__name__)
-    log_progress(logger, "Selected location: %s", selected_location)
-    _run_selected_scraper(
-        scraper=scraper,
-        selected_location=selected_location,
-        loc_info=loc_info,
-        test_mode=test_mode,
-    )
+def _repair_snapshot(path):
+    """Retry incomplete providers in the same destination, keeping successful output."""
+    global _pull_running
+    # Hold one lock through loading, discovery, retries, and the final checkpoint.
+    with ledger_lock(JSON_FILE):
+        manifest = RunManifest.load_for_repair(path)
+        options = PullOptions("snapshot",
+                              date.fromisoformat(manifest.data["start_date"]) if manifest.data["start_date"] else None,
+                              date.fromisoformat(manifest.data["end_date"]) if manifest.data["end_date"] else None)
+        configured = load_locations(LOCATIONS_FILE)
+        manifest.begin_repair()
+        _pull_running = True
+        try:
+            for cls in get_scraper_classes():
+                if _shutdown_check():
+                    break
+                name = cls.__name__
+                expected = manifest.data["providers"].get(name)
+                if expected is None:
+                    continue
+                is_dispatcher = cls.SCRAPER_NAME == "Play365Base"
+                if is_dispatcher:
+                    targets = {label: ref for label, ref in configured.items()
+                               if "(Play365Base)" in label and
+                               (manifest.data["providers"].get(label, {}).get("status") != "complete" or
+                                any(v.get("status") != "complete" for k, v in manifest.data["locations"].items()
+                                    if k.startswith(label + "|")))}
+                    if not targets:
+                        manifest.provider(name, "complete")
+                        continue
+                else:
+                    outcomes = [v for k, v in manifest.data["locations"].items() if k.startswith(name + "|")]
+                    missing = any(f"{name}|{loc}" not in manifest.data["locations"] for loc in expected.get("locations", []))
+                    if expected["status"] == "complete" and not missing and all(v.get("status") == "complete" for v in outcomes):
+                        continue
+                active = None
+                try:
+                    active = cls()
+                    selection, info, active = _resolve_all_locations_for_scraper(configured, active)
+                    if selection == "None Found":
+                        raise ValueError("No locations resolved for incomplete provider")
+                    if is_dispatcher:
+                        info = targets
+                    else:
+                        info = {loc: url for loc, url in info.items()
+                                if manifest.data["locations"].get(f"{name}|{loc}", {}).get("status") != "complete"}
+                        unresolved = [loc for loc in expected.get("locations", [])
+                                      if manifest.data["locations"].get(f"{name}|{loc}", {}).get("status") != "complete" and loc not in info]
+                        if unresolved:
+                            raise ValueError("Previously expected locations missing from discovery: " + ", ".join(unresolved))
+                    manifest.provider(name, "running")
+                    _run_selected_scraper_unlocked(scraper=active, selected_location=selection, loc_info=info,
+                                                   pull_options=options, manifest=manifest, unattended=True)
+                    if is_dispatcher:
+                        statuses = [manifest.data["providers"].get(label, {}).get("status")
+                                    for label in expected.get("locations", [])]
+                    else:
+                        statuses = [manifest.data["locations"].get(f"{name}|{loc}", {}).get("status")
+                                    for loc in set(expected.get("locations", [])) | set(info)]
+                        expected["locations"] = list(dict.fromkeys(expected.get("locations", []) + list(info)))
+                    manifest.provider(name, "interrupted" if _shutdown_check() else
+                                      "complete" if all(s == "complete" for s in statuses) else "partial",
+                                      locations=expected.get("locations", []))
+                except Exception as exc:
+                    logger.exception("Snapshot repair failed for %s; continuing other providers", name)
+                    manifest.provider(name, "failed", error=str(exc))
+                finally:
+                    close = getattr(active, "close", None)
+                    if callable(close):
+                        close()
+        finally:
+            _pull_running = False
+            manifest.finish(interrupted=_shutdown_check())
+            manifest.data["repair_attempts"][-1]["finished_at"] = manifest.data["finished_at"]
+            manifest.data["repair_attempts"][-1]["status"] = manifest.data["status"]
+            manifest.save()
+        return manifest
 
 
 def _run_data_control():
@@ -510,19 +697,56 @@ def _run_data_control():
 
 
 # -------------------- CLI ENTRYPOINT -------------------------
-def run_cli():
+def run_cli(argv=None):
+    global logger, shutdown_flag
+    parser = argparse.ArgumentParser(description="Pull baseball tournaments with recoverable exports.")
+    parser.add_argument("--all", action="store_true", help="Run every provider without scraper/location menus")
+    parser.add_argument("--repair-snapshot", help="Retry unfinished work in a finished snapshot from today")
+    parser.add_argument("--test", action="store_true", help="Use isolated test state and output")
+    parser.add_argument("--mode", choices=("incremental", "refresh", "snapshot"),
+                        help="All-provider runs default to refreshed snapshots")
+    parser.add_argument("--start-date", type=date.fromisoformat, help="Inclusive event start-date lower bound (YYYY-MM-DD)")
+    parser.add_argument("--end-date", type=date.fromisoformat, help="Inclusive event start-date upper bound (YYYY-MM-DD)")
+    parser.add_argument("--interactive-fallback", action="store_true", help="Allow manual fallback prompts during a full sweep")
+    args = parser.parse_args(argv)
+    if args.repair_snapshot and (args.all or args.test or args.mode or args.start_date or args.end_date or args.interactive_fallback):
+        parser.error("--repair-snapshot uses the original run settings and cannot be combined with pull options")
+    if args.start_date and args.end_date and args.start_date > args.end_date:
+        parser.error("--start-date must be on or before --end-date")
+    options = PullOptions(args.mode or ("snapshot" if args.all or args.start_date or args.end_date else "incremental"), args.start_date, args.end_date)
+    if not args.mode and not args.all:
+        options = None if not (args.start_date or args.end_date) else options
+    shutdown_flag = False
+    signal.signal(signal.SIGINT, _signal_handler)
+    signal.signal(signal.SIGTERM, _signal_handler)
+    cleanup_old_logs(logs_root="Logs", keep_runs=50, keep_days=60)
+    logger = setup_logger(log_file=build_run_log_path("startup", logs_root="Logs"), log_level=logging.INFO)
     try:
+        if args.repair_snapshot:
+            manifest = _repair_snapshot(args.repair_snapshot)
+            return 0 if manifest.data["status"] == "complete" else 1
+        if args.all:
+            manifest = _run_scrape_flow(test_mode=args.test, all_scrapers=True, pull_options=options,
+                                      interactive_fallback=args.interactive_fallback)
+            return 0 if manifest.data["status"] == "complete" else 1
         action = prompt_main_action()
 
         if action == "1":
             _run_data_control()
         elif action == "2":
-            _run_scrape_flow(test_mode=False)
+            _run_scrape_flow(test_mode=args.test, pull_options=options,
+                             interactive_fallback=args.interactive_fallback)
         elif action == "3":
-            _run_scrape_flow(test_mode=True)
+            _run_scrape_flow(test_mode=True, pull_options=options,
+                             interactive_fallback=args.interactive_fallback)
     except KeyboardInterrupt:
         print("\nOperation cancelled.")
         flush_logs()
+        return 130
+    except Exception:
+        logger.exception("Pull failed")
+        return 1
+    finally:
         logging.shutdown()
 
 

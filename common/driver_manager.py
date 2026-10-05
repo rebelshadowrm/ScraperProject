@@ -8,7 +8,7 @@ from typing import Optional
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, InvalidSessionIdException, NoSuchWindowException
 from webdriver_manager.firefox import GeckoDriverManager
 from common.logging_utils import log_progress
 
@@ -20,6 +20,7 @@ DEFAULT_DOWNLOAD_DIR = os.path.abspath(os.path.join(os.getcwd(), "_selenium_down
 _DRIVER_DEAD_MARKERS = (
     "Tried to run command without establishing a connection",
     "invalid session id",
+    "session does not exist, or is not active",
     "session not created",
     "disconnected",
     "connection refused",
@@ -29,7 +30,11 @@ _DRIVER_DEAD_MARKERS = (
 )
 
 def is_driver_connection_error(exc: Exception) -> bool:
+    if isinstance(exc, (InvalidSessionIdException, NoSuchWindowException)):
+        return True
     msg = str(exc) or ""
+    if isinstance(exc, WebDriverException) and "out of memory" in msg.lower():
+        return True
     return any(m.lower() in msg.lower() for m in _DRIVER_DEAD_MARKERS)
 
 def safe_quit_driver(driver) -> None:
@@ -65,7 +70,7 @@ def initialize_driver(
     firefox_binary: Optional[str] = None,
     download_dir: Optional[str] = None,
     headless: bool = True,
-    page_load_timeout_sec: Optional[int] = None,
+    page_load_timeout_sec: Optional[int] = 60,
 ):
     """
     Set up a Firefox driver with webdriver-manager.
@@ -81,7 +86,8 @@ def initialize_driver(
     if firefox_binary:
         options.binary_location = firefox_binary
 
-    options.headless = headless
+    if headless:
+        options.add_argument("-headless")
     options.accept_insecure_certs = True
 
     # Keep downloads contained (headless can't handle "Open/Save" prompts well)
@@ -105,6 +111,7 @@ def initialize_driver(
 
     service = Service(GeckoDriverManager().install())
     driver = webdriver.Firefox(service=service, options=options)
+    driver.set_script_timeout(30)
 
     if page_load_timeout_sec:
         try:
@@ -121,7 +128,7 @@ def restart_driver(
     firefox_binary: Optional[str] = None,
     download_dir: Optional[str] = None,
     headless: bool = True,
-    page_load_timeout_sec: Optional[int] = None,
+    page_load_timeout_sec: Optional[int] = 60,
     sleep_after_sec: float = 2.0,
 ):
     """Quit an existing driver safely and return a fresh one."""

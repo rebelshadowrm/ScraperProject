@@ -36,7 +36,8 @@ class PSTScraper(BaseScraper):
 
     def __init__(self):
         self.geolocator = Nominatim(user_agent="my_app")
-        self.reverse_func = RateLimiter(self.geolocator.reverse, min_delay_seconds=1)
+        self.reverse_func = RateLimiter(self.geolocator.reverse, min_delay_seconds=1, swallow_exceptions=False)
+        self._geocode_cache = {}
         self.events_by_url = {}  # Cache event details keyed by event URL.
         self.store_org_id = None
         self.session = requests.Session()
@@ -70,6 +71,9 @@ class PSTScraper(BaseScraper):
         Reverse geocodes (lat, lon) using Nominatim via geopy.
         Returns a dict with keys: 'venue_name', 'street', 'city', 'state', 'postal_code'.
         """
+        key = (lat, lon)
+        if key in self._geocode_cache:
+            return dict(self._geocode_cache[key])
         # Use the pre-initialized reverse geocoding function.
         try:
             location = self.reverse_func((lat, lon), language="en", timeout=self.GEOCODE_TIMEOUT_SECONDS)
@@ -78,6 +82,7 @@ class PSTScraper(BaseScraper):
             return {}
 
         if not location:
+            self._geocode_cache[key] = {}
             return {}
 
         raw_data = location.raw
@@ -93,13 +98,15 @@ class PSTScraper(BaseScraper):
 
         venue_name = address.get("attraction") or address.get("building") or address.get("public_building") or address.get("amenity") or ""
 
-        return {
+        result = {
             "venue_name": venue_name,
             "street": street,
             "city": city,
             "state": state,
             "postal_code": postal_code,
         }
+        self._geocode_cache[key] = result
+        return dict(result)
 
     
     def build_address_and_venue(self, event: dict) -> Dict[str, str]:
@@ -156,8 +163,7 @@ class PSTScraper(BaseScraper):
         qs = parse_qs(parsed.query)
         store_org_id = qs.get("storeorganizationid", [None])[0]
         if not store_org_id:
-            logger.error("Store organization id not found in base_url.")
-            return []
+            raise ValueError("PST requires storeorganizationid")
         self.store_org_id = store_org_id
 
         # Update session headers.
@@ -188,30 +194,50 @@ class PSTScraper(BaseScraper):
                 self.session.cookies.set(cookie['name'], cookie['value'])
 
         except Exception as e:
+            from common.driver_manager import is_driver_connection_error
+            if is_driver_connection_error(e):
+                raise
             logger.error(f"Error during page load/click: {e}")
 
-        all_event_urls = []
+        from common.collection import CollectedLinks
+        all_event_urls = CollectedLinks()
+        seen_pages = set()
+        deadline = time.monotonic() + 600
         current_page = 1
         while True:
+            if current_page > 200 or time.monotonic() > deadline:
+                all_event_urls.complete = False
+                all_event_urls.error = "PST 200-page budget exceeded"
+                break
+            all_event_urls.pages = current_page
             api_url = f"{self.API_BASE_URL}?storeorganizationid={store_org_id}"
             payload = self._build_future_only_payload(current_page)
             try:
-                response = self.session.post(api_url, json=payload)
+                response = self.session.post(api_url, json=payload, timeout=(10, 30))
                 response.raise_for_status()
                 if not response.text.strip():
                     raise ValueError("Empty API response")
                 data = response.json()
+                from common.collection import validated_records
+                results = validated_records(data, field="Results", source="PST")
             except (requests.RequestException, ValueError) as e:
                 logger.error(f"API error on page {current_page}: {e}")
                 logger.info("Falling back to extracting event links from the DOM.")
-                all_event_urls = self._extract_event_links_from_dom(driver)
+                all_event_urls.complete = False
+                all_event_urls.error = f"PST API error on page {current_page}: {e}"
+                all_event_urls.extend(u for u in self._extract_event_links_from_dom(driver) if u not in all_event_urls)
                 break
 
-            results = data.get("Results", [])
             logger.info(f"API page {current_page} returned {len(results)} events.")
             if not results:
                 logger.info("No events returned via API – last page reached.")
                 break
+            fingerprint = tuple(str(event.get("Id", "")) for event in results)
+            if fingerprint in seen_pages:
+                all_event_urls.complete = False
+                all_event_urls.error = "PST repeated a nonempty events page"
+                break
+            seen_pages.add(fingerprint)
 
             for event in results:
                 event_id = event.get("Id")
@@ -341,7 +367,7 @@ class PSTScraper(BaseScraper):
             schedule_url = f"{self.SCHEDULE_BASE_URL}?eventId={event_id}&storeorganizationid={self.store_org_id}"
             logger.info(f"Fetching schedule data for event {event_id} from {schedule_url}")
             try:
-                schedule_response = self.session.get(schedule_url)
+                schedule_response = self.session.get(schedule_url, timeout=(10, 30))
                 schedule_response.raise_for_status()
                 schedule_data = schedule_response.json()
                 teams = schedule_data.get("Teams", [])

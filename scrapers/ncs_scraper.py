@@ -17,6 +17,7 @@ from selenium.common.exceptions import (
 )
 
 from common.config import OUTPUT_COLUMNS, VALID_LEVELS
+from common.collection import CollectedLinks
 from .base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
@@ -61,11 +62,20 @@ class NCSScraper(BaseScraper):
 
         Returns a list of absolute URLs to each event's /Details/ page.
         """
-        event_links: List[str] = []
+        event_links = CollectedLinks()
         current_url = base_url
         page_number = 1
+        visited = set()
+        seen_links, seen_content = set(), set()
+        deadline = time.monotonic() + 600
 
         while True:
+            if current_url in visited or page_number > 200 or time.monotonic() > deadline:
+                event_links.complete = False
+                event_links.error = "NCS repeated listing URL or 200-page budget exceeded"
+                break
+            visited.add(current_url)
+            event_links.pages = page_number
             logger.info(f"Scraping page {page_number}: {current_url}")
 
             try:
@@ -79,16 +89,23 @@ class NCSScraper(BaseScraper):
                     logger.info(f"No NCS events found on page {page_number}. Stopping pagination.")
                 else:
                     logger.warning(f"Timeout while loading page {page_number}. Stopping pagination.")
+                    event_links.complete = False
+                    event_links.error = f"NCS listing timeout on page {page_number}"
                 break
             except WebDriverException as e:
                 logger.error(f"WebDriverException on page {page_number}: {e}")
-                break
+                raise
 
             soup = BeautifulSoup(driver.page_source, "html.parser")
             if self._page_has_no_events(driver.page_source):
                 logger.info(f"No NCS events found on page {page_number}. Stopping pagination.")
                 break
             anchors = soup.select(".media-body .h4 a")
+            fingerprint = tuple(sorted({a.get("href", "") for a in anchors}))
+            if not fingerprint or fingerprint in seen_content:
+                event_links.complete, event_links.error = False, "NCS missing event links or repeated event page"
+                break
+            seen_content.add(fingerprint)
             new_count = 0
 
             for a in anchors:
@@ -101,7 +118,8 @@ class NCSScraper(BaseScraper):
                 # Normalize to canonical casing so downstream parsing/replacements work.
                 full_url = self._canonicalize_event_url(full_url)
 
-                if full_url not in event_links:
+                if full_url not in seen_links:
+                    seen_links.add(full_url)
                     event_links.append(full_url)
                     new_count += 1
 
@@ -278,10 +296,16 @@ class NCSScraper(BaseScraper):
                 continue
             except WebDriverException as e:
                 logger.error(f"WebDriverException at {url}: {e}")
+                from common.driver_manager import is_driver_connection_error
+                if is_driver_connection_error(e):
+                    raise
                 retries += 1
                 time.sleep(3)
                 continue
             except Exception as e:
+                from common.driver_manager import is_driver_connection_error
+                if is_driver_connection_error(e):
+                    raise
                 logger.error(f"Unexpected error extracting details at {url}: {e}")
                 return None
 
@@ -422,12 +446,16 @@ class NCSScraper(BaseScraper):
         raw = date_tags[-1].get_text(strip=True) if date_tags else ""
 
         if raw:
+            from common.date_utils import explicit_year_range
+            explicit = explicit_year_range(raw)
+            if explicit:
+                return tournament_name, explicit[0].strftime("%m/%d/%Y"), explicit[1].strftime("%m/%d/%Y")
             raw_clean = raw.replace(",", " ").strip()
 
-            year_match = re.search(r"\b(20\d{2})\b", raw_clean)
+            year_match = re.search(r"\b(\d{4})\b", raw_clean)
             year = year_match.group(1) if year_match else str(datetime.now().year)
 
-            raw_no_year = re.sub(r"\b20\d{2}\b", "", raw_clean).strip()
+            raw_no_year = re.sub(r"\b\d{4}\b", "", raw_clean).strip()
             raw_no_year = re.sub(r"\s+", " ", raw_no_year).strip()
 
             m = re.match(r"([A-Za-z]+)\s+(\d+)-(\d+)$", raw_no_year)

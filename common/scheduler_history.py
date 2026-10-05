@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime, timezone
 from typing import Any, Dict
+from common.storage import save_json_atomic
 
 
 MAX_RECENT_RUNS_PER_LOCATION = 12
@@ -73,8 +74,7 @@ def load_scheduler_history(json_path: str) -> Dict[str, Any]:
 def save_scheduler_history(data: Dict[str, Any], json_path: str):
     data = ensure_scheduler_history_schema(data)
     data["updated_at"] = _utc_now_iso()
-    with open(json_path, "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4)
+    save_json_atomic(data, json_path)
 
 
 def record_location_run(
@@ -93,6 +93,14 @@ def record_location_run(
     non_future_skipped: int,
     batches_attempted: int,
     batches_written: int,
+    persistence_failures: int = 0,
+    events_attempted: int = 0,
+    interrupted: bool = False,
+    collection_complete: bool = True,
+    collection_error: str = "",
+    source_incomplete_skipped: int = 0,
+    driver_restarts: int = 0,
+    date_scope_skipped: int = 0,
 ) -> Dict[str, Any]:
     history_data = ensure_scheduler_history_schema(history_data)
     key = f"{scraper}|{location}"
@@ -100,6 +108,10 @@ def record_location_run(
     if not entry:
         entry = _default_location_entry(scraper=scraper, location=location)
         history_data["locations"][key] = entry
+    entry.setdefault("total_persistence_failures", 0)
+    entry.setdefault("total_events_attempted", 0)
+    entry["total_persistence_failures"] += persistence_failures
+    entry["total_events_attempted"] += events_attempted
 
     entry["runs_checked"] += 1
     if links_collected > 0:
@@ -134,7 +146,8 @@ def record_location_run(
     entry["last_run_mode"] = run_mode
     entry["last_had_events"] = bool(links_collected > 0)
     entry["last_had_writes"] = bool(rows_written > 0)
-    entry["last_failed"] = bool(validation_failures > 0 or extraction_failures > 0)
+    entry["last_failed"] = bool(validation_failures or extraction_failures or persistence_failures or not collection_complete)
+    entry["last_status"] = "interrupted" if interrupted else "partial" if entry["last_failed"] else "complete"
 
     recent_run = {
         "recorded_at": entry["last_run_at"],
@@ -149,6 +162,15 @@ def record_location_run(
         "non_future_skipped": int(non_future_skipped),
         "batches_attempted": int(batches_attempted),
         "batches_written": int(batches_written),
+        "persistence_failures": persistence_failures,
+        "events_attempted": events_attempted,
+        "interrupted": interrupted,
+        "collection_complete": collection_complete,
+        "collection_error": collection_error,
+        "status": entry["last_status"],
+        "date_scope_skipped": date_scope_skipped,
+        "source_incomplete_skipped": source_incomplete_skipped,
+        "driver_restarts": driver_restarts,
     }
     recent_runs = entry.setdefault("recent_runs", [])
     recent_runs.append(recent_run)

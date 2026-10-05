@@ -1,28 +1,23 @@
 # common/runner.py
 
 import os
-import time
-import random
 import logging
 from datetime import datetime
 from typing import List, Dict, Any, Callable, Optional
 
-from selenium.common.exceptions import WebDriverException
-
 from common.logging_utils import log_progress
-from common.validation import is_future_event, validate_event_data
-from common.excel_utils import create_workbook_from_template, append_rows_to_template, get_output_filename
+from common.identity import normalize_url, event_identity, discovered_identities
+from common.excel_utils import create_workbook_from_template, get_output_filename, write_snapshot
+from common.pull_options import PullOptions
+from common.collection import CollectedLinks
+from common.validation import validate_event_data
+from scrapers.play365_base import Play365ManualFallbackRequired
 
 from common.json_utils import (
-    load_events,
     save_events,
-    load_failed_events,
     save_failed_events,
     add_or_update_event,
-    record_attempt,
-    mark_processed,
     add_or_update_failure,
-    mark_failure_resolved,
 )
 from common.scheduler_history import (
     load_scheduler_history,
@@ -32,15 +27,11 @@ from common.scheduler_history import (
 
 from common.driver_manager import (
     is_driver_connection_error,
-    cleanup_download_dir,
     restart_driver,
 )
+from common.batch_runner import process_events_in_batches
 
 logger = logging.getLogger(__name__)
-
-
-def normalize_url(url: str) -> str:
-    return url.rstrip('/.').lower()
 
 
 def _can_use_driver(scraper, driver) -> bool:
@@ -63,238 +54,6 @@ def ensure_template(output_file: str) -> bool:
     return False
 
 
-def process_events_in_batches(
-    *,
-    scraper,
-    driver,
-    urls_to_process: List[Dict[str, str]],
-    events_data: Dict[str, Any],
-    failed_data: Dict[str, Any],
-    json_file: str,
-    failed_events_file: str,
-    output_file: str,
-    columns: List[str],
-    selected_location: str,
-    download_dir: str,
-    shutdown_check: Callable[[], bool],
-    batch_size: int = 10,
-    delay_between_batches: int = 30,
-    firefox_binary: Optional[str] = None,
-):
-    """
-    Process event detail pages in batches; restart driver once if disconnected.
-    Returns (driver, total_appended, metrics).
-    """
-    pending_rows: List[Dict[str, Any]] = []
-    total_urls = len(urls_to_process)
-    total_appended = 0
-    metrics = {
-        "validation_failures": 0,
-        "extraction_failures": 0,
-        "non_future_skipped": 0,
-        "batches_attempted": 0,
-        "batches_written": 0,
-    }
-
-    for i in range(0, total_urls, batch_size):
-        if shutdown_check():
-            logger.info("Shutdown flag detected. Exiting batch processing.")
-            break
-
-        batch = urls_to_process[i:i + batch_size]
-        metrics["batches_attempted"] += 1
-        log_progress(
-            logger,
-            "Processing batch %d/%d.",
-            (i // batch_size) + 1,
-            (total_urls + batch_size - 1) // batch_size
-        )
-
-        for event_dict in batch:
-            if shutdown_check():
-                logger.info("Shutdown flag detected during URL processing. Exiting.")
-                break
-
-            # NOTE: in your current flow, "name" is effectively the event key (often normalized URL)
-            key = event_dict["name"]
-            url = event_dict["url"]
-
-            attempts = 0
-            while attempts < 2:
-                attempts += 1
-                try:
-                    event_data = scraper.extract_event_details(
-                        url,
-                        driver=driver,
-                        selected_location=selected_location,
-                    )
-                    if not event_data:
-                        msg = "Extraction failed"
-                        logger.warning("%s for URL: %s.", msg, url)
-                        metrics["extraction_failures"] += 1
-
-                        record_attempt(events_data, key=key, status="failed", error=msg)
-                        save_events(events_data, json_file)
-
-                        add_or_update_failure(
-                            failed_data,
-                            name=key,
-                            url=url,
-                            location=selected_location,
-                            reason=msg
-                        )
-                        save_failed_events(failed_data, failed_events_file)
-                        break
-
-                    ok, reason = validate_event_data(event_data)
-                    if not ok:
-                        msg = f"Validation failed: {reason}"
-                        logger.warning("%s — URL: %s", msg, url)
-                        metrics["validation_failures"] += 1
-
-                        record_attempt(events_data, key=key, status="failed", error=msg)
-                        save_events(events_data, json_file)
-
-                        add_or_update_failure(
-                            failed_data,
-                            name=key,
-                            url=url,
-                            location=selected_location,
-                            reason=msg
-                        )
-                        save_failed_events(failed_data, failed_events_file)
-                        break
-
-                    # success
-                    record_attempt(events_data, key=key, status="success", error="")
-                    save_events(events_data, json_file)
-
-                    if not is_future_event(event_data):
-                        logger.info(
-                            "Skipping non-future event for %s: start date %s.",
-                            url,
-                            event_data.get("Start-date", ""),
-                        )
-                        metrics["non_future_skipped"] += 1
-                        mark_processed(events_data, key=key)
-                        save_events(events_data, json_file)
-
-                        mark_failure_resolved(failed_data, name=key, url=url)
-                        failed_data["failed_events"] = [
-                            fev for fev in failed_data["failed_events"]
-                            if not (fev.get("name") == key and fev.get("url") == url)
-                        ]
-                        save_failed_events(failed_data, failed_events_file)
-                        break
-
-                    pending_rows.append(
-                        {
-                            "key": key,
-                            "url": url,
-                            "event_data": event_data,
-                        }
-                    )
-
-                    break
-
-                except WebDriverException as e:
-                    # record attempt failure (even if we retry, it's still useful telemetry)
-                    metrics["extraction_failures"] += 1
-                    record_attempt(events_data, key=key, status="failed", error=str(e))
-                    save_events(events_data, json_file)
-
-                    if is_driver_connection_error(e) and attempts < 2 and _can_use_driver(scraper, driver):
-                        logger.warning("WebDriver disconnected. Restarting and retrying URL: %s", url)
-                        driver = restart_driver(
-                            driver,
-                            firefox_binary=firefox_binary,
-                            download_dir=download_dir,
-                            headless=True,
-                        )
-                        continue
-
-                    logger.warning("WebDriver error at %s: %s", url, e)
-                    add_or_update_failure(
-                        failed_data,
-                        name=key,
-                        url=url,
-                        location=selected_location,
-                        reason=str(e)
-                    )
-                    save_failed_events(failed_data, failed_events_file)
-                    break
-
-                except Exception as e:
-                    metrics["extraction_failures"] += 1
-                    record_attempt(events_data, key=key, status="failed", error=str(e))
-                    save_events(events_data, json_file)
-
-                    if is_driver_connection_error(e) and attempts < 2 and _can_use_driver(scraper, driver):
-                        logger.warning("Driver connection issue detected. Restarting and retrying URL: %s", url)
-                        driver = restart_driver(
-                            driver,
-                            firefox_binary=firefox_binary,
-                            download_dir=download_dir,
-                            headless=True,
-                        )
-                        continue
-
-                    logger.error("Error processing %s: %s", url, e)
-                    add_or_update_failure(
-                        failed_data,
-                        name=key,
-                        url=url,
-                        location=selected_location,
-                        reason=str(e)
-                    )
-                    save_failed_events(failed_data, failed_events_file)
-                    break
-
-        # Write this batch to Excel
-        if pending_rows:
-            try:
-                append_rows_to_template(
-                    output_file=output_file,
-                    rows=[item["event_data"] for item in pending_rows],
-                    column_order=columns,
-                )
-                total_appended += len(pending_rows)
-
-                for item in pending_rows:
-                    key = item["key"]
-                    url = item["url"]
-
-                    mark_processed(events_data, key=key)
-                    save_events(events_data, json_file)
-
-                    mark_failure_resolved(failed_data, name=key, url=url)
-                    failed_data["failed_events"] = [
-                        fev for fev in failed_data["failed_events"]
-                        if not (fev.get("name") == key and fev.get("url") == url)
-                    ]
-                    save_failed_events(failed_data, failed_events_file)
-
-                logger.info("Saved batch %d to Excel (template append).", (i // batch_size) + 1)
-                metrics["batches_written"] += 1
-                pending_rows.clear()
-            except Exception as e:
-                logger.error("Error saving batch to Excel: %s", e)
-
-        cleanup_download_dir(download_dir)
-
-        if i + batch_size < total_urls and not shutdown_check():
-            base_delay = getattr(scraper, "BATCH_DELAY_SECONDS", delay_between_batches)
-            if base_delay and base_delay > 0:
-                wait_time = base_delay + random.uniform(0, 5)
-                logger.info("Batch %d completed. Waiting %.2fs before next batch.", (i // batch_size) + 1, wait_time)
-                time.sleep(wait_time)
-            else:
-                logger.info("Batch %d completed. No wait (API/fast scraper).", (i // batch_size) + 1)
-
-
-    return driver, total_appended, metrics
-
-
 def process_location(
     *,
     location_name: str,
@@ -313,6 +72,8 @@ def process_location(
     collect_kwargs: Optional[Dict[str, Any]] = None,
     scheduler_history_file: str = "scheduler_history.json",
     run_mode: str = "live",
+    pull_options: PullOptions | None = None,
+    run_date: str | None = None,
 ):
     """
     Process a single location:
@@ -323,27 +84,47 @@ def process_location(
       5) batch scrape + append to Excel
     """
     location_started_at = datetime.now()
+    options = pull_options or PullOptions()
 
     if _should_log_source_init(scraper):
         log_progress(logger, "Initializing event source for %s...", getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__))
     else:
         log_progress(logger, "Processing location: %s", location_name)
 
-    # 1) Collect event links (restart-on-disconnect once)
-    try:
-        new_links = scraper.collect_event_links(driver, base_url=base_url, **(collect_kwargs or {}))
-    except WebDriverException as e:
-        if is_driver_connection_error(e) and _can_use_driver(scraper, driver):
-            logger.warning("WebDriver disconnected during link collection. Restarting and retrying once.")
-            driver = restart_driver(
-                driver,
-                firefox_binary=firefox_binary,
-                download_dir=download_dir,
-                headless=True,
-            )
+    for attempt in range(2):
+        try:
             new_links = scraper.collect_event_links(driver, base_url=base_url, **(collect_kwargs or {}))
-        else:
+            if not isinstance(new_links, list):
+                raise ValueError("Event discovery must return a list of links")
+            break
+        except Play365ManualFallbackRequired:
             raise
+        except Exception as exc:
+            if attempt == 0 and is_driver_connection_error(exc) and _can_use_driver(scraper, driver):
+                logger.warning("Driver disconnected during discovery; restarting once.")
+                driver = restart_driver(driver, firefox_binary=firefox_binary, download_dir=download_dir, headless=True)
+                scraper._active_driver = driver
+                continue
+            logger.exception("Discovery failed for %s", location_name)
+            new_links = CollectedLinks(complete=False, error=str(exc))
+            break
+    # A catalogue can omit a still-published future event. Recheck its actual
+    # source in snapshot mode; never export the cached payload merely to keep it.
+    if options.mode == "snapshot" and getattr(scraper, "REFRESH_KNOWN_FUTURE_EVENTS", False):
+        for entry in events_data["events"].values():
+            payload = entry.get("event_data")
+            if (entry.get("scraper") == scraper.__class__.__name__
+                    and location_name in entry.get("locations", [entry.get("location")])
+                    and not entry.get("is_deleted") and isinstance(payload, dict)
+                    and validate_event_data(payload)[0] and options.includes(payload)
+                    and entry.get("url") and entry["url"] not in new_links):
+                new_links.append(entry["url"])
+                logger.info("Rechecking known future event absent from listing: %s", entry["url"])
+    collection_complete = getattr(new_links, "complete", True)
+    collection_error = getattr(new_links, "error", "")
+    collection_non_future = getattr(new_links, "non_future_skipped", 0)
+    if type(collection_non_future) is not int or collection_non_future < 0:
+        raise ValueError("Discovery non-future skip count must be a nonnegative integer")
 
     source_label = getattr(scraper, "_last_collection_source", "") or base_url
     logger.info("Collected %d event links using %s for %s.", len(new_links), source_label, location_name)
@@ -353,8 +134,9 @@ def process_location(
 
     # 2) Add/update events with richer schema
     scraper_name = scraper.__class__.__name__
+    discovered_now = discovered_identities(events_data, failed_data, scraper, new_links, location_name)
     for link in new_links:
-        norm_key = normalize_url(link)
+        norm_key = event_identity(scraper, link)
 
         add_or_update_event(
             events_data,
@@ -367,18 +149,15 @@ def process_location(
 
     save_events(events_data, json_file)
 
-    # 3) Filter unprocessed events for this location, but only if rediscovered
-    # in the current listing pass. This prevents stale historical failures from
-    # being retried forever after they have disappeared from the source site.
-    discovered_now = {normalize_url(link) for link in new_links}
-
+    # Rediscovered records are refreshable; durably staged exports remain replayable
+    # even if the listing no longer contains them.
     unprocessed_events = [
         {"name": key, "url": details["url"]}
         for key, details in events_data["events"].items()
-        if not details.get("processed", False)
-        and details.get("location") == location_name
+        if (not details.get("processed", False) or options.mode != "incremental")
+        and (details.get("location") == location_name or location_name in details.get("locations", []))
         and not details.get("is_deleted", False)
-        and key in discovered_now
+        and (key in discovered_now or details.get("export_status") == "pending")
     ]
 
     stale_carryover_count = sum(
@@ -388,6 +167,7 @@ def process_location(
         and details.get("location") == location_name
         and not details.get("is_deleted", False)
         and key not in discovered_now
+        and details.get("export_status") != "pending"
     )
     if stale_carryover_count:
         logger.info(
@@ -396,11 +176,11 @@ def process_location(
             location_name,
         )
 
-    # Deduplicate by normalized URL
+    # Deduplicate by provider event identity.
     seen = set()
     unique_events_to_process = []
     for ev in unprocessed_events:
-        norm = normalize_url(ev["url"])
+        norm = ev["name"]
         if norm not in seen:
             unique_events_to_process.append(ev)
             seen.add(norm)
@@ -409,32 +189,40 @@ def process_location(
 
     if len(unique_events_to_process) == 0:
         logger.info("No unprocessed events for %s. Skipping Excel creation.", location_name)
+        if options.mode == "snapshot":
+            destination = get_output_filename(location_name, base_folder=output_base_folder, run_date=run_date)
+            if os.path.exists(destination):
+                write_snapshot(destination, [], output_columns, [])
         history_data = load_scheduler_history(scheduler_history_file)
-        record_location_run(
+        entry = record_location_run(
             history_data,
             scraper=scraper.__class__.__name__,
             location=location_name,
             run_mode=run_mode,
             runtime_seconds=(datetime.now() - location_started_at).total_seconds(),
-            links_collected=len(new_links),
+            links_collected=len(new_links) + collection_non_future,
             candidates_processed=0,
             rows_written=0,
             stale_skipped=stale_carryover_count,
             validation_failures=0,
             extraction_failures=0,
-            non_future_skipped=0,
+            non_future_skipped=collection_non_future,
             batches_attempted=0,
             batches_written=0,
+            collection_complete=collection_complete,
+            collection_error=collection_error,
         )
+        scraper._last_location_result = dict(entry["recent_runs"][-1])
         save_scheduler_history(history_data, scheduler_history_file)
         return driver
 
     # 4) Ensure output Excel file exists
-    output_file = get_output_filename(location_name, base_folder=output_base_folder)
-    created_this_run = ensure_template(output_file)
+    output_file = get_output_filename(location_name, base_folder=output_base_folder, run_date=run_date)
+    created_this_run = not os.path.exists(output_file)
     logger.info("Excel output file for %s will be: %s", location_name, output_file)
 
     # 5) Process in batches (returns possibly restarted driver)
+    recovered_keys = {key for key in discovered_now if events_data["events"][key].get("export_status") == "pending"}
     driver, total_appended, batch_metrics = process_events_in_batches(
         scraper=scraper,
         driver=driver,
@@ -449,10 +237,49 @@ def process_location(
         download_dir=download_dir,
         shutdown_check=shutdown_check,
         firefox_binary=firefox_binary,
+        pull_options=options,
     )
+    scraper._active_driver = driver
+    if recovered_keys and options.mode != "incremental" and not batch_metrics["persistence_failures"] and not batch_metrics["interrupted"]:
+        driver, refreshed_rows, refreshed_metrics = process_events_in_batches(
+            scraper=scraper, driver=driver,
+            urls_to_process=[{"name": key, "url": events_data["events"][key]["url"]} for key in sorted(recovered_keys)],
+            events_data=events_data, failed_data=failed_data, json_file=json_file,
+            failed_events_file=failed_events_file, output_file=output_file, columns=output_columns,
+            selected_location=location_name, download_dir=download_dir, shutdown_check=shutdown_check,
+            firefox_binary=firefox_binary, pull_options=options,
+        )
+        scraper._active_driver = driver
+        total_appended += refreshed_rows
+        for metric, value in refreshed_metrics.items():
+            batch_metrics[metric] = (batch_metrics[metric] or value) if metric == "interrupted" else batch_metrics[metric] + value
+
+    if options.mode == "snapshot" and not batch_metrics["persistence_failures"] and not batch_metrics["interrupted"]:
+        snapshot_keys = [key for key in discovered_now
+                         if events_data["events"][key].get("event_data")
+                         and events_data["events"][key].get("last_attempt_status") == "success"
+                         and events_data["events"][key].get("export_status") == "exported"
+                         and not events_data["events"][key].get("is_deleted")
+                         and options.includes(events_data["events"][key]["event_data"])]
+        snapshot_keys.sort()
+        try:
+            write_snapshot(output_file, [events_data["events"][key]["event_data"] for key in snapshot_keys],
+                           output_columns, [events_data["events"][key].get("export_identity", key)
+                                            for key in snapshot_keys])
+            total_appended = len(snapshot_keys)
+        except Exception as exc:
+            batch_metrics["persistence_failures"] += 1
+            logger.exception("Could not finalize location snapshot: %s", output_file)
+            for key in snapshot_keys:
+                entry = events_data["events"][key]
+                entry.update(processed=False, export_status="pending", export_file=os.path.abspath(output_file))
+                add_or_update_failure(failed_data, name=key, url=entry["url"], location=location_name,
+                                      reason=f"Snapshot export failed: {exc}")
+            save_events(events_data, json_file)
+            save_failed_events(failed_data, failed_events_file)
 
     # Safe cleanup: only delete if we created it AND nothing was appended
-    if created_this_run and total_appended == 0:
+    if created_this_run and total_appended == 0 and os.path.exists(output_file) and not batch_metrics["persistence_failures"]:
         try:
             os.remove(output_file)
             logger.info("[Excel] Deleted empty staged sheet (no successful rows): %s", output_file)
@@ -460,22 +287,32 @@ def process_location(
             logger.warning("[Excel] Failed to delete empty staged sheet %s: %s", output_file, e)
 
     history_data = load_scheduler_history(scheduler_history_file)
-    record_location_run(
+    entry = record_location_run(
         history_data,
         scraper=scraper.__class__.__name__,
         location=location_name,
         run_mode=run_mode,
         runtime_seconds=(datetime.now() - location_started_at).total_seconds(),
-        links_collected=len(new_links),
+        links_collected=len(new_links) + collection_non_future,
         candidates_processed=len(unique_events_to_process),
         rows_written=total_appended,
         stale_skipped=stale_carryover_count,
         validation_failures=batch_metrics["validation_failures"],
         extraction_failures=batch_metrics["extraction_failures"],
-        non_future_skipped=batch_metrics["non_future_skipped"],
+        non_future_skipped=batch_metrics["non_future_skipped"] + collection_non_future,
         batches_attempted=batch_metrics["batches_attempted"],
         batches_written=batch_metrics["batches_written"],
+        persistence_failures=batch_metrics["persistence_failures"],
+        events_attempted=batch_metrics["events_attempted"],
+        interrupted=batch_metrics["interrupted"],
+        collection_complete=collection_complete,
+        collection_error=collection_error,
+        date_scope_skipped=batch_metrics["date_scope_skipped"],
+        source_incomplete_skipped=batch_metrics["source_incomplete_skipped"],
+        driver_restarts=batch_metrics["driver_restarts"],
     )
+    scraper._last_location_result = dict(entry["recent_runs"][-1])
+    scraper._active_driver = driver
     save_scheduler_history(history_data, scheduler_history_file)
 
     log_progress(logger, "Completed location: %s", location_name)

@@ -8,6 +8,7 @@ from common.json_utils import (
     load_failed_events,
     save_failed_events,
 )
+from common.storage import ledger_lock
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,12 @@ def _parse_cutoff(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def rollback_events(
+def rollback_events(**kwargs) -> Dict[str, Any]:
+    with ledger_lock(kwargs["events_path"]):
+        return _rollback_events_unlocked(**kwargs)
+
+
+def _rollback_events_unlocked(
     *,
     events_path: str,
     failed_events_path: str,

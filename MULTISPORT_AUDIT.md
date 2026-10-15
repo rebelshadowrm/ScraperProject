@@ -34,9 +34,11 @@ case-preserving normalized URL, except TopGun's verified TournamentID fragment
 
 ## Existing provider inventory
 
-All configured acquisition is baseball. Platform ownership of a softball program
-does not make the configured adapter a softball adapter. All adapters emit the
-same importer row, then the shared pipeline writes Excel.
+Configuration and the original workflow target baseball, but organization-wide
+feeds are not sport proof. A later read-only backfill check found an actual
+fastpitch record in the legacy PlayPPS output. These shared parsers can extract
+softball-shaped rows without identifying their sport; that is not verified typed
+softball support. All original adapters emit the same importer row for Excel.
 
 | Adapter | Coverage configured | Acquisition and identity | Softball today |
 | --- | --- | --- | --- |
@@ -50,7 +52,7 @@ same importer row, then the shared pipeline writes Excel.
 | GrandSlam | Configured state baseball listings | HTTP paginated HTML/details; URL identity | No |
 | Ripken | Dynamic baseball locations | Browser listing/details; URL identity | No |
 | FiveTool, FiveToolYouth | Configured Play365 organizations across states | Shared Play365 GET/GET-all feeds, browser/manual fallback; URL identity | Unverified; FiveTool has no forced sport filter |
-| Play24Sports, PlayPPS, PlayRBI, ProspectWire | Configured Play365 organizations across states | Shared POST/CSRF feed, browser/manual fallback; URL identity | Unverified; organization coverage is not sport proof |
+| Play24Sports, PlayPPS, PlayRBI, ProspectWire | Configured Play365 organizations across states | Shared POST/CSRF feed, browser/manual fallback; URL identity | PlayPPS has an observed legacy fastpitch row; sport typing is unverified. Organization coverage is not sport proof |
 | 2DSportsYouth, 2DSportsHighSchool | Configured Play365 organizations across states | Shared GET-all feed, browser/manual fallback; URL identity | Unverified |
 
 The October 4 release report records 17 concrete providers, 722 completed location
@@ -101,3 +103,13 @@ all 14,344 predate explicit sport metadata. No records are soft-deleted.
 failed_events.json contains 149 failure records. Those counts describe local
 state, not verified active events or unresolved failures in a fresh provider run.
 No ledger was rewritten or migrated on disk to obtain these statistics.
+
+An initial temporary website backfill staged 3,308 future rows and caught one
+fastpitch URL under PlayPPSScraper. The source is
+baseball.playpps.com/events/fastpitch-armed-forces-brawl-mansfield-11-27-2026.
+This exposed an unsafe historical baseball assumption, so the final implementation
+also quarantines untyped legacy Play365/PST website payloads until sport provenance
+is verified. Fresh Play365 acquisition records the observed sport_id; only the
+existing known baseball ID 1 verifies that route. Other/missing IDs are not guessed
+into softball. Dedicated softball adapters own explicit sport identities. The
+established Excel path is preserved; no historical mixed-sport row was removed.

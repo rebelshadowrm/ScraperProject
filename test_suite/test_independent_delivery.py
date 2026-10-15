@@ -142,6 +142,30 @@ class DeliveryTests(unittest.TestCase):
         del self.ledger["events"]["FixtureScraper|42"]["sport"]
         self.assertIn("FixtureScraper|42", self.store.ingest(self.ledger)["quarantined"])
 
+    def test_mixed_feed_requires_source_sport_evidence_even_after_excel_export(self):
+        key = "PlayPPSScraper|42"
+        record = entry(provider="PlayPPSScraper")
+        ledger = {"events": {key: record}}
+        self.assertEqual(self.store.ingest(ledger)["quarantined"], [key])
+        self.assertTrue(record["processed"])
+        record.update(source_sport_id=1, sport_verified=True)
+        self.store.ingest(ledger)
+        self.assertEqual(len(self.store.pending("baseball_connected")), 1)
+        record.update(sport_verified=False, source_sport_id=2)
+        self.store.ingest(ledger)
+        self.assertEqual(self.store.pending("baseball_connected"), [])
+        self.store.requeue("baseball_connected")
+        self.assertEqual(self.store.pending("baseball_connected"), [])
+        self.assertEqual(self.store.summary()["baseball_connected"]["quarantined"], 1)
+        record.update(sport_verified=True, source_sport_id=1)
+        self.store.ingest(ledger)
+        self.assertEqual(len(self.store.pending("baseball_connected")), 1)
+
+    def test_fastpitch_url_cannot_be_stamped_into_baseball_delivery(self):
+        record = self.ledger["events"]["FixtureScraper|42"]
+        record.update(url="https://baseball.example.org/events/fastpitch-classic", sport_verified=True)
+        self.assertIn("FixtureScraper|42", self.store.ingest(self.ledger)["quarantined"])
+
     def test_endpoint_errors_are_isolated_and_tokens_are_not_reported(self):
         ledger = Path(self.temp.name) / "events.json"
         save_json_atomic(self.ledger, ledger)

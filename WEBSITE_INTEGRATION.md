@@ -20,11 +20,22 @@ remain unchanged. Softball uses a sport-scoped identity; it cannot adopt an old
 baseball key or export checkpoint. Different providers with the same numeric ID
 remain distinct. Do not fuzzy-merge tournaments by name/date/location.
 
-Legacy rows from the known configured baseball provider classes are backfilled
-under their original project baseball contract, provided their source URL does
-not use a fastpitch route. Missing/unknown provenance is quarantined and reported.
+Legacy rows from verified baseball adapter routes are backfilled under their
+original contract, provided their source URL does not signal fastpitch/softball.
+Untyped Play365/PST organization feeds require sport_verified evidence before
+website routing. A real legacy PlayPPS fastpitch row demonstrated why organization
+membership cannot prove baseball. Fresh Play365 extraction records source_sport_id;
+only the existing known baseball ID 1 verifies that acquisition route. Other/missing
+IDs stay unverified rather than being assigned a guessed sport. A sport tag without
+sport_verified on these mixed feeds is insufficient. The legacy Excel path remains
+unchanged, including its historical untyped records; dedicated typed softball
+adapters bypass that path. Missing/unknown provenance is quarantined and reported.
 Operators must resolve provenance rather than assigning sport from a title.
 Website ingestion does not use processed or export_status as delivery filters.
+When previously queued provenance becomes ambiguous, its website queue is suspended
+as quarantined. Requeue cannot bypass that state. Fresh verified provenance restores
+the prior acknowledgement/pending state without inventing a new content revision.
+Local website exports exclude quarantined records.
 
 The two website destinations are baseball_connected and softball_connected.
 They own desired_revision/desired_sequence, delivered_revision/delivered_sequence,
@@ -170,6 +181,9 @@ a second normalization/moderation pipeline:
 - Authenticate the wrapper per destination, convert fields to existing row payloads,
   map additional venues to the existing locations contract, and preserve raw B/C,
   graduation-year and invitation/waitlist labels. Do not relabel softball classes.
+  The inspected normalizer currently drops zero fees (amount > 0) and strips
+  nondigits from arbitrary fee text. Preserve a published zero as zero; do not turn
+  a range or unknown price into one invented amount. Retain its source label/range.
 - Record validation/moderation outcomes, implement version ordering and explicit
   withdrawal handling, and return the exact receipt only for durable valid staging.
   Existing aggregate 202 responses can remain compatible for older clients.

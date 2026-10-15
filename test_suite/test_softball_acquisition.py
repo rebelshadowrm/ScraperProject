@@ -88,6 +88,45 @@ class SoftballTests(unittest.TestCase):
             self.assertEqual(softball_classes(manifest), [TopGunFastpitchScraper])
         manifest.provider.assert_called_once_with("NCSFastpitchScraper", "queued", error="blocked")
 
+    def test_mixed_legacy_feed_keeps_excel_semantics_but_requires_website_sport_proof(self):
+        from common.batch_runner import process_events_in_batches
+        from common.config import OUTPUT_COLUMNS, TEMPLATE_SHEET
+        from common.json_utils import default_event_entry
+        from common.delivery import DeliveryStore
+        from openpyxl import load_workbook
+        class MixedFeed:
+            SPORT = "baseball"
+            REQUIRES_DRIVER = False
+            BATCH_DELAY_SECONDS = 0
+            events_by_url = {"https://example.org/one": {"sport_id": 1},
+                             "https://example.org/two": {"sport_id": 2}}
+            def extract_event_details(self, url, **kwargs):
+                return {"Tournament-name": "Source Event", "Start-date": "10/20/2099", "End-date": "10/21/2099",
+                        "State-FullName": "Texas", "Website-url": url}
+        scraper = MixedFeed()
+        events = {"events": {"MixedFeed|" + url: default_event_entry(url=url,location="Texas",scraper="MixedFeed")
+                             for url in scraper.events_by_url}}
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            process_events_in_batches(scraper=scraper, driver=None,
+                urls_to_process=[{"name": key,"url": value["url"]} for key,value in events["events"].items()],
+                events_data=events, failed_data={"failed_events": []}, json_file=str(root / "events.json"),
+                failed_events_file=str(root / "failed.json"),output_file=str(root / "legacy.xlsx"),
+                columns=OUTPUT_COLUMNS,selected_location="Texas",download_dir="",shutdown_check=lambda:False)
+            workbook = load_workbook(root / "legacy.xlsx")
+            try:
+                self.assertEqual(sum(bool(row[0]) for row in workbook[TEMPLATE_SHEET].iter_rows(min_row=3, values_only=True)), 2)
+            finally:
+                workbook.close()
+            store = DeliveryStore(root / "website.db")
+            try:
+                result = store.ingest(events)
+                self.assertEqual(result["staged"], 1)
+                self.assertEqual(result["quarantined"], ["MixedFeed|https://example.org/two"])
+                self.assertTrue(all(item["processed"] for item in events["events"].values()))
+            finally:
+                store.close()
+
     def test_id_and_route_separate_sports_preserve_baseball_identity(self):
         baseball = "https://playncs.com/baseball/Events/Details/42/classic"
         softball = "https://playncs.com/fastpitch/Events/Details/42/classic"

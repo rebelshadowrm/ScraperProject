@@ -143,6 +143,17 @@ def process_events_in_batches(
                     entry.pop("source_exclusion", None)
                     entry["event_data"] = payload
                     entry.update(sport=sport, payload_revision=payload_revision(payload))
+                    entry["sport_verified"] = True
+                    if hasattr(scraper, "events_by_url"):
+                        # The existing Play365 baseball contract uses sport_id=1.
+                        # Other/missing IDs are not translated into a guessed sport.
+                        source_sport = scraper.events_by_url.get(url, {}).get("sport_id")
+                        entry.update(source_sport_id=source_sport,
+                                     sport_verified=sport == "baseball" and type(source_sport) in (int, str)
+                                     and source_sport in (1, "1"))
+                        entry.setdefault("source_details", {})["sport_id"] = source_sport
+                    elif scraper.__class__.__name__ == "PSTScraper":
+                        entry["sport_verified"] = False  # organization filters do not prove sport
                     if hasattr(scraper, "get_event_identity"):
                         entry["source_event_id"] = scraper.get_event_identity(url)
                     if hasattr(scraper, "source_details"):

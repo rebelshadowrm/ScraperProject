@@ -10,14 +10,23 @@ def normalize_url(url):
 
 
 def event_identity(scraper, url):
+    from common.sport import scraper_sport
     identity = getattr(scraper, "get_event_identity", None)
     value = identity(url) if identity else normalize_url(url)
-    return f"{scraper.__class__.__name__}|{value}"
+    # Existing baseball keys and workbook aliases must remain byte-for-byte stable.
+    prefix = scraper.__class__.__name__
+    if scraper_sport(scraper) != "baseball":
+        prefix += "|softball"
+    return f"{prefix}|{value}"
 
 
 def discovered_identities(events_data, failed_data, scraper, links, location):
     """Rekey unambiguous legacy records without losing processed or pending state."""
     provider = scraper.__class__.__name__
+    from common.sport import scraper_sport
+    if scraper_sport(scraper) != "baseball":
+        # Never adopt an ambiguous old baseball lifecycle for a softball event.
+        return {event_identity(scraper, url) for url in links}
     public_url = lambda u: urldefrag(u)[0] if getattr(scraper, "SCRAPER_NAME", "") == "TopGun" else u
     counts = defaultdict(set)
     for url in links:

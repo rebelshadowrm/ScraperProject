@@ -1,5 +1,6 @@
 import uuid
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,6 +41,8 @@ class RunManifest:
             "previous_manifest": str(archive), "previous_status": self.data["status"],
         })
         self.data["status"] = "running"
+        if os.environ.get("SCRAPER_DAILY_RUN_ID"):
+            self.data["coordinator_id"] = os.environ["SCRAPER_DAILY_RUN_ID"]
         self.data.pop("finished_at", None)
         self.save()
 
@@ -53,6 +56,8 @@ class RunManifest:
         self.data = {"run_id": self.run_id, "run_date": self.run_date, "mode": options.mode, "test_mode": test_mode,
                      "start_date": str(options.start_date or ""), "end_date": str(options.end_date or ""),
                      "output_root": self.output_root, "status": "running", "providers": {}, "locations": {}}
+        if os.environ.get("SCRAPER_DAILY_RUN_ID"):
+            self.data["coordinator_id"] = os.environ["SCRAPER_DAILY_RUN_ID"]
         self.save()
 
     def save(self):

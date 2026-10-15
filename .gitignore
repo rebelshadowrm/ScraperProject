@@ -18,6 +18,8 @@ Play365Utilities/**/*_dump.json
 events.json
 failed_events.json
 scheduler_history.json
+Delivery/
+delivery.local.json
 geckodriver.exe
 *.bak
 *.lock

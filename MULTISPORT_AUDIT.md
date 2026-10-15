@@ -91,3 +91,13 @@ website revision/acknowledgement queues; receiver idempotency/reconciliation;
 bounded daily orchestration with independent destination retries. Never infer
 website delivery from processed, workbook creation or HTTP success alone. Never
 infer event deletion from absence in an incomplete provider listing.
+
+## Current ledger inspection (read-only handoff supplement)
+
+The current local events.json contains 14,344 records, 4,130 durable payloads,
+14,194 processed flags, 3,593 exported statuses, 537 expired statuses and one
+source-incomplete status. There are 4,934 records without scraper provenance;
+all 14,344 predate explicit sport metadata. No records are soft-deleted.
+failed_events.json contains 149 failure records. Those counts describe local
+state, not verified active events or unresolved failures in a fresh provider run.
+No ledger was rewritten or migrated on disk to obtain these statistics.

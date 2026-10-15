@@ -1,0 +1,12 @@
+{
+  "baseball_connected": {
+    "enabled": false,
+    "endpoint": "https://baseball.example.invalid/api/acquisition/events",
+    "token_env": "BASEBALL_CONNECTED_TOKEN"
+  },
+  "softball_connected": {
+    "enabled": false,
+    "endpoint": "https://softball.example.invalid/api/acquisition/events",
+    "token_env": "SOFTBALL_CONNECTED_TOKEN"
+  }
+}

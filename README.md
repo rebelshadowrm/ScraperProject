@@ -51,3 +51,21 @@ After a repair finishes, compare its 56 output fields with both the initial and 
 ```
 
 Removed records and changed fields return a nonzero status for source-backed review. Additions are reported separately. A source may legitimately update a field during a run; verify that change against the published page. Keep all captures and generated reports local.
+
+Multi-sport acquisition and independent delivery:
+
+- [Architecture audit](MULTISPORT_AUDIT.md) and [softball provider assessment](SOFTBALL_PROVIDERS.md).
+- [Website contract and diamond-connected handoff](WEBSITE_INTEGRATION.md).
+- [Windows daily execution and recovery](WINDOWS_DAILY.md).
+
+The legacy baseball Excel contract remains 56 columns. Website synchronization owns separate revision queues and acknowledgements in `Delivery/`; Excel processed status cannot suppress it. NCS and TopGun fastpitch adapters are implemented behind separate recorded written-permission gates. NCS rejects yearless dates. Other softball providers remain research candidates, not verified nationwide coverage.
+
+```powershell
+# No network or runtime-state writes; inspect the unattended daily plan.
+.\.venv\Scripts\python.exe scripts/daily_acquisition.py --dry-run
+
+# Retry independently configured website receivers without scraping or Excel writes.
+.\.venv\Scripts\python.exe scripts/sync_destinations.py --config delivery.local.json
+```
+
+Copy `delivery.example.json` to ignored `delivery.local.json` for endpoint configuration; store credentials in the scheduled account's environment. Both example destinations are disabled. The existing diamond-connected ingestion endpoint needs the correlated receipt/version wrapper described in the handoff. No Windows task is installed or activated by these commands.

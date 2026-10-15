@@ -34,6 +34,8 @@ def get_scraper_classes():
             if name in excluded_names:
                 continue
             if issubclass(obj, BaseScraper) and obj is not BaseScraper:
+                if not getattr(obj, "ENABLED_BY_DEFAULT", True):
+                    continue
                 scraper_classes.append(obj)
     return scraper_classes
 

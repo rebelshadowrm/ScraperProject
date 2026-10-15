@@ -10,6 +10,7 @@ from common.identity import normalize_url, event_identity, discovered_identities
 from common.excel_utils import create_workbook_from_template, get_output_filename, write_snapshot
 from common.pull_options import PullOptions
 from common.collection import CollectedLinks
+from common.sport import scraper_sport
 from common.validation import validate_event_data
 from scrapers.play365_base import Play365ManualFallbackRequired
 
@@ -85,6 +86,7 @@ def process_location(
     """
     location_started_at = datetime.now()
     options = pull_options or PullOptions()
+    sport = scraper_sport(scraper)
 
     if _should_log_source_init(scraper):
         log_progress(logger, "Initializing event source for %s...", getattr(scraper, "SCRAPER_NAME", scraper.__class__.__name__))
@@ -146,6 +148,10 @@ def process_location(
             scraper=scraper_name,
             discovered_from=base_url,
         )
+        entry = events_data["events"][norm_key]
+        if entry.get("sport", sport) != sport:
+            raise ValueError("Event sport conflicts with stored provenance")
+        entry["sport"] = sport
 
     save_events(events_data, json_file)
 
@@ -154,7 +160,11 @@ def process_location(
     unprocessed_events = [
         {"name": key, "url": details["url"]}
         for key, details in events_data["events"].items()
-        if (not details.get("processed", False) or options.mode != "incremental")
+        if (not (details.get("processed", False) if sport == "baseball" else
+                 details.get("acquisition_status") == "ready") or options.mode != "incremental")
+        and (details.get("scraper") == scraper_name or
+             (sport == "baseball" and not details.get("scraper") and details.get("export_status") == "pending"))
+        and details.get("sport", "baseball") == sport
         and (details.get("location") == location_name or location_name in details.get("locations", []))
         and not details.get("is_deleted", False)
         and (key in discovered_now or details.get("export_status") == "pending")
@@ -189,7 +199,7 @@ def process_location(
 
     if len(unique_events_to_process) == 0:
         logger.info("No unprocessed events for %s. Skipping Excel creation.", location_name)
-        if options.mode == "snapshot":
+        if options.mode == "snapshot" and sport == "baseball":
             destination = get_output_filename(location_name, base_folder=output_base_folder, run_date=run_date)
             if os.path.exists(destination):
                 write_snapshot(destination, [], output_columns, [])
@@ -254,7 +264,7 @@ def process_location(
         for metric, value in refreshed_metrics.items():
             batch_metrics[metric] = (batch_metrics[metric] or value) if metric == "interrupted" else batch_metrics[metric] + value
 
-    if options.mode == "snapshot" and not batch_metrics["persistence_failures"] and not batch_metrics["interrupted"]:
+    if options.mode == "snapshot" and sport == "baseball" and not batch_metrics["persistence_failures"] and not batch_metrics["interrupted"]:
         snapshot_keys = [key for key in discovered_now
                          if events_data["events"][key].get("event_data")
                          and events_data["events"][key].get("last_attempt_status") == "success"

@@ -496,18 +496,24 @@ def _run_selected_scraper_unlocked(*, scraper, selected_location, loc_info, test
         flush_logs()
 
 
-def _run_scrape_flow(*, test_mode=False, all_scrapers=False, pull_options=None, interactive_fallback=False):
+def _run_scrape_flow(*, test_mode=False, all_scrapers=False, pull_options=None, interactive_fallback=False, sport="baseball"):
     global _pull_running
     scraper = ALL_SCRAPERS_SENTINEL if all_scrapers else prompt_for_scraper()
     locations = load_locations(LOCATIONS_FILE)
     batch = scraper in {ALL_SCRAPERS_SENTINEL, VALIDATION_SCRAPERS_SENTINEL}
     options = pull_options or PullOptions("snapshot" if batch else "incremental")
     manifest = RunManifest(options, test_mode=test_mode)
+    manifest.data["sport"] = sport
+    manifest.save()
     _pull_running = True
     log_progress(logger, "Pull mode: %s. Run manifest: %s", options.mode, manifest.path)
     try:
         if batch:
             scraper_classes = get_scraper_classes()
+            scraper_classes = [cls for cls in scraper_classes if sport == "all" or getattr(cls, "SPORT", "baseball") == sport]
+            if sport in ("softball", "all"):
+                from common.provider_access import softball_classes
+                scraper_classes.extend(softball_classes(manifest))
             if scraper == VALIDATION_SCRAPERS_SENTINEL:
                 wanted = {"NCS", "PerfectGame", "USSSA"}
                 scraper_classes = [cls for cls in scraper_classes if cls.SCRAPER_NAME in wanted]
@@ -588,7 +594,11 @@ def _repair_snapshot(path):
         manifest.begin_repair()
         _pull_running = True
         try:
-            for cls in get_scraper_classes():
+            repair_classes = get_scraper_classes()
+            if manifest.data.get("sport") in ("softball", "all"):
+                from common.provider_access import softball_classes
+                repair_classes.extend(softball_classes(manifest))
+            for cls in repair_classes:
                 if _shutdown_check():
                     break
                 name = cls.__name__
@@ -701,6 +711,8 @@ def run_cli(argv=None):
     global logger, shutdown_flag
     parser = argparse.ArgumentParser(description="Pull baseball tournaments with recoverable exports.")
     parser.add_argument("--all", action="store_true", help="Run every provider without scraper/location menus")
+    parser.add_argument("--sport", choices=("baseball", "softball", "all"), default="baseball",
+                        help="Sport selection for --all; softball providers require recorded source permission")
     parser.add_argument("--repair-snapshot", help="Retry unfinished work in a finished snapshot from today")
     parser.add_argument("--test", action="store_true", help="Use isolated test state and output")
     parser.add_argument("--mode", choices=("incremental", "refresh", "snapshot"),
@@ -709,6 +721,8 @@ def run_cli(argv=None):
     parser.add_argument("--end-date", type=date.fromisoformat, help="Inclusive event start-date upper bound (YYYY-MM-DD)")
     parser.add_argument("--interactive-fallback", action="store_true", help="Allow manual fallback prompts during a full sweep")
     args = parser.parse_args(argv)
+    if args.sport != "baseball" and (not args.all or args.repair_snapshot):
+        parser.error("--sport softball/all requires --all; repair uses recorded sport settings")
     if args.repair_snapshot and (args.all or args.test or args.mode or args.start_date or args.end_date or args.interactive_fallback):
         parser.error("--repair-snapshot uses the original run settings and cannot be combined with pull options")
     if args.start_date and args.end_date and args.start_date > args.end_date:
@@ -727,7 +741,7 @@ def run_cli(argv=None):
             return 0 if manifest.data["status"] == "complete" else 1
         if args.all:
             manifest = _run_scrape_flow(test_mode=args.test, all_scrapers=True, pull_options=options,
-                                      interactive_fallback=args.interactive_fallback)
+                                      interactive_fallback=args.interactive_fallback, sport=args.sport)
             return 0 if manifest.data["status"] == "complete" else 1
         action = prompt_main_action()
 

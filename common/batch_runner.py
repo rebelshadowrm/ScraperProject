@@ -14,6 +14,7 @@ from common.pull_options import PullOptions
 from common.logging_utils import log_progress
 from common.normalize import normalize_row
 from common.source_exclusions import SourceEventIncomplete
+from common.sport import scraper_sport, payload_revision
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ def process_events_in_batches(
                    events_attempted=0, interrupted=False, source_incomplete_skipped=0, driver_restarts=0)
     total_written = 0
     options = pull_options or PullOptions()
+    sport = scraper_sport(scraper)
 
     def failure(key, url, reason):
         add_or_update_failure(failed_data, name=key, url=url, location=selected_location, reason=reason)
@@ -78,7 +80,9 @@ def process_events_in_batches(
             previous = {key: dict(events_data["events"][key]) for key in keys}
             for key in keys:
                 mark_processed(events_data, key=key)
-                events_data["events"][key].update(export_status="exported", export_error="")
+                entry = events_data["events"][key]
+                entry.update(export_status="exported", export_error="",
+                             excel_delivered_revision=entry.get("payload_revision") or payload_revision(entry["event_data"]))
             try:
                 save_events(events_data, json_file)
             except Exception as exc:
@@ -114,6 +118,8 @@ def process_events_in_batches(
                 break
             key, url = item["name"], item["url"]
             entry = events_data["events"][key]
+            if sport != "baseball" and entry.get("export_status") == "pending":
+                raise ValueError("Softball cannot replay a legacy baseball Excel export")
             if entry.get("export_status") == "pending" and isinstance(entry.get("event_data"), dict):
                 pending.append(key)
                 continue
@@ -136,6 +142,20 @@ def process_events_in_batches(
                     record_attempt(events_data, key=key, status="success")
                     entry.pop("source_exclusion", None)
                     entry["event_data"] = payload
+                    entry.update(sport=sport, payload_revision=payload_revision(payload))
+                    if hasattr(scraper, "get_event_identity"):
+                        entry["source_event_id"] = scraper.get_event_identity(url)
+                    if hasattr(scraper, "source_details"):
+                        entry["source_details"] = scraper.source_details.get(url, {})
+                    if sport != "baseball":
+                        # Durable acquisition independent of the baseball workbook contract.
+                        eligible = options.includes(payload)
+                        if not eligible:
+                            future = is_future_event(payload)
+                            metrics["non_future_skipped" if not future else "date_scope_skipped"] += 1
+                        entry.update(acquisition_status="ready" if eligible else "filtered", export_status="not_applicable")
+                        expired.append(key)  # resolve earlier extraction failures after staging
+                        break
                     if not options.includes(payload):
                         future = is_future_event(payload)
                         metrics["non_future_skipped" if not future else "date_scope_skipped"] += 1

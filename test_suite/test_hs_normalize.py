@@ -11,6 +11,9 @@ class HighSchoolNormalizationTests(unittest.TestCase):
             self.assertEqual(normalize_age_group(label), 'HS')
         self.assertEqual(normalize_age_group('18U'), '18u')
         self.assertEqual(normalize_age_group('13uB'), '13u')
+        for label in ['13uAA', '13uBB']:
+            self.assertEqual(age_tokens(label), ['13u'])
+            self.assertEqual(normalize_age_group(label), '13u')
         self.assertEqual(normalize_age_group('Graduation 2028'), '')
         self.assertEqual(age_tokens('11/13U A / HS'), ['11u', '13u', 'HS'])
 

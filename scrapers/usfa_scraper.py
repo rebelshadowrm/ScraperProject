@@ -85,16 +85,22 @@ class USFAScraper(SoftballScaffoldScraper):
                 postal=re.search(r'(\d{1,6}[^,]+,\s*[^,]+,\s*[A-Za-z ]+?\s+\d{5}(?:-\d{4})?)',tail)
                 if postal:venues.append(source_address(re.sub(r'\s*\(COMPLEX MAP\)$','',full_name,flags=re.I).strip(),postal[1]))
         organizer={}
+        director_name=''
+        contact_name=''
         for paragraph in soup.select('p'):
             label=paragraph.get_text(' ',strip=True).replace('\xa0',' ').replace('\ufffd',' ')
             match=re.search(r'Tourn\w* Contact:\s*(.+?)\s+(\(?\d{3}\)?[ .-]\d{3}[ .-]\d{4})',label,re.I)
-            if match:organizer=dict(name=match[1].strip(),phone=match[2])
+            if match:
+                contact_name=match[1].strip()
+                organizer=dict(name=contact_name,phone=match[2])
             director=re.search(r'Tourn\w* Director:\s*(.+?)\s*-\s*(\(?\d{3}\)?[ .-]\d{3}[ .-]\d{4})',label,re.I)
             if director:
+                director_name=director[1].strip()
                 emails=_extract_emails(paragraph)
                 organizer=dict(name=director[1].strip(),phone=director[2],email=emails[0] if emails else '')
         if not hasattr(self,'source_details'):self.source_details={}
         self.source_details[url]=dict(source_id=identity,divisions=divisions,event_schema=event,locations=venues,organizer=organizer,description=rich,
+            directorName=director_name,tournamentContactName=contact_name or organizer.get('name',''),
             data_gaps=['Additional Fields/Contact tabs remain unverified'] if not venues else ['Email not published in inspected event description'])
         return make_row(title=event['name'],start=event.get('startDate'),end=event.get('endDate'),url=url,
             state=state,city=city,divisions=divisions,locations=venues,organizer=organizer,notes=notes,guaranteed_games=games[1] if games else '')

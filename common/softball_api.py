@@ -173,6 +173,7 @@ class RegisterPlaySoftballScraper(SoftballScaffoldScraper):
                     description_media_omitted=bool(BeautifulSoup(event_info.get('info') or '', 'html.parser').select('img,iframe,object,embed,video')),
                     credit_card_fee_extra=event_info.get('ccFeeExtra'),
                     organizer_name=header.get('dirName',''),
+                    directorName=header.get('dirName',''),
                     source_organization=header.get('site'),
                     season=header.get('season'),
                     program='HPP' if any('HPP' in str(item.get('divisionType') or '')

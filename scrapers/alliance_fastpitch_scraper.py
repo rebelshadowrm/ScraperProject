@@ -108,6 +108,7 @@ class AllianceFastpitchScraper(SoftballScaffoldScraper):
             raise SoftballNotReady('Alliance external detail host/layout has not been verified: '+public)
         soup=BeautifulSoup(fetch_listing(public),'html.parser')
         locations=[];organizer={};notes='';hotel='NA';rich=None
+        director_name=''
         if connect:
             title=soup.select_one('.section-heading h1')
             def labelled(label):
@@ -130,6 +131,7 @@ class AllianceFastpitchScraper(SoftballScaffoldScraper):
             if directors:
                 contacts=directors.select('a[href^="mailto:"]')
                 if contacts:organizer=dict(name='; '.join(a.get_text(' ',strip=True) for a in contacts),email=contacts[0]['href'][7:])
+                director_name=organizer.get('name','')
             notes='Source pricing choices (game-guarantee packages, not age-specific fees): '+(pricing.get_text(' ',strip=True) if pricing else 'not published')
             if pricing:
                 from common.softball_description import description
@@ -164,6 +166,7 @@ class AllianceFastpitchScraper(SoftballScaffoldScraper):
         start,end=_parse_month_day_range(date_label,None)
         self.source_details=getattr(self,'source_details',{})
         self.source_details[url]=dict(public_url=public,source_dates=date_label,divisions=divisions,locations=locations,data_gaps=gaps)
+        if director_name:self.source_details[url]['directorName']=director_name
         if rich:self.source_details[url]['description']=rich
         return make_row(title=title.get_text(' ',strip=True),start=start,end=end,url=public,state=state,city=city,
             divisions=divisions,locations=locations,organizer=organizer,notes=notes,hotel=hotel)

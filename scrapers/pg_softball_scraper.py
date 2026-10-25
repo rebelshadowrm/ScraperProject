@@ -96,4 +96,9 @@ class PGSoftballScraper(SoftballScaffoldScraper):
             schedule_group_id=getattr(self,'schedule_groups',{}).get(url),
             data_gaps=['Single-division parser reused; grouped division membership still needs verification before production'])
         if rich:self.source_details[url]['description']=rich
+        from common.softball_contacts import pg_contact_facts, pg_division_facts
+        self.source_details[url].update(pg_contact_facts(soup, url))
+        division_facts = pg_division_facts(soup, url)
+        if division_facts:
+            self.source_details[url]['divisions'][0].update(division_facts)
         return row

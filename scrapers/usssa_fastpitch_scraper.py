@@ -107,6 +107,8 @@ class USSSAFastpitchScraper(SoftballScaffoldScraper):
             node=contact.select_one(selector) if contact else None
             return node.get_text(' ',strip=True) if node else ''
         email=contact.select_one('a[href^="mailto:"]') if contact else None
+        from common.softball_contacts import cloudflare_email
+        public_email = email['href'][7:] if email else cloudflare_email(contact.select_one('[data-cfemail]') if contact else None)
         phone=contact.select_one('a[href^="tel:"]') if contact else None
         self.source_details=getattr(self,'source_details',{})
         self.source_details[url]=dict(divisions=divisions,locations=venues,
@@ -117,7 +119,7 @@ class USSSAFastpitchScraper(SoftballScaffoldScraper):
             self.source_details[url]['description']=description(event['description'],base_url=url)
         return make_row(title=event['name'],start=event.get('startDate'),end=event.get('endDate'),url=url,
             state=venues[0]['state'],city=venues[0]['city'],locations=venues,divisions=mapped_divisions,
-            organizer=dict(name=text('h3'),email=email['href'][7:] if email else '',phone=phone['href'][4:] if phone else ''),
+            organizer=dict(name=text('h3'),email=public_email,phone=phone['href'][4:] if phone else ''),
             guaranteed_games=next(iter(games)) if len(games)==1 else '',
             notes='Division labels and source registration inconsistency retained in source details'
                 + ('\n\nSchool divisions retained without invented U ages: '+ '; '.join(division['label']+': '+division['fee_label'] for division in divisions if not division.get('age')) if len(mapped_divisions)!=len(divisions) else ''))

@@ -1,0 +1,142 @@
+{
+  "header": {
+    "_key": "7484010695",
+    "cancelled": null,
+    "dirName": "Tye Roberson",
+    "ends": "2026-10-24T05:00:00Z",
+    "hasIndividualDivisions": false,
+    "hasTeamDivisions": true,
+    "isLeague": false,
+    "isYouth": true,
+    "location": "Lawton, OK",
+    "name": "District 9 USA Softball Pinkout",
+    "season": "2027",
+    "site": "usasb-ok",
+    "sport": "FP",
+    "starts": "2026-10-24T05:00:00Z"
+  },
+  "info": {
+    "eventInfo": {
+      "ccFeeExtra": true,
+      "ends": "2026-10-24T05:00:00Z",
+      "info": null,
+      "starts": "2026-10-24T05:00:00Z",
+      "state": "OK"
+    },
+    "divisions": [
+      {
+        "_key": "7484010703",
+        "age": "18",
+        "divisionFee": "150",
+        "divisionType": "State Tournament",
+        "ends": "2026-10-24T05:00:00Z",
+        "enterByCutDate": "Oct 20",
+        "fee": "155.82",
+        "individual": false,
+        "minGames": 3,
+        "name": "16/18O",
+        "showEnter": false,
+        "spotsRemaining": {
+          "message": "Closed on Oct 20",
+          "showEnter": false,
+          "spotsRemaining": null
+        },
+        "starts": "2026-10-24T05:00:00Z",
+        "waitlist": null
+      },
+      {
+        "_key": "7484010705",
+        "age": "14",
+        "divisionFee": "150",
+        "divisionType": "State Tournament",
+        "ends": "2026-10-24T05:00:00Z",
+        "enterByCutDate": "Oct 20",
+        "fee": "155.82",
+        "individual": false,
+        "minGames": 3,
+        "name": "14O",
+        "showEnter": false,
+        "spotsRemaining": {
+          "message": "Closed on Oct 20",
+          "showEnter": false,
+          "spotsRemaining": null
+        },
+        "starts": "2026-10-24T05:00:00Z",
+        "waitlist": null
+      },
+      {
+        "_key": "7484010713",
+        "age": "12",
+        "divisionFee": "150",
+        "divisionType": "State Tournament",
+        "ends": "2026-10-24T05:00:00Z",
+        "enterByCutDate": "Oct 20",
+        "fee": "155.82",
+        "individual": false,
+        "minGames": 3,
+        "name": "12O",
+        "showEnter": false,
+        "spotsRemaining": {
+          "message": "Closed on Oct 20",
+          "showEnter": false,
+          "spotsRemaining": null
+        },
+        "starts": "2026-10-24T05:00:00Z",
+        "waitlist": null
+      },
+      {
+        "_key": "7484010717",
+        "age": "10",
+        "divisionFee": "100",
+        "divisionType": "State Tournament",
+        "ends": "2026-10-24T05:00:00Z",
+        "enterByCutDate": "Oct 20",
+        "fee": "104.33",
+        "individual": false,
+        "minGames": 3,
+        "name": "10O",
+        "showEnter": false,
+        "spotsRemaining": {
+          "message": "Closed on Oct 20",
+          "showEnter": false,
+          "spotsRemaining": null
+        },
+        "starts": "2026-10-24T05:00:00Z",
+        "waitlist": null
+      }
+    ],
+    "facilities": [
+      {
+        "_key": "7483909189",
+        "abr": "MPBF",
+        "address": "1713 38th",
+        "coordinate": null,
+        "divisions": [
+          {
+            "_key": "7484010703",
+            "name": "16/18O"
+          },
+          {
+            "_key": "7484010705",
+            "name": "14O"
+          },
+          {
+            "_key": "7484010713",
+            "name": "12O"
+          },
+          {
+            "_key": "7484010717",
+            "name": "10O"
+          }
+        ],
+        "gridData": null,
+        "isWatched": false,
+        "location": "Lawton, OK",
+        "mapMarks": 0,
+        "name": "McMahon Park Ball Fields",
+        "periods": null,
+        "zip": "73505"
+      }
+    ]
+  }
+}

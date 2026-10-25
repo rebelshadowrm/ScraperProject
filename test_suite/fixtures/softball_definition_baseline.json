@@ -1,0 +1,90 @@
+{
+  "sources": {
+    "scrapers\\alliance_fastpitch_scraper.py": "8c7355e8ed04194e61034d06437754c8134064b061efdfc1ca297d4c14aa51b4",
+    "scrapers\\base_scraper.py": "bc14ff1aa3f3ea240f07cc187ad691689431f2e9985c8640cec5393b43707e72",
+    "scrapers\\fasa_scraper.py": "0abadbd6128a68c7ab4991d2a61e7b56a51f3557756423996c6a2204c0d91309",
+    "scrapers\\game7baseball_scraper.py": "0559452b1181a6e66ca311a9e0339dc967ca74feaf58a623496603c55b19a7b0",
+    "scrapers\\grandslam_scraper.py": "84cfe904acbef502a9d7348a88c4c7fabb415d7eb6b1a2f6580e7c224311abc8",
+    "scrapers\\ncs_fastpitch_scraper.py": "63647c1adb3d9754db31175a5fd7fd1448b07cc548d2ee981c5547b6ada246d6",
+    "scrapers\\ncs_scraper.py": "ce540aea335450ed790e3a9bac750729f1aea7aa53bada4c3fef9741da768cb4",
+    "scrapers\\nsa_fastpitch_scraper.py": "475fb4140f2f293892804386f8b5e5672dd4d669cbefee7fde004d8b28f99d06",
+    "scrapers\\pgf_scraper.py": "4f12ed43fc53eaf159509f08a374f4a4685d3403b24cf94295e86ce8425315c5",
+    "scrapers\\pg_scraper.py": "cb1278a514ba249bbdb589c850b8ab59ffc60c15cd530428fc555a30e79ffe02",
+    "scrapers\\pg_softball_scraper.py": "b6a033bb76f43f1d19df9d2f5ec24a34a8b0a68630f80fe48ad0148dcda5e261",
+    "scrapers\\pst_scraper.py": "07d27d1d85e12e5e993a59922840a8d7c0f43c307078eb29eed7153d5f8ea556",
+    "scrapers\\ripkenbaseball_scraper.py": "f517c2d2076a5465dea110c7366462f11d87682c2f080950b0a97986db44aaf2",
+    "scrapers\\topgun_events_scraper.py": "9fc2f622c4e970afb3083078d56139f40b01efa49530a0e5dc1bd70f3e943072",
+    "scrapers\\topgun_fastpitch_scraper.py": "f94bd6d06d60b213df2408f548b884e7020588289f2a56db2f5c39ce2de068be",
+    "scrapers\\topgun_scraper.py": "19c9966b8ed6702d2a0a5c29195eb9e2f350a8d7c33b080d16576690637dc5ca",
+    "scrapers\\triplecrown_fastpitch_scraper.py": "085466cdb9b26d9760a82c5c2dbc5014cdd4e545f480e5f3f8bc8d7a1a4c425c",
+    "scrapers\\triplecrown_scraper.py": "808d0360eb40277ff8c902b917ec24c9f7bb303511d4f7546077216d4ccb9a0c",
+    "scrapers\\usa_fastpitch_scraper.py": "4755ad2e810382b2cc19189f6fdac9c9b68563b68a18265d67e9d6b4262fbcc4",
+    "scrapers\\usa_softball_scraper.py": "d4d95d2080e5a815dc711dee2345966af4d4648ee0cb79ccbccf6d51ebd3023c",
+    "scrapers\\usfa_scraper.py": "2096e768c1e81ff0660263974c8719d9e4204b83862dc884befcd6c64bb2254d",
+    "scrapers\\usssa_fastpitch_scraper.py": "8178db587123d131384be05c47bec708ee807ee9222a6e759b7987ff56362df9",
+    "scrapers\\usssa_scraper.py": "77de21a7d15b105cc03659093012ca7ddb9041e64162e69190af55e92fcf9002",
+    "common\\softball_scaffold.py": "86a23eea3fcb5c7b7eb78d25af32717ee38ee00f1b136245d8d1f38db4a894ae",
+    "common\\softball_registry.py": "fbd4906f39252c19f5dd54a1ed2d38e4eecc9f8353d048433c4b90851029abbc",
+    "common\\provider_access.py": "baf4202eea4e9b605a2c67da7ba3e00ebbf5834f374b840a132bf5846da8f8c2",
+    "scripts\\softball_discovery_smoke.py": "8f9c1252e4fedf8fd9d0bc9e6d5da02fd217b77d26508961b7a12c5b30820279"
+  },
+  "discovery": {
+    "usfa": {
+      "fixture": "softball_discovery.html",
+      "links": [
+        "https://usfaevents.com/TTContent.aspx?tid=USFA46019"
+      ],
+      "ids": [
+        "USFAScraper|softball|USFA46019"
+      ],
+      "complete": false,
+      "pages": 1
+    },
+    "fasa": {
+      "fixture": "softball_discovery.html",
+      "links": [
+        "https://www.playfasa.com/profile.asp?ID=15448"
+      ],
+      "ids": [
+        "FASAScraper|softball|15448"
+      ],
+      "complete": false,
+      "pages": 1
+    },
+    "topgun_events": {
+      "fixture": "softball_discovery.html",
+      "links": [
+        "https://app.tagup.com/topgun/event/tournament/123/"
+      ],
+      "ids": [
+        "TopGunEventsScraper|softball|123"
+      ],
+      "complete": false,
+      "pages": 1
+    },
+    "triplecrown_fastpitch": {
+      "fixture": "softball_discovery.html",
+      "links": [
+        "https://www.triplecrownfastpitch.com/events/test-Case"
+      ],
+      "ids": [
+        "TripleCrownFastpitchScraper|softball|https://www.triplecrownfastpitch.com/events/test-Case"
+      ],
+      "complete": false,
+      "pages": 1
+    },
+    "usa_fastpitch": {
+      "fixture": "softball_active.json",
+      "links": [
+        "https://usafastpitch.org/pages/event/detail/7630151141",
+        "https://usafastpitch.org/pages/event/detail/7518445822"
+      ],
+      "ids": [
+        "USAFastpitchScraper|softball|7630151141",
+        "USAFastpitchScraper|softball|7518445822"
+      ],
+      "complete": false,
+      "pages": 1
+    }
+  }
+}

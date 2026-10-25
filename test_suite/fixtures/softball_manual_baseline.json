@@ -1,0 +1,15 @@
+{
+  "source_hashes": {
+    "scrapers/pgf_scraper.py": "4f12ed43fc53eaf159509f08a374f4a4685d3403b24cf94295e86ce8425315c5",
+    "scrapers/ncs_fastpitch_scraper.py": "63647c1adb3d9754db31175a5fd7fd1448b07cc548d2ee981c5547b6ada246d6",
+    "common/softball_registry.py": "d8d44811d2430b87410d2b56d06225b7880a7914cdecfed6e86dcc9ed238b3ec"
+  },
+  "ncs_explicit_year": {
+    "html": "<hgroup><h1 class=\"mv-sm\">Source Fixture</h1><h3 class=\"inline-block m0\">Oct 17-18, 2099</h3></hgroup>",
+    "result": [
+      "Source Fixture",
+      "Oct 17 2099",
+      "Oct 18 2099"
+    ]
+  }
+}

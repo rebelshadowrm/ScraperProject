@@ -53,10 +53,58 @@ class DeliveryStore:
                 id INTEGER PRIMARY KEY, destination TEXT NOT NULL, event_id TEXT NOT NULL,
                 revision TEXT NOT NULL, sequence INTEGER NOT NULL,
                 started_at REAL NOT NULL, finished_at REAL, result TEXT);
+            CREATE TABLE IF NOT EXISTS event_revisions (
+                event_id TEXT NOT NULL, sequence INTEGER NOT NULL,
+                sport TEXT NOT NULL, revision TEXT NOT NULL, payload TEXT NOT NULL,
+                recorded_at REAL, PRIMARY KEY(event_id, sequence));
+            CREATE TABLE IF NOT EXISTS receiver_targets (
+                destination TEXT PRIMARY KEY, endpoint TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS delivery_receipts (
+                destination TEXT NOT NULL,event_id TEXT NOT NULL,sequence INTEGER NOT NULL,
+                revision TEXT NOT NULL,idempotency_key TEXT NOT NULL,acknowledged_at REAL NOT NULL,
+                receipt TEXT NOT NULL,PRIMARY KEY(destination,event_id,sequence));
         """)
+        columns = {row[1] for row in self.db.execute('PRAGMA table_info(attempts)')}
+        for name,kind in (('http_status','INTEGER'),('failure_kind','TEXT')):
+            if name not in columns:self.db.execute(f'ALTER TABLE attempts ADD COLUMN {name} {kind}')
+        self.db.commit()
+        # Existing stores only retained their latest payload. Preserve that known
+        # version without inventing earlier history or its observation time.
+        with self.transaction():
+            self.db.execute("""INSERT INTO event_revisions
+                (event_id,sequence,sport,revision,payload,recorded_at)
+                SELECT event_id,sequence,sport,revision,payload,NULL FROM events
+                WHERE NOT EXISTS (SELECT 1 FROM event_revisions r
+                    WHERE r.event_id=events.event_id AND r.sequence=events.sequence)""")
 
     def close(self):
         self.db.close()
+
+    def history(self, event_id):
+        """Read retained versions; restoring content must create a new sequence.
+
+        This never rewinds acknowledgements or changes the acquisition ledger.
+        Legacy stores expose only versions still available at migration time.
+        """
+        return [dict(row, payload=json.loads(row["payload"])) for row in
+                self.db.execute("SELECT * FROM event_revisions WHERE event_id=? ORDER BY sequence", (event_id,))]
+
+    def bind_target(self, destination, endpoint, *, adopt_existing_receipts=False):
+        """Keep a destination's acknowledgements scoped to one physical receiver.
+
+        Legacy acknowledgements require explicit operator reconciliation, since
+        older stores did not retain which endpoint committed them.
+        """
+        with self.transaction():
+            old = self.db.execute("SELECT endpoint FROM receiver_targets WHERE destination=?", (destination,)).fetchone()
+            if old and old["endpoint"] != endpoint:
+                raise ValueError("Outbox is bound to another receiver; reconcile instead of reusing acknowledgements")
+            if not old:
+                acknowledged = self.db.execute("SELECT 1 FROM deliveries WHERE destination=? AND delivered_sequence IS NOT NULL LIMIT 1",
+                                               (destination,)).fetchone()
+                if acknowledged and not adopt_existing_receipts:
+                    raise ValueError("Legacy receiver acknowledgements require explicit target reconciliation")
+                self.db.execute("INSERT INTO receiver_targets VALUES (?,?)", (destination, endpoint))
 
     @contextmanager
     def transaction(self):
@@ -82,11 +130,15 @@ class DeliveryStore:
                     continue
                 provider = entry.get("scraper", "")
                 sport = entry.get("sport")
+                if sport=='softball' and entry.get('source_review_required') is True:
+                    quarantine(key)
+                    continue
                 if sport is None and provider in LEGACY_BASEBALL_PROVIDERS and provider not in UNTYPED_PROVIDERS:
                     # Historical project contract, not an inference from title.
                     if "fastpitch" not in entry.get("url", "").lower():
                         sport = "baseball"
                 if (sport not in DESTINATIONS.values() or not provider or not key.startswith(provider + "|")
+                        or (sport != 'baseball' and not key.startswith(provider+'|'+sport+'|'))
                         or entry.get("sport_verified") is False
                         or (provider in UNTYPED_PROVIDERS and entry.get("sport_verified") is not True)
                         or (sport == "baseball" and any(marker in entry.get("url", "").lower()
@@ -104,9 +156,10 @@ class DeliveryStore:
                     continue
                 if withdrawn and not old:
                     continue
+                source_key = key[len(provider+'|'+sport+'|'):] if sport!='baseball' else key.split('|',1)[1]
                 body = {
                     "schema_version": 1, "event_id": key, "sport": sport,
-                    "provider": provider, "source_id": entry.get("source_event_id") or key.split("|", 1)[1],
+                    "provider": provider, "source_id": entry.get("source_event_id") or source_key,
                     "source_url": entry.get("url", ""), "operation": "withdraw" if withdrawn else "upsert",
                     "fields": row, "source_details": {**(raw.get("source_details") or {}), **(entry.get("source_details") or {})},
                 }
@@ -125,6 +178,8 @@ class DeliveryStore:
                 self.db.execute("INSERT INTO events VALUES (?,?,?,?,?) ON CONFLICT(event_id) DO UPDATE SET "
                                 "revision=excluded.revision,sequence=excluded.sequence,payload=excluded.payload",
                                 (key, sport, revision, sequence, json.dumps(body, ensure_ascii=False)))
+                self.db.execute("INSERT INTO event_revisions VALUES (?,?,?,?,?,?)",
+                                (key, sequence, sport, revision, json.dumps(body, ensure_ascii=False), time.time()))
                 for destination, target_sport in DESTINATIONS.items():
                     if target_sport != sport:
                         continue
@@ -144,11 +199,20 @@ class DeliveryStore:
         with self.transaction():
             self.db.execute("UPDATE deliveries SET status='pending',retry_at=0 WHERE destination=? AND status!='quarantined'", (destination,))
 
-    def pending(self, destination, *, limit=100, now=None):
+    def pending(self, destination, *, limit=100, now=None, event_ids=None):
         now = time.time() if now is None else now
+        clause=''
+        parameters=[destination,now]
+        if event_ids is not None:
+            selected=sorted(set(event_ids))
+            if not selected:return []
+            if len(selected)>1000:raise ValueError('Selection exceeds the attempt bound')
+            clause=' AND d.event_id IN ('+','.join('?' for _ in selected)+')'
+            parameters.extend(selected)
+        parameters.append(limit)
         return self.db.execute("""SELECT d.*,e.payload FROM deliveries d JOIN events e USING(event_id)
             WHERE destination=? AND status IN ('pending','failed','unknown','in_flight') AND retry_at<=?
-            ORDER BY retry_at,event_id LIMIT ?""", (destination, now, limit)).fetchall()
+            """+clause+" ORDER BY retry_at,event_id LIMIT ?", parameters).fetchall()
 
     @staticmethod
     def envelope(item):
@@ -159,13 +223,13 @@ class DeliveryStore:
             "event_id": item["event_id"], "revision": item["desired_revision"], "sequence": item["desired_sequence"]})
         return body
 
-    def export(self, destination, path):
+    def export(self, destination, path, *, event_ids=None):
         """Local materialization is never an acknowledgement."""
         from common.storage import save_json_atomic
         items = self.db.execute("SELECT d.*,e.payload FROM deliveries d JOIN events e USING(event_id) "
                                 "WHERE destination=? AND status!='quarantined' ORDER BY event_id", (destination,)).fetchall()
         save_json_atomic({"schema_version": 1, "destination": destination,
-                          "events": [self.envelope(item) for item in items]}, path)
+                          "events": [self.envelope(item) for item in items if event_ids is None or item['event_id'] in event_ids]}, path)
 
     def summary(self):
         result = {destination: {"delivered": 0, "pending": 0, "unknown": 0, "failed": 0, "quarantined": 0}
@@ -176,18 +240,24 @@ class DeliveryStore:
             result[row["destination"]][status] = row["n"]
         return result
 
-    def send(self, destination, endpoint, token, *, limit=100, session=None):
+    def send(self, destination, endpoint, token, *, limit=100, session=None, allow_loopback=False, event_ids=None, min_interval=0):
         if destination not in DESTINATIONS or not 1 <= limit <= 1000:
             raise ValueError("Invalid destination or attempt limit")
         parsed = urlsplit(endpoint)
-        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment:
+        local_http = allow_loopback and parsed.scheme == 'http' and parsed.hostname in ('127.0.0.1','localhost','::1')
+        if (parsed.scheme != "https" and not local_http) or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment:
             raise ValueError("Delivery endpoint must be HTTPS without embedded credentials, query or fragment")
         if not token or "\n" in token or "\r" in token:
             raise ValueError("A nonempty bearer token is required")
+        self.bind_target(destination, endpoint)
         owned = session is None
         session = session or requests.Session()
+        next_request=0
         try:
-            for item in self.pending(destination, limit=limit):
+            for item in self.pending(destination, limit=limit,event_ids=event_ids):
+                delay=next_request-time.monotonic()
+                if delay>0:time.sleep(delay)
+                next_request=time.monotonic()+min_interval
                 body = self.envelope(item)
                 started = time.time()
                 with self.transaction():
@@ -198,10 +268,13 @@ class DeliveryStore:
                                     "WHERE destination=? AND event_id=?", (started + 60,destination,item["event_id"]))
                 status, error = "unknown", "Unverified response"
                 response = None
+                ack = None
+                http_status = None
                 try:
                     response = session.post(endpoint, json=body,
                         headers={"Authorization": "Bearer " + token, "Idempotency-Key": body["idempotency_key"]},
                         timeout=(5, 20), allow_redirects=False, stream=True)
+                    http_status=response.status_code
                     if response.status_code == 200:
                         content = bytearray()
                         for chunk in response.iter_content(8192):
@@ -225,8 +298,18 @@ class DeliveryStore:
                         response.close()
                 finished = time.time()
                 with self.transaction():
-                    self.db.execute("UPDATE attempts SET finished_at=?,result=? WHERE id=?", (finished,status,attempt_id))
+                    kind=('authorization' if http_status in (401,403) else 'rejected' if http_status in (409,422)
+                          else 'http_error' if status=='failed' else 'unverified_response' if status=='unknown' else None)
+                    self.db.execute("UPDATE attempts SET finished_at=?,result=?,http_status=?,failure_kind=? WHERE id=?",
+                                    (finished,status,http_status,kind,attempt_id))
                     if status == "delivered":
+                        # Retain only correlation and publication fields, never a
+                        # reflected source body or arbitrary response diagnostics.
+                        receipt={key:ack[key] for key in ('status','destination','event_id','revision','sequence',
+                            'idempotency_key','item_id','review_required') if key in ack}
+                        self.db.execute('INSERT OR IGNORE INTO delivery_receipts VALUES (?,?,?,?,?,?,?)',
+                            (destination,item['event_id'],item['desired_sequence'],item['desired_revision'],
+                             body['idempotency_key'],finished,json.dumps(receipt,sort_keys=True)))
                         self.db.execute("""UPDATE deliveries SET delivered_revision=?,delivered_sequence=?,
                             acknowledged_at=?,status='delivered',last_error='',retry_at=0
                             WHERE destination=? AND event_id=? AND desired_revision=? AND desired_sequence=?""",
@@ -237,6 +320,8 @@ class DeliveryStore:
                         self.db.execute("UPDATE deliveries SET status=?,last_error=?,retry_at=? "
                             "WHERE destination=? AND event_id=? AND desired_sequence=?",
                             (status,error,finished+delay,destination,item["event_id"],item["desired_sequence"]))
+                if http_status in (401,403,429):
+                    break  # One credential/configuration failure must not churn the backlog.
         finally:
             if owned:
                 session.close()

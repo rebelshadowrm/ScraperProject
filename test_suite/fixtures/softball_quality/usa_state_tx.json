@@ -1,0 +1,1062 @@
+[
+  {
+    "_key": "6600918637",
+    "cancelled": true,
+    "name": "7TH ANNUAL PINK-OUT AGAINST BREAST CANCER",
+    "sport": "FP",
+    "entryFee": "$150-$165",
+    "starts": "2026-10-03T05:00:00Z",
+    "location": "San Marcos, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6777351711",
+    "cancelled": null,
+    "name": "USA Softball Fall Brawl 2026",
+    "sport": "FP",
+    "entryFee": "$175",
+    "starts": "2026-10-03T05:00:00Z",
+    "location": "Temple, TX, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7708336758",
+    "cancelled": null,
+    "name": "MUGS Middle School Fall Ball",
+    "sport": "FP",
+    "entryFee": "$102",
+    "starts": "2026-10-06T00:00:00",
+    "location": "Midland , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "MS",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7887966951",
+    "cancelled": null,
+    "name": "2026 MUGS Umpire Classic",
+    "sport": "FP",
+    "entryFee": "$1",
+    "starts": "2026-10-10T05:00:00Z",
+    "location": "Midland , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14C/Rec",
+        "qualifier": null
+      },
+      {
+        "name": "12C/Rec",
+        "qualifier": null
+      },
+      {
+        "name": "10C/Rec",
+        "qualifier": null
+      },
+      {
+        "name": "8-C/Rec",
+        "qualifier": null
+      },
+      {
+        "name": "6R",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7138018638",
+    "cancelled": null,
+    "name": "USA Softball of CTX vs DFW",
+    "sport": "FP",
+    "entryFee": "$175",
+    "starts": "2026-10-10T05:00:00Z",
+    "location": "White Settlement, TX, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6756497148",
+    "cancelled": null,
+    "name": "Boneyard Bash Fall Classic ",
+    "sport": "FP",
+    "entryFee": "$350",
+    "starts": "2026-10-16T05:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": true
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6198400876",
+    "cancelled": null,
+    "name": "Halloween Havoc",
+    "sport": "FP",
+    "entryFee": "$140",
+    "starts": "2026-10-17T05:00:00Z",
+    "location": "Brenham , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7000278918",
+    "cancelled": null,
+    "name": "SUNRISE OPTIMIST ZOMBIE INVITATIONAL",
+    "sport": "FP",
+    "entryFee": "$175",
+    "starts": "2026-10-17T05:00:00Z",
+    "location": "WICHITA FALLS, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "HSO",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6200780587",
+    "cancelled": null,
+    "name": "Halloween (PINK-OUT)",
+    "sport": "FP",
+    "entryFee": "$100",
+    "starts": "2026-10-24T05:00:00Z",
+    "location": "Brownwood , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "HSO",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7236802279",
+    "cancelled": null,
+    "name": "Gateway's Hallowball Spooktacular",
+    "sport": "FP",
+    "entryFee": "$150-$175",
+    "starts": "2026-10-24T05:00:00Z",
+    "location": "Laredo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18BC",
+        "qualifier": null
+      },
+      {
+        "name": "14A/B",
+        "qualifier": null
+      },
+      {
+        "name": "12A/B",
+        "qualifier": null
+      },
+      {
+        "name": "10A/B",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6777614477",
+    "cancelled": true,
+    "name": "South Texas Summit Showcase Games",
+    "sport": "FP",
+    "entryFee": "$650",
+    "starts": "2026-10-24T05:00:00Z",
+    "location": "Laredo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "18O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6806945296",
+    "cancelled": null,
+    "name": "6TH ANNUAL CENTRAL TEXAS FALL SHOWCASE & CAMP",
+    "sport": "FP",
+    "entryFee": "$550-$625",
+    "starts": "2026-10-24T05:00:00Z",
+    "location": "San Marcos, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "18O",
+        "qualifier": null
+      },
+      {
+        "name": "16O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6812425106",
+    "cancelled": null,
+    "name": "Centex Halloween Tailgate Trunk or Treat",
+    "sport": "FP",
+    "entryFee": "$150-$155.82",
+    "starts": "2026-10-30T05:00:00Z",
+    "location": "Little River-Academy, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7000353803",
+    "cancelled": null,
+    "name": "VETERANS DAY CLASSIC",
+    "sport": "FP",
+    "entryFee": "$175",
+    "starts": "2026-11-07T06:00:00Z",
+    "location": "WICHITA FALLS, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "HSO",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6756944575",
+    "cancelled": null,
+    "name": "Midland Thanksgiving Brawl ",
+    "sport": "FP",
+    "entryFee": "$400",
+    "starts": "2026-11-13T06:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": true
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6200829901",
+    "cancelled": null,
+    "name": "Veterans Day classic ",
+    "sport": "FP",
+    "entryFee": "$100",
+    "starts": "2026-11-14T06:00:00Z",
+    "location": "Brownwood , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "HSO",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "5981818348",
+    "cancelled": null,
+    "name": "USA Softball 2026 Fall State Championship",
+    "sport": "FP",
+    "entryFee": "$140",
+    "starts": "2026-11-14T06:00:00Z",
+    "location": "The Woodlands , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6799442363",
+    "cancelled": null,
+    "name": "Centex Fastpitch",
+    "sport": "FP",
+    "entryFee": "$145-$150.67",
+    "starts": "2026-11-21T00:00:00",
+    "location": "Little River Academy, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6516506941",
+    "cancelled": null,
+    "name": "Harvest Havoc",
+    "sport": "FP",
+    "entryFee": "$425",
+    "starts": "2026-11-21T06:00:00Z",
+    "location": "San Angelo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6807486296",
+    "cancelled": null,
+    "name": "31ST  ANNUAL PANCHO CLAUS CLASSIC TOY-DRIVE",
+    "sport": "FP",
+    "entryFee": "$135-$155",
+    "starts": "2026-11-21T06:00:00Z",
+    "location": "San Marcos, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6762695372",
+    "cancelled": null,
+    "name": "Midland Winter Classic ",
+    "sport": "FP",
+    "entryFee": "$400",
+    "starts": "2026-12-04T06:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": true
+      },
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": true
+      }
+    ]
+  },
+  {
+    "_key": "6200891427",
+    "cancelled": null,
+    "name": "Holliday in the park (Toy drive)",
+    "sport": "FP",
+    "entryFee": "$1",
+    "starts": "2026-12-05T06:00:00Z",
+    "location": "Brownwood , TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "HSO",
+        "qualifier": null
+      },
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6832952162",
+    "cancelled": null,
+    "name": "Centex Christmas Bash",
+    "sport": "FP",
+    "entryFee": "$125-$130.07",
+    "starts": "2026-12-19T06:00:00Z",
+    "location": "Little River Academy, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6516852700",
+    "cancelled": null,
+    "name": "Spring Swing",
+    "sport": "FP",
+    "entryFee": "$425",
+    "starts": "2027-03-06T06:00:00Z",
+    "location": "San Angelo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7238405110",
+    "cancelled": null,
+    "name": "Oil and Gas $100 Bash ",
+    "sport": "FP",
+    "entryFee": "$100",
+    "starts": "2027-03-19T05:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7238647374",
+    "cancelled": null,
+    "name": "Midland Spring Classic",
+    "sport": "FP",
+    "entryFee": "$450",
+    "starts": "2027-04-16T05:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7065892195",
+    "cancelled": null,
+    "name": "2nd Annual Brenham Blue Bonnet Classic",
+    "sport": "FP",
+    "entryFee": "$140",
+    "starts": "2027-04-17T00:00:00",
+    "location": "Brenham, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      }
+    ]
+  },
+  {
+    "_key": "6925036647",
+    "cancelled": null,
+    "name": "Bats in Bloom",
+    "sport": "FP",
+    "entryFee": "$450",
+    "starts": "2027-04-23T05:00:00Z",
+    "location": "San Angelo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6617335016",
+    "cancelled": null,
+    "name": "2027 District Tournament - 27",
+    "sport": "FP",
+    "entryFee": "$275",
+    "starts": "2027-05-14T05:00:00Z",
+    "location": "Angleton, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14R",
+        "qualifier": null
+      },
+      {
+        "name": "12R",
+        "qualifier": null
+      },
+      {
+        "name": "10R",
+        "qualifier": null
+      },
+      {
+        "name": "8R",
+        "qualifier": null
+      },
+      {
+        "name": "6R",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6925430204",
+    "cancelled": null,
+    "name": "Rumble on the River",
+    "sport": "FP",
+    "entryFee": "$450",
+    "starts": "2027-05-21T05:00:00Z",
+    "location": "San Angelo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7154066228",
+    "cancelled": null,
+    "name": "2027 USA SOFTBALL OF TEXAS AREA 1 & 2 - 6U / 8U B/C STATE TOURNAMENT",
+    "sport": "FP",
+    "entryFee": "$275",
+    "starts": "2027-06-04T05:00:00Z",
+    "location": "Brownwood, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "8B",
+        "qualifier": null
+      },
+      {
+        "name": "8C",
+        "qualifier": null
+      },
+      {
+        "name": "6B",
+        "qualifier": null
+      },
+      {
+        "name": "6C",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7064912112",
+    "cancelled": null,
+    "name": "Midland 8 Game",
+    "sport": "FP",
+    "entryFee": "$650",
+    "starts": "2027-06-04T05:00:00Z",
+    "location": "Midland, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "16/18O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6617270873",
+    "cancelled": null,
+    "name": "2027 USA Softball of Texas Area 5 14U B/C State Tournament/National Qualifier",
+    "sport": "FP",
+    "entryFee": "$300",
+    "starts": "2027-06-11T05:00:00Z",
+    "location": "Angleton, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14B/C",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6925490170",
+    "cancelled": null,
+    "name": "Blazin Bases",
+    "sport": "FP",
+    "entryFee": "$450",
+    "starts": "2027-06-11T05:00:00Z",
+    "location": "San Angelo, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      },
+      {
+        "name": "8O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6820679201",
+    "cancelled": null,
+    "name": "USA SOFTBALL OF TEXAS  AREA 2 10,12,14 STATE CHAMPIONSHIP & NATIONAL QUALIFIER",
+    "sport": "FP",
+    "entryFee": "$175",
+    "starts": "2027-06-11T05:00:00Z",
+    "location": "WICHITA FALLS, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14B/C",
+        "qualifier": null
+      },
+      {
+        "name": "12B/C",
+        "qualifier": null
+      },
+      {
+        "name": "10B/C",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "7528087699",
+    "cancelled": null,
+    "name": "War on the Diamond",
+    "sport": "FP",
+    "entryFee": "$140-$145.52",
+    "starts": "2027-06-12T05:00:00Z",
+    "location": "Brenham, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": null
+      },
+      {
+        "name": "12O",
+        "qualifier": null
+      },
+      {
+        "name": "10O",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6586812070",
+    "cancelled": null,
+    "name": "USA Softball of Texas Pixie 6U/8U National Invitational Tournament",
+    "sport": "FP",
+    "entryFee": "$300-$310.3",
+    "starts": "2027-06-18T05:00:00Z",
+    "location": "Angleton, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "8O",
+        "qualifier": null
+      },
+      {
+        "name": "6Open",
+        "qualifier": null
+      }
+    ]
+  },
+  {
+    "_key": "6536407868",
+    "cancelled": null,
+    "name": "USA Softball of Texas Southern National Invitational Tournament",
+    "sport": "FP",
+    "entryFee": "$300",
+    "starts": "2027-06-25T05:00:00Z",
+    "location": "Brenham, TX",
+    "season": "2027",
+    "competitionClassesList": [
+      {
+        "name": "14O",
+        "qualifier": true
+      },
+      {
+        "name": "12O",
+        "qualifier": true
+      },
+      {
+        "name": "10O",
+        "qualifier": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+[
+  {"_key":"7630151141","sport":"FP","season":"2099","name":"Fixture Classic","starts":"2099-03-06T00:00:00","ends":"2099-03-07T00:00:00","location":"Test City, CO","entryFee":"$795-$820.08","competitionClassesList":[{"name":"18O","qualifier":null}]},
+  {"_key":"7518445822","sport":"FP","season":"2099","name":"Fixture Classic","starts":"2099-03-06T00:00:00","ends":"2099-03-07T00:00:00","location":"Test City, CO","entryFee":"$840","competitionClassesList":[]}
+]

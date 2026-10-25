@@ -15,8 +15,9 @@ def event_identity(scraper, url):
     value = identity(url) if identity else normalize_url(url)
     # Existing baseball keys and workbook aliases must remain byte-for-byte stable.
     prefix = scraper.__class__.__name__
-    if scraper_sport(scraper) != "baseball":
-        prefix += "|softball"
+    sport = scraper_sport(scraper)
+    if sport != "baseball":
+        prefix += "|" + sport
     return f"{prefix}|{value}"
 
 

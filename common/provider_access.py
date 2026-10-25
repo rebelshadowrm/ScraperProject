@@ -2,13 +2,14 @@
 
 
 def softball_classes(manifest):
-    from scrapers.ncs_fastpitch_scraper import NCSFastpitchScraper
-    from scrapers.topgun_fastpitch_scraper import TopGunFastpitchScraper
+    from common.softball_registry import softball_registry
     result = []
-    for cls in (NCSFastpitchScraper, TopGunFastpitchScraper):
+    for cls in softball_registry().values():
         try:
+            if hasattr(cls, 'require_ready'):
+                cls.require_ready()
             cls.require_permission()
             result.append(cls)
-        except RuntimeError as exc:
+        except (RuntimeError, NotImplementedError) as exc:
             manifest.provider(cls.__name__, "queued", error=str(exc))
     return result

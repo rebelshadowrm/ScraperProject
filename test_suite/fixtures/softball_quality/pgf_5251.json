@@ -1,0 +1,223 @@
+{
+  "event": {
+    "eventid": 5251,
+    "eventtypeid": 1,
+    "providerid": 146,
+    "sportid": 4,
+    "name": "1st to 3rd Softball Events - \"Monster Mash for Cash\" Powered by PGF",
+    "startdate": "2026-10-24",
+    "enddate": "2026-10-25",
+    "visible": 1,
+    "gameguarantee": "4+",
+    "city": "Modesto, Stockton & Tracy",
+    "description": "<div style=\"text-align: center;\"><strong>1st to 3rd Softball Events \"Monster Mash Bash for Cash\" Powered by PGF</strong></div>\n<div style=\"text-align: center;\"><br/>October 24/25, 2026</div>\n<div style=\"text-align: center;\"><br/>18U, 16U will compete in Modesto @ Rainbow Sports Complex<br/><br/>14U &amp; 10U will compete in Tracy @ Legacy &amp;/or Tracy Sports Complex <br/><br/></div>\n<div style=\"text-align: center;\">12U will compete in Stockton @ Arnaiz Sports Complex<br/><br/>Entry Fee:<br/>18U - 12U = $850<br/>10U = $750 (5 GG)</div>\n<div style=\"text-align: center;\"> </div>\n<div style=\"text-align: center;\">Format - 3 Games Pool Play Saturday/Single Elimination Bracket Sunday</div>\n<div style=\"text-align: center;\"><br/><strong>Prize Package (Based on 12 or more Teams Per Division):</strong></div>\n<div style=\"text-align: center;\"><br/>1st Place - $1,000 &amp; Custom Tournament Shirts.</div>\n<div style=\"text-align: center;\"><br/>2nd Place - $500 &amp; Custom Tournament Shirts.</div>\n<div style=\"text-align: center;\"><br/>Bomb Squad - We will be running the Bomb Squad during this event!<br/><br/>Every player that hits a HR over the fence will receive a \"Bomb Squad\" shirt!</div>\n<div style=\"text-align: center;\"><br/>The Best Play Here!</div>",
+    "modified": "2026-10-20 19:15:11",
+    "ngb_affiliation": 76,
+    "stateabbr": "CA",
+    "entitytype": "team",
+    "divisionlabel": "10U - 18U Girls",
+    "pricinglabel": "$750 - $850"
+  },
+  "provider": {
+    "email": "ckappmeyer32@gmail.com",
+    "name": "1st To 3rd Softball Events, Inc",
+    "phonenumber": "209-395-8817"
+  },
+  "divisions": [
+    {
+      "eventdivisionid": 140322,
+      "eventid": 5251,
+      "price": 750,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140321,
+      "eventid": 5251,
+      "price": 750,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140320,
+      "eventid": 5251,
+      "price": 750,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": null,
+      "sportskill": "1st to 3rd"
+    },
+    {
+      "eventdivisionid": 140325,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140324,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140323,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": null,
+      "sportskill": "1st to 3rd"
+    },
+    {
+      "eventdivisionid": 140328,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140327,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140326,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": null,
+      "sportskill": "1st to 3rd"
+    },
+    {
+      "eventdivisionid": 140331,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140330,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140329,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": null,
+      "sportskill": "1st to 3rd"
+    },
+    {
+      "eventdivisionid": 140334,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 18,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140333,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 18,
+      "toDivisionAge": null,
+      "sportskill": "-"
+    },
+    {
+      "eventdivisionid": 140332,
+      "eventid": 5251,
+      "price": 850,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 18,
+      "toDivisionAge": null,
+      "sportskill": "1st to 3rd"
+    }
+  ],
+  "facilities": [
+    {
+      "name": "Arnaiz Sports Complex",
+      "physical_address": "3293 Morada Ln",
+      "physical_city": "Stockton",
+      "physical_zip": "95212",
+      "physical_state": "CA"
+    },
+    {
+      "name": "Tracy - Legacy Sports complex",
+      "physical_address": "4901 N Tracy Blvd",
+      "physical_city": "Tracy",
+      "physical_zip": "95304",
+      "physical_state": "CA"
+    },
+    {
+      "name": "Rainbow Sports Complex",
+      "physical_address": "3800 Claribel Rd",
+      "physical_city": "Modesto",
+      "physical_zip": "95357",
+      "physical_state": "CA"
+    },
+    {
+      "name": "Tracy Sports Complex",
+      "physical_address": "955 Crossroads Dr",
+      "physical_city": "Tracy",
+      "physical_zip": "95377",
+      "physical_state": "CA"
+    }
+  ]
+}

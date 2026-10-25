@@ -14,7 +14,7 @@ import scrapers  # This ensures the scrapers package is imported
 ALL_SCRAPERS_SENTINEL = "ALL_SCRAPERS"
 VALIDATION_SCRAPERS_SENTINEL = "VALIDATION_SCRAPERS"
 
-def get_scraper_classes():
+def get_scraper_classes(*, include_disabled=False):
     """
     Discover and return a list of all classes in the scrapers package
     that are subclasses of BaseScraper (excluding BaseScraper itself).
@@ -34,7 +34,7 @@ def get_scraper_classes():
             if name in excluded_names:
                 continue
             if issubclass(obj, BaseScraper) and obj is not BaseScraper:
-                if not getattr(obj, "ENABLED_BY_DEFAULT", True):
+                if not include_disabled and not getattr(obj, "ENABLED_BY_DEFAULT", True):
                     continue
                 scraper_classes.append(obj)
     return scraper_classes

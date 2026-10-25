@@ -1,0 +1,12 @@
+{
+  "success":true,
+  "data":{
+    "stale":false,
+    "totalRecords":3,
+    "events":[
+      {"Event ID":5396,"dates":"Oct 23 - Oct 25, 2099","event_name":"<a href='https://events.example.org/CaseSensitive'>Fixture invitational</a>","city":"Test City","state":"TX","age_divisions":"14u, 16u, 18u","event_type":"Qualifier","event_host":"Fixture Organizer"},
+      {"Event ID":0,"dates":"Oct 23 - Oct 25, 2099","event_name":"<a href='https://events.example.org'>Unresolved occurrence one</a>"},
+      {"Event ID":0,"dates":"Oct 23 - Oct 25, 2099","event_name":"<a href='https://events.example.org'>Unresolved occurrence two</a>"}
+    ]
+  }
+}

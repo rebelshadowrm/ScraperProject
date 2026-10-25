@@ -1,0 +1,223 @@
+{
+  "event": {
+    "eventid": 5165,
+    "eventtypeid": 1,
+    "providerid": 203,
+    "sportid": 4,
+    "name": "Halloween Havoc qualifier WS 2027",
+    "startdate": "2026-10-24",
+    "enddate": "2026-10-25",
+    "visible": 1,
+    "gameguarantee": "4",
+    "city": "Phoenix",
+    "description": "Halloween costume contest WINNER GETS A FREE TOURNAMENT <br/>FOR ALL DIVISONS <br/><br/>10U 12U <br/>1:15 FINISH THE INNG <br/><br/>14U 16U 18U<br/>1:20 FINISH THE INNG<br/><br/>1st PLACE RINGS<br/>2ND PLACE RINGS<br/><br/><span style=\"font-size: large;\"><strong>Trunk or Treat following the tournament starting at 7 pm!<br/>Event will take place at both East and West Valley locations.</strong></span><br/><br/>\n<ul>\n<li>We need <strong>ONE</strong> decorated car per team to pass out candy to players, siblings, and our softball families.</li>\n<li>The team with the <strong>BEST</strong> decorated car wins a <strong>FREE</strong> PGF No Limit tournament entry, get your next PGF No Limit registration fee waived! <a href=\"https://www.nolimitfastpitch.com/halloween-havoc-qualifier-ws-2027.html\" target=\"_blank\">Sign up here to enter a vehicle.</a></li>\n<li><strong>Trunk or Treat Host Locations:</strong><br/>Events will be held exclusively at Pioneer and Freestone.</li>\n</ul>\n<br/><em>(Yes, if your team sweeps both contests, you just scored TWO fully paid tournament entries!)</em><br/><br/><strong style=\"color: #000000;\">IMPORTANT:</strong><span style=\"color: #000000; font-weight: 400;\"> To be eligible to win the free </span>tournament<span style=\"color: #000000; font-weight: 400;\"> entry, you <a href=\"https://www.nolimitfastpitch.com/halloween-havoc-qualifier-ws-2027.html\" target=\"_blank\">MUST RSVP and fill out the official form here. </a></span><br/><br/><a href=\"https://app.ttievent.com/admin/WebDesign/OnlineReservation?slNqtekeJSt5c6qntqj9KCmWgTjO44_P-C0JbAjTNHP3XE0xue214if_ckxW4k5KGooipsWP7qq8NFqODMGaIF6XbOxoCm2eVWU6JzAp5xs\" target=\"_blank\" title=\"Hotels \">Hotels Here </a>",
+    "modified": "2026-10-12 14:50:35",
+    "ngb_affiliation": 76,
+    "stateabbr": "AZ",
+    "entitytype": "team",
+    "divisionlabel": "10U - 18U Girls",
+    "pricinglabel": "$800"
+  },
+  "divisions": [
+    {
+      "eventdivisionid": 139209,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 8,
+      "toDivisionAge": 10,
+      "sportskill": "B Level"
+    },
+    {
+      "eventdivisionid": 139208,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 8,
+      "toDivisionAge": 10,
+      "sportskill": "A Level"
+    },
+    {
+      "eventdivisionid": 139207,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "10U",
+      "fromDivisionAge": 8,
+      "toDivisionAge": 10,
+      "sportskill": "Platinum"
+    },
+    {
+      "eventdivisionid": 139212,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": 12,
+      "sportskill": "B Level"
+    },
+    {
+      "eventdivisionid": 139211,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": 12,
+      "sportskill": "A Level"
+    },
+    {
+      "eventdivisionid": 139210,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "12U",
+      "fromDivisionAge": 10,
+      "toDivisionAge": 12,
+      "sportskill": "Platinum"
+    },
+    {
+      "eventdivisionid": 139215,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": 14,
+      "sportskill": "B Level"
+    },
+    {
+      "eventdivisionid": 139214,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": 14,
+      "sportskill": "A Level"
+    },
+    {
+      "eventdivisionid": 139213,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "14U",
+      "fromDivisionAge": 12,
+      "toDivisionAge": 14,
+      "sportskill": "Platinum"
+    },
+    {
+      "eventdivisionid": 139218,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": 16,
+      "sportskill": "B Level"
+    },
+    {
+      "eventdivisionid": 139217,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": 16,
+      "sportskill": "A Level"
+    },
+    {
+      "eventdivisionid": 139216,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "16U",
+      "fromDivisionAge": 14,
+      "toDivisionAge": 16,
+      "sportskill": "Platinum"
+    },
+    {
+      "eventdivisionid": 139221,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": 18,
+      "sportskill": "B Level"
+    },
+    {
+      "eventdivisionid": 139220,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": 18,
+      "sportskill": "A Level"
+    },
+    {
+      "eventdivisionid": 139219,
+      "eventid": 5165,
+      "price": 800,
+      "do_not_display": 0,
+      "gender": "Girls",
+      "division": "18U",
+      "fromDivisionAge": 16,
+      "toDivisionAge": 18,
+      "sportskill": "Platinum"
+    }
+  ],
+  "facilities": [
+    {
+      "name": "RIO VISTA",
+      "physical_address": "8866 W THUNDERBIRD",
+      "physical_city": "PEORIA",
+      "physical_zip": "85381",
+      "physical_state": "AZ"
+    },
+    {
+      "name": "PASEO PARK",
+      "physical_address": "6268 W THUNDERBIRD",
+      "physical_city": "GLENDALE",
+      "physical_zip": "858282",
+      "physical_state": "AZ"
+    },
+    {
+      "name": "Desert West Complex",
+      "physical_address": "6602 w Encanto Blvd",
+      "physical_city": "Phoenix",
+      "physical_zip": "85033",
+      "physical_state": "AZ"
+    },
+    {
+      "name": "PIONEER PARK",
+      "physical_address": "8755 N 83rd Ave,",
+      "physical_city": "PEORIA",
+      "physical_zip": "85345",
+      "physical_state": "AZ"
+    }
+  ],
+  "provider": {
+    "email": "mendoza_is@yahoo.com",
+    "name": "No Limit Fastpitch Sports",
+    "phonenumber": "(602) 628-9631"
+  }
+}

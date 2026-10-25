@@ -4,6 +4,7 @@ import logging
 import os
 import random
 import time
+from datetime import datetime, timezone
 from collections import defaultdict
 
 from common.driver_manager import cleanup_download_dir, is_driver_connection_error, restart_driver
@@ -165,6 +166,8 @@ def process_events_in_batches(
                             future = is_future_event(payload)
                             metrics["non_future_skipped" if not future else "date_scope_skipped"] += 1
                         entry.update(acquisition_status="ready" if eligible else "filtered", export_status="not_applicable")
+                        entry["acquisition_refreshed_at"] = datetime.now(timezone.utc).isoformat()
+                        entry["acquired_discovery_revision"] = entry.get("observed_discovery_revision")
                         expired.append(key)  # resolve earlier extraction failures after staging
                         break
                     if not options.includes(payload):

@@ -1,0 +1,16 @@
+{
+  "header":{
+    "_key":"7630151141","sport":"FP","name":"Fixture Classic",
+    "starts":"2099-03-06T00:00:00","ends":"2099-03-07T00:00:00",
+    "location":"Fixture City, CO","isYouth":true,"isLeague":false,
+    "hasTeamDivisions":true,"hasIndividualDivisions":false,"cancelled":null
+  },
+  "info":{
+    "eventInfo":{"starts":"2099-03-06T00:00:00","ends":"2099-03-07T00:00:00","state":"CO","ccFeeExtra":true,"info":"<p>Published fixture rules.</p>"},
+    "divisions":[
+      {"_key":"7630151145","name":"18O","age":"18","starts":"2099-03-06T07:00:00Z","ends":"2099-03-07T07:00:00Z","fee":"820.08","divisionFee":"795","minGames":4,"individual":false,"divisionType":"Invitational","waitlist":null},
+      {"_key":"7630151144","name":"16O","age":"16","fee":"0","divisionFee":"0","minGames":4,"individual":false,"divisionTeams":[{"privateParticipant":"must not leave inspection"}]}
+    ],
+    "facilities":[{"name":"Fixture Park","city":"Fixture City","state":"CO"}]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "usa_description_7695094890.html": {
+    "source_url": "https://usa.registerplay.com/pages/event/7695094890",
+    "observed_on": "2026-10-20",
+    "retained": "Event info prose, paragraphs and emphasis; embedded media removed"
+  },
+  "usa_description_6200780587.html": {
+    "source_url": "https://usa.registerplay.com/pages/event/6200780587",
+    "observed_on": "2026-10-20",
+    "retained": "Event info prose and structure; presentation attributes removed except bold/italic spans"
+  },
+  "usa_pinkout_open.json": {
+    "source_url": "https://usa.registerplay.com/pages/event/7484010695",
+    "observed_on": "2026-10-20",
+    "retained": "Header, event info, public divisions and facilities; participant arrays excluded"
+  },
+  "usa_pinkout_closed.json": {
+    "source_url": "https://usa.registerplay.com/pages/event/7484010695",
+    "observed_on": "2026-10-21",
+    "retained": "Same public fields observed in rendered UI and browser API reads after source closure"
+  },
+  "usa_hpp.json": {
+    "source_url": "https://usa.registerplay.com/pages/event/7992042197",
+    "observed_on": "2026-10-19",
+    "retained": "HPP individual classification, fee, deadline and public venue; media excluded"
+  },
+  "usa_state_tx.json": {
+    "source_url": "https://usa.registerplay.com/api/v1/Event/search",
+    "observed_on": "2026-10-20",
+    "request": {
+      "stateID": "TX",
+      "sportID": "FP",
+      "period": "d|10|2026"
+    },
+    "retained": "All 38 listing identities and revision/filter fields; no detail or participant data"
+  },
+  "pgf_5165.json": {
+    "source_url": "https://softball.tournamentconnect.premiergirlsfastpitch.com/callAPI.php?e=1",
+    "observed_on": "2026-10-21",
+    "request": {
+      "controller": "Event",
+      "action": "read",
+      "parameters": {
+        "eventid": 5165
+      }
+    },
+    "retained": "Public event/division/facility facts; no access codes, files or participant material"
+  },
+  "usa_metro_dfw.json": {
+    "source_url": "https://usa.registerplay.com/pages/event/5108764366",
+    "observed_on": "2026-10-21",
+    "retained": "Public event/division/facility facts and nested description lists; embedded media and participant arrays removed",
+    "discovery": "TX-DFW query returned this event; same-period TX query of 38 records omitted it"
+  },
+  "pgf_5251.json": {
+    "source_url": "https://softball.tournamentconnect.premiergirlsfastpitch.com/callAPI.php?e=1",
+    "observed_on": "2026-10-21",
+    "request": {
+      "controller": "Event",
+      "action": "read",
+      "parameters": {
+        "eventid": 5251
+      }
+    },
+    "retained": "Public event/division/facility facts; no access codes, files or participant material"
+  },
+  "tc_event_details.html": {
+    "source_url": "https://www.triplecrownfastpitch.com/events/triple-crown-okc",
+    "observed_on": "2026-10-20",
+    "retained": "Identified Event Details accordion; presentation attributes and media removed"
+  }
+}

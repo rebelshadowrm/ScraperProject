@@ -11,6 +11,7 @@ from common.excel_utils import create_workbook_from_template, get_output_filenam
 from common.pull_options import PullOptions
 from common.collection import CollectedLinks
 from common.sport import scraper_sport
+from common.softball_refresh import needs_softball_details
 from common.validation import validate_event_data
 from scrapers.play365_base import Play365ManualFallbackRequired
 
@@ -152,6 +153,10 @@ def process_location(
         if entry.get("sport", sport) != sport:
             raise ValueError("Event sport conflicts with stored provenance")
         entry["sport"] = sport
+        if sport == "softball" and hasattr(scraper, "get_discovery_revision"):
+            revision = scraper.get_discovery_revision(link)
+            if revision:
+                entry["observed_discovery_revision"] = revision
 
     save_events(events_data, json_file)
 
@@ -160,8 +165,8 @@ def process_location(
     unprocessed_events = [
         {"name": key, "url": details["url"]}
         for key, details in events_data["events"].items()
-        if (not (details.get("processed", False) if sport == "baseball" else
-                 details.get("acquisition_status") == "ready") or options.mode != "incremental")
+        if ((not details.get("processed", False) if sport == "baseball" else
+             needs_softball_details(details, scraper)) or options.mode != "incremental")
         and (details.get("scraper") == scraper_name or
              (sport == "baseball" and not details.get("scraper") and details.get("export_status") == "pending"))
         and details.get("sport", "baseball") == sport

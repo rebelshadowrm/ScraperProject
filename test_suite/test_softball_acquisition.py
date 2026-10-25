@@ -86,7 +86,29 @@ class SoftballTests(unittest.TestCase):
         with patch.object(NCSFastpitchScraper, "require_permission", side_effect=RuntimeError("blocked")), \
                 patch.object(TopGunFastpitchScraper, "require_permission"):
             self.assertEqual(softball_classes(manifest), [TopGunFastpitchScraper])
-        manifest.provider.assert_called_once_with("NCSFastpitchScraper", "queued", error="blocked")
+        manifest.provider.assert_any_call("NCSFastpitchScraper", "queued", error="blocked")
+
+    def test_topgun_numeric_identity_extracts_from_cold_feed_without_prior_discovery(self):
+        import json
+        scraper=TopGunFastpitchScraper();self.addCleanup(scraper.close)
+        scraper._filter_loaded=True
+        record=dict(TournamentID=99,SportID=2,TournamentName='Independent Fastpitch',StartDate='2099-10-20',EndDate='2099-10-21',
+                    FullName='Organizer',Email='organizer@example.org',TFeeObj=json.dumps([{'Fee':'450','AgeGroups':['12U']}]))
+        url='https://topgunstats.com/tournaments?sport=2&locations=5#tournament=99'
+        with patch.object(scraper,'require_permission'),patch.object(scraper,'_get',return_value=[record]) as fetch:
+            row=scraper.extract_event_details(url)
+            self.assertEqual(row['Tournament-name'],'Independent Fastpitch')
+            self.assertEqual(row['Entry-fee.1'],'450')
+            fetch.assert_called_once_with(scraper.TOURNAMENT_DATA_URL)
+        with self.assertRaises(ValueError):scraper.get_event_identity(url.replace('tournament=99','tournament=fallback-invented'))
+
+    def test_ncs_bounded_entrypoint_reads_one_page_without_following_next(self):
+        scraper=NCSFastpitchScraper();driver=FixtureDriver()
+        with patch.object(scraper,'require_permission'):
+            links=scraper.collect_discovery_sample(driver,'https://playncs.com/fastpitch/Events?countryState=US-TX',max_events=2)
+        self.assertEqual(len(links),1)
+        self.assertFalse(links.complete)
+        self.assertEqual(links.pages,1)
 
     def test_mixed_legacy_feed_keeps_excel_semantics_but_requires_website_sport_proof(self):
         from common.batch_runner import process_events_in_batches

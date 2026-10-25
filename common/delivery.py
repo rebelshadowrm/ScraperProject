@@ -108,7 +108,7 @@ class DeliveryStore:
                     "schema_version": 1, "event_id": key, "sport": sport,
                     "provider": provider, "source_id": entry.get("source_event_id") or key.split("|", 1)[1],
                     "source_url": entry.get("url", ""), "operation": "withdraw" if withdrawn else "upsert",
-                    "fields": row, "source_details": entry.get("source_details", {}),
+                    "fields": row, "source_details": {**(raw.get("source_details") or {}), **(entry.get("source_details") or {})},
                 }
                 try:
                     revision = payload_revision(body)

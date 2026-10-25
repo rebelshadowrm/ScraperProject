@@ -157,7 +157,7 @@ def process_events_in_batches(
                     if hasattr(scraper, "get_event_identity"):
                         entry["source_event_id"] = scraper.get_event_identity(url)
                     if hasattr(scraper, "source_details"):
-                        entry["source_details"] = scraper.source_details.get(url, {})
+                        entry["source_details"] = {**(payload.get("source_details") or {}), **scraper.source_details.get(url, {})}
                     if sport != "baseball":
                         # Durable acquisition independent of the baseball workbook contract.
                         eligible = options.includes(payload)

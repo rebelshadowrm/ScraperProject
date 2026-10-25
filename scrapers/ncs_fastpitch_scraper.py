@@ -102,7 +102,8 @@ class NCSFastpitchScraper(NCSScraper):
             label = label.get_text(" ", strip=True)
             amount = panel.select_one(".amount")
             fee = amount.get_text(" ", strip=True) if amount else ""
-            source_divisions.append({"label": label, "entry_fee": fee,
+            from common.age_groups import age_tokens
+            source_divisions.append({"label": label, "age_groups": age_tokens(label), "entry_fee": fee,
                 "restrictions": panel.select_one(".locations").get_text(" ", strip=True)
                 if panel.select_one(".locations") else ""})
         source_locations = [{key: site.get("data-" + attr, "") for key, attr in

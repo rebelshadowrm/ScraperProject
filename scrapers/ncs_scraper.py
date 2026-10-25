@@ -498,9 +498,10 @@ class NCSScraper(BaseScraper):
 
         for div in soup.select("div.division"):
             txt = div.get_text(strip=True).upper()
-            age_match = re.match(r"^(\d+U)", txt)
-            if age_match:
-                age_groups.append(age_match.group(1))
+            from common.normalize import normalize_age_group
+            age = normalize_age_group(txt)
+            if age:
+                age_groups.append(age.upper())
 
             for w in txt.split():
                 if w in valid_levels_upper:

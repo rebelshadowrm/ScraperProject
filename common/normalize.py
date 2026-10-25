@@ -4,6 +4,7 @@ import re
 from typing import Any, Dict
 from datetime import datetime
 from us import states
+from common.age_groups import age_tokens
 
 from common.config import (
     VALID_LEVELS,
@@ -148,6 +149,11 @@ def normalize_age_group(value: Any) -> str:
         if not t:
             continue
 
+        if re.fullmatch(r"(?:HS|High\s*School)(?:\s+(?:Open|A|AA|B|BB|C|Rec))?", t, re.I):
+            return "HS"
+        explicit = age_tokens(t)
+        if explicit:
+            return explicit[0]
         if t in _AGE_CANON_SET:
             return t
 
@@ -345,6 +351,20 @@ def normalize_row(row: Dict[str, Any]) -> Dict[str, Any]:
 
     if "Gate-fees" in out:
         out["Gate-fees"] = normalize_gate_fees(out.get("Gate-fees"))
+
+    # Preserve explicit eligibility before a legacy single-value cell is reduced.
+    divisions = list((out.get("source_details") or {}).get("divisions") or [])
+    for i in range(1, 14):
+        label = clean_text(out.get(f"Age-groups.{i}"))
+        if not label:
+            continue
+        ages = age_tokens(label)
+        if len(ages) > 1 or "HS" in ages or (ages and label.casefold() != ages[0].casefold()):
+            division = {"label": label, "age_groups": ages, "entry_fee": out.get(f"Entry-fee.{i}", "")}
+            if division not in divisions:
+                divisions.append(division)
+    if divisions:
+        out["source_details"] = {**(out.get("source_details") or {}), "divisions": divisions}
 
     # Repeating age/fee columns
     for i in range(1, 14):

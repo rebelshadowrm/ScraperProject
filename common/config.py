@@ -24,7 +24,7 @@ OUTPUT_COLUMNS = [
 # IMPORTANT: keep these exactly as the site expects.
 VALID_LEVELS = ["Open", "AAA", "AA", "A", "D1", "D2", "D3", "Silver", "Rec"]
 
-VALID_AGE_GROUPS = [f"{i}u" for i in range(6, 19)]  # 6u ... 18u
+VALID_AGE_GROUPS = [f"{i}u" for i in range(6, 19)] + ["HS"]  # 6u ... 18u
 
 VALID_GUARANTEED_GAMES = ["None"] + [str(i) for i in range(1, 10)]  # None, 1..9
 
